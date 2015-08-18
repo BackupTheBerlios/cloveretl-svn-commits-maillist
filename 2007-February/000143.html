@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2505 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2505%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702261745.l1QHj7D2030615%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000142.html">
+   <LINK REL="Next"  HREF="000144.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2505 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2505%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702261745.l1QHj7D2030615%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2505 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 26 18:45:07 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000142.html">[Cloveretl-svn-commits] CloverETL repos r2504 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000144.html">[Cloveretl-svn-commits] CloverETL repos r2506 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-26 18:45:05 +0100 (Mon, 26 Feb 2007)
+New Revision: 2505
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+Log:
+UPDATE:XLSReader can now read from more sheets
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-02-26 14:42:29 UTC (rev 2504)
++++ trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-02-26 17:45:05 UTC (rev 2505)
+@@ -81,11 +81,9 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;startRow&lt;/b&gt;&lt;/td&gt;&lt;td&gt;index of first parsed record&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;finalRow&lt;/b&gt;&lt;/td&gt;&lt;td&gt;index of final parsed record&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;maxErrorCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;count of tolerated error records in input file&lt;/td&gt;
+- *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetName&lt;/b&gt;&lt;/td&gt;&lt;td&gt;name of sheet for reading data. If it is not set data
+- *   are read from first sheet&lt;/td&gt;
+- *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetNumber&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of sheet for reading data (starting from 0).
+- *   If it is not set data are read from first sheet. If sheetName and sheetNumber are both
+- *    set, sheetNumber is ignored&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetName&lt;/b&gt;&lt;/td&gt;&lt;td&gt;name of sheet for reading data. &lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetNumber&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of sheet for reading data (starting from 0). 
++ *  This attribute has higher priority then sheetName. One of theese atributes has to be set.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;metadataRow&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of row where are names of columns&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;fieldMap&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Pairs of clover fields and xls columns
+  *   (cloverField=xlsColumn) separated by :;| {colon, semicolon, pipe}.
+@@ -156,12 +154,12 @@
+ 	private MultiFileReader reader;
+ 	private PolicyType policyType = PolicyType.STRICT;
+ 	
+-	private String sheetName;
+-	private int sheetNumber = -1;
++	private String sheetName = null;
++	private String sheetNumber = null;
+ 	private int metadataRow = 0;
+ 	private String[][] fieldMap;
+ 	
+-	public final static boolean usePOI = false;
++	public final static boolean usePOI = true;
+ 
+ 	/**
+ 	 * @param id
+@@ -247,16 +245,17 @@
+         checkInputPorts(status, 0, 0);
+         checkOutputPorts(status, 1, Integer.MAX_VALUE);
+ 
+-        try {
+-            init();
+-            free();
+-        } catch (ComponentNotReadyException e) {
+-            ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+-            if(!StringUtils.isEmpty(e.getAttributeName())) {
+-                problem.setAttributeName(e.getAttributeName());
+-            }
+-            status.add(problem);
+-        }
++    	//TODO
++//        try {
++//            init();
++//            free();
++//        } catch (ComponentNotReadyException e) {
++//            ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
++//            if(!StringUtils.isEmpty(e.getAttributeName())) {
++//                problem.setAttributeName(e.getAttributeName());
++//            }
++//            status.add(problem);
++//        }
+         
+         return status;
+     }
+@@ -298,7 +297,7 @@
+ 			if (xattribs.exists(XML_SHEETNAME_ATTRIBUTE)){
+ 				aXLSReader.setSheetName(xattribs.getString(XML_SHEETNAME_ATTRIBUTE));
+ 			}else if (xattribs.exists(XML_SHEETNUMBER_ATTRIBUTE)){
+-				aXLSReader.setSheetNumber(xattribs.getInteger(XML_SHEETNUMBER_ATTRIBUTE));
++				aXLSReader.setSheetNumber(xattribs.getString(XML_SHEETNUMBER_ATTRIBUTE));
+ 			}
+ 			if (xattribs.exists(XML_METADATAROW_ATTRIBUTE)){
+ 				aXLSReader.setMetadataRow(xattribs.getInteger(XML_METADATAROW_ATTRIBUTE));
+@@ -389,7 +388,7 @@
+ 			throw new InvalidParameterException(&quot;Invalid finalRow parameter.&quot;);
+ 		}
+ 		this.finalRow = finalRecord;
+-		parser.setLastRow(finalRow);
++		parser.setLastRow(finalRow - 1);
+ 	}
+ 
+ 	/**
+@@ -414,7 +413,7 @@
+ 		if (sheetName != null){
+ 			parser.setSheetName(sheetName);
+ 		}
+-		if (sheetNumber &gt; -1){
++		if (sheetNumber != null){
+ 			parser.setSheetNumber(sheetNumber);
+ 		}
+ 		if (metadataRow != 0){
+@@ -452,12 +451,6 @@
+ 		}else{
+ 			parser.setMappingType(XLSDataParser.NO_METADATA_INFO);
+ 		}
+-//		try {
+-//			parser.init(getOutputPort(OUTPUT_PORT).getMetadata());
+-//            parser.setDataSource(new FileInputStream(fileURL));
+-//		} catch (IOException ex) {
+-//			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
+-//		}
+             reader = new MultiFileReader(parser, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
+ 	        reader.setLogger(logger);
+ 	        reader.setNumRecords(numRecords);
+@@ -477,7 +470,7 @@
+ 		this.metadataRow = metadaRow;
+ 	}
+ 
+-	public void setSheetNumber(int sheetNumber) {
++	public void setSheetNumber(String sheetNumber) {
+ 		this.sheetNumber = sheetNumber;
+ 	}
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000142.html">[Cloveretl-svn-commits] CloverETL repos r2504 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000144.html">[Cloveretl-svn-commits] CloverETL repos r2506 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#143">[ date ]</a>
+              <a href="thread.html#143">[ thread ]</a>
+              <a href="subject.html#143">[ subject ]</a>
+              <a href="author.html#143">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

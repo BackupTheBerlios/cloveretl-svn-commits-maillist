@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2385 -	trunk/cloveretl.engine/src/org/jetel/graph
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2385%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph&In-Reply-To=%3C200701290916.l0T9G6Tv003676%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000022.html">
+   <LINK REL="Next"  HREF="000024.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2385 -	trunk/cloveretl.engine/src/org/jetel/graph</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2385%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph&In-Reply-To=%3C200701290916.l0T9G6Tv003676%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2385 -	trunk/cloveretl.engine/src/org/jetel/graph">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Jan 29 10:16:06 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000022.html">[Cloveretl-svn-commits] CloverETL repos r2384 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000024.html">[Cloveretl-svn-commits] CloverETL repos r2386 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-01-29 10:16:06 +0100 (Mon, 29 Jan 2007)
+New Revision: 2385
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/DirectEdge.java
+Log:
+MINOR:extended error message (IOException text) thrown when BUFFER OVERFLOW during serialization(writing)
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/DirectEdge.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/DirectEdge.java	2007-01-29 09:14:10 UTC (rev 2384)
++++ trunk/cloveretl.engine/src/org/jetel/graph/DirectEdge.java	2007-01-29 09:16:06 UTC (rev 2385)
+@@ -224,7 +224,8 @@
+             record.serialize(tmpDataRecord);
+         } catch (BufferOverflowException ex) {
+             throw new IOException(
+-                    &quot;Internal buffer is not big enough to accomodate data record ! (See MAX_RECORD_SIZE parameter)&quot;);
++                    &quot;Internal buffer is not big enough to accomodate data record ! (See MAX_RECORD_SIZE parameter)&quot;+
++                    &quot;\n [actual record size: &quot;+record.getSizeSerialized()+&quot; bytes]&quot;);
+         }
+         tmpDataRecord.flip();
+         int length = tmpDataRecord.remaining();
+@@ -269,7 +270,8 @@
+             writeBuffer.put(record);
+         } catch (BufferOverflowException ex) {
+             throw new IOException(
+-                    &quot;WriteBuffer is not big enough to accomodate data record !&quot;);
++                    &quot;WriteBuffer is not big enough to accomodate data record ! (See MAX_RECORD_SIZE parameter)&quot;+
++                    &quot;\n [actual record size: &quot;+record.rewind().remaining()+&quot; bytes]&quot;);
+         }
+ 
+         byteCounter += dataLength;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000022.html">[Cloveretl-svn-commits] CloverETL repos r2384 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000024.html">[Cloveretl-svn-commits] CloverETL repos r2386 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#23">[ date ]</a>
+              <a href="thread.html#23">[ thread ]</a>
+              <a href="subject.html#23">[ subject ]</a>
+              <a href="author.html#23">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

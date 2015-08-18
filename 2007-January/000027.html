@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2389%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200701291455.l0TEtujJ002471%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000026.html">
+   <LINK REL="Next"  HREF="000028.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2389%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200701291455.l0TEtujJ002471%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Jan 29 15:55:56 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000026.html">[Cloveretl-svn-commits] CloverETL repos r2388 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+        <LI>Next message: <A HREF="000028.html">[Cloveretl-svn-commits] CloverETL repos r2390 - in	trunk/cloveretl.engine/src/org/jetel: graph main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-01-29 15:55:55 +0100 (Mon, 29 Jan 2007)
+New Revision: 2389
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+Log:
+UPDATE:added implementation of stopGraphExecution()
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-01-29 14:46:25 UTC (rev 2388)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-01-29 14:55:55 UTC (rev 2389)
+@@ -37,11 +37,12 @@
+     private int runingPhase;
+     private int runningNodes;
+     private long runTimeMS;
++    private WatchDog watchDog;
+     
+     
+     private Map&lt;String,TrackingDetail&gt; trackingMap;
+     
+-    public CloverJMX(){
++    public CloverJMX(WatchDog watchDog){
+         StringBuilder str=new StringBuilder(30);
+       //  str.append(org.jetel.util.JetelVersion.getMajorVersion()).append('.');
+       //  str.append(org.jetel.util.JetelVersion.getMinorVersion()).append(&quot; build# &quot;);
+@@ -49,6 +50,7 @@
+       //  str.append(org.jetel.util.JetelVersion.getBuildDatetime());
+         
+         cloverVersion=str.toString();
++        this.watchDog=watchDog;
+     }
+     
+    
+@@ -110,7 +112,7 @@
+     }
+ 
+     public void stopGraphExecution() {
+-        // TODO Auto-generated method stub
++        watchDog.stopRun();
+ 
+     }
+     
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-01-29 14:46:25 UTC (rev 2388)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-01-29 14:55:55 UTC (rev 2389)
+@@ -81,6 +81,7 @@
+     private Throwable causeException;
+     private String causeNodeID;
+     private CloverJMX mbean;
++    private volatile boolean runIt;
+     
+     private PrintTracking printTracking;
+ 
+@@ -134,9 +135,10 @@
+ 	/**  Main processing method for the WatchDog object */
+ 	public void run() {
+ 		watchDogStatus = Result.RUNNING;
++        runIt=true;
+ 		logger.info(&quot;Thread started.&quot;);
+ 		logger.info(&quot;Running on &quot; + javaRuntime.availableProcessors() + &quot; CPU(s)&quot;
+-			+ &quot; max available memory for JVM &quot; + javaRuntime.freeMemory() / 1024 + &quot; KB&quot;);
++			+ &quot; max available memory for JVM &quot; + javaRuntime.maxMemory() / 1024 + &quot; KB&quot;);
+ 		// renice - lower the priority
+ 		setPriority(Thread.MIN_PRIORITY);
+ 		
+@@ -151,11 +153,16 @@
+ //        trackingThread.start();
+         
+ 		for (currentPhaseNum = 0; currentPhaseNum &lt; phases.length; currentPhaseNum++) {
+-			if (!executePhase(phases[currentPhaseNum])) {
+-				watchDogStatus = Result.ERROR;
++			switch( executePhase(phases[currentPhaseNum]) ){
++            case ABORTED:
++                watchDogStatus = Result.ABORTED;
++                logger.error(&quot;!!! Phase execution aborted !!!&quot;);
++                return;
++            case ERROR:
++                watchDogStatus = Result.ERROR;
+ 				logger.error(&quot;!!! Phase finished with error - stopping graph run !!!&quot;);
+ 				return;
+-			}
++            }
+ 			// force running of garbage collector
+ 			logger.info(&quot;Forcing garbage collection ...&quot;);
+ 			javaRuntime.runFinalization();
+@@ -174,7 +181,7 @@
+      * @since 17.1.2007
+      */
+     private CloverJMX registerTrackingMBean() {
+-       mbean = new CloverJMX();
++       mbean = new CloverJMX(this);
+         // register MBean
+         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+ 
+@@ -221,7 +228,12 @@
+             }
+         }
+         if (currentPhaseNum&gt;=0){
+-            if (!executePhase(phases[currentPhaseNum])) {
++            switch( executePhase(phases[currentPhaseNum]) ) {
++            case ABORTED:
++                watchDogStatus = Result.ABORTED;
++                logger.error(&quot;!!! Phase execution aborted !!!&quot;);
++                return;
++            case ERROR:
+                 watchDogStatus = Result.ERROR;
+                 logger.error(&quot;!!! Phase finished with error - stopping graph run !!!&quot;);
+                 return;
+@@ -280,7 +292,7 @@
+         mbean.updated();
+ 	
+         // entering the loop awaiting completion of work by all leaf nodes
+-		while (true) {
++		while (runIt) {
+             // wait on error message queue
+             message=inMsgQueue.poll(Defaults.WatchDog.WATCHDOG_SLEEP_INTERVAL, TimeUnit.MILLISECONDS);
+             if (message != null) {
+@@ -397,6 +409,16 @@
+                     mbean.updated();
+                 }
+             }
++        if (!runIt){
++            // we were forced to stop execution, stop all Nodes
++            logger.error(&quot;User has interrupted graph execution !!!&quot;);
++            abort();
++            causeNodeID=null;
++            causeException=null;
++            return Result.ABORTED;
++        }else{
++            return Result.FINISHED_OK;
++        }
+ 			
+ 	}
+ 
+@@ -433,6 +455,7 @@
+ 	 * @since    July 29, 2002
+ 	 */
+ 	public void abort() {
++        watchDogStatus=Result.ABORTED;
+ 		Iterator iterator = currentPhase.getNodes().iterator();
+ 		Node node;
+ 
+@@ -471,13 +494,13 @@
+ 	 * @param  phase  Description of the Parameter
+ 	 * @return        Description of the Return Value
+ 	 */
+-	private boolean executePhase(Phase phase) {
++	private Result executePhase(Phase phase) {
+ 		currentPhase = phase;
+ 		//phase.checkConfig();
+ 		// init phase
+ 		if (!phase.init()) {
+ 			// something went wrong !
+-			return false;
++			return Result.ERROR;
+ 		}
+ 		logger.info(&quot;Starting up all nodes in phase [&quot; + phase.getPhaseNum() + &quot;]&quot;);
+ 		startUpNodes(phase);
+@@ -504,7 +527,7 @@
+         //end of phase, destroy it
+ 		phase.free();
+         
+-		return (watchDogStatus==Result.FINISHED_OK) ? true : false;
++		return watchDogStatus;
+ 	}
+ 
+ 	/*
+@@ -710,6 +733,16 @@
+     public String getCauseNodeID() {
+         return causeNodeID;
+     }
++
++
++    /**
++     * Stop execution of graph
++     * 
++     * @since 29.1.2007
++     */
++    public void stopRun() {
++        this.runIt = false;
++    }
+     
+     
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000026.html">[Cloveretl-svn-commits] CloverETL repos r2388 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+	<LI>Next message: <A HREF="000028.html">[Cloveretl-svn-commits] CloverETL repos r2390 - in	trunk/cloveretl.engine/src/org/jetel: graph main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#27">[ date ]</a>
+              <a href="thread.html#27">[ thread ]</a>
+              <a href="subject.html#27">[ subject ]</a>
+              <a href="author.html#27">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

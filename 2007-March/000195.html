@@ -1,0 +1,239 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2557 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2557%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200703060912.l269ClVv013036%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000194.html">
+   <LINK REL="Next"  HREF="000196.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2557 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2557%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200703060912.l269ClVv013036%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2557 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Mar  6 10:12:47 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000194.html">[Cloveretl-svn-commits] CloverETL repos r2556 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+        <LI>Next message: <A HREF="000196.html">[Cloveretl-svn-commits] CloverETL repos r2558 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#195">[ date ]</a>
+              <a href="thread.html#195">[ thread ]</a>
+              <a href="subject.html#195">[ subject ]</a>
+              <a href="author.html#195">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-03-06 10:12:44 +0100 (Tue, 06 Mar 2007)
+New Revision: 2557
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+Log:
+UPDATE: small improvements of JMX engine - PhaseTrackingDetail knows number of phase and suitable notification object is sended from CloverJMXMBean.
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-03-06 09:07:47 UTC (rev 2556)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-03-06 09:12:44 UTC (rev 2557)
+@@ -23,16 +23,20 @@
+  */
+ package org.jetel.graph.runtime;
+ 
+-import java.util.LinkedList;
+-import java.util.List;
+ import java.util.Map;
+ 
+-import javax.management.*; 
++import javax.management.AttributeChangeNotification;
++import javax.management.MBeanNotificationInfo;
++import javax.management.Notification;
++import javax.management.NotificationBroadcasterSupport;
+ 
+ import org.jetel.graph.Phase;
+ 
+ public class CloverJMX extends NotificationBroadcasterSupport  implements CloverJMXMBean {
+ 
++    public static final String UPDATE_NOTIFICATION_ID = &quot;Tracking updated&quot;;
++    public static final String PHASE_UPDATE_NOTIFICATION_ID = &quot;Phase updated&quot;;
++    
+     private long sequenceNumber = 1;
+     private String runningGraphName;
+     private String cloverVersion;
+@@ -95,11 +99,14 @@
+         return watchDog.getTransformationGraph().getPhase(phase).getTracking().get(nodeID);
+     }
+     
++    public PhaseTrackingDetail getPhaseTracking() {
++        return watchDog.getTransformationGraph().getPhase(getRunningPhase()).getPhaseTracking();
++    }
++    
+     public PhaseTrackingDetail getPhaseTracking(int phase) {
+         return watchDog.getTransformationGraph().getPhase(phase).getPhaseTracking();
+     }
+     
+-    
+     public String getTrackingDetailString(String nodeID){
+         TrackingDetail detail=trackingMap.get(nodeID);
+         if (detail!=null){
+@@ -138,31 +145,23 @@
+     }
+     
+     public synchronized void updated() { 
+-        Notification n = 
+-            new AttributeChangeNotification(this, 
+-                        sequenceNumber++, 
+-                        System.currentTimeMillis(), 
+-                        &quot;Tracking updated&quot;, 
+-                        &quot;Tracking&quot;, 
+-                        &quot;int&quot;, 
+-                        -1/*oldSize*/, 
+-                        1/*this.cacheSize*/); 
++        Notification n = new Notification(UPDATE_NOTIFICATION_ID,
++                                this,
++                                sequenceNumber++, 
++                                System.currentTimeMillis(), 
++                                UPDATE_NOTIFICATION_ID); 
+  
+-    sendNotification(n); 
++        sendNotification(n);
+     } 
+     
+     public synchronized void phaseUpdated() { 
+-        Notification n = 
+-            new AttributeChangeNotification(this, 
+-                        sequenceNumber++, 
+-                        System.currentTimeMillis(), 
+-                        &quot;Phase updated&quot;, 
+-                        &quot;Phase&quot;, 
+-                        &quot;int&quot;, 
+-                        -1/*oldSize*/, 
+-                        runingPhase); 
++        Notification n = new Notification(PHASE_UPDATE_NOTIFICATION_ID, 
++                                this, 
++                                sequenceNumber++, 
++                                System.currentTimeMillis(), 
++                                PHASE_UPDATE_NOTIFICATION_ID); 
+  
+-    sendNotification(n); 
++        sendNotification(n); 
+     } 
+  
+     @Override 
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java	2007-03-06 09:07:47 UTC (rev 2556)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java	2007-03-06 09:12:44 UTC (rev 2557)
+@@ -52,6 +52,7 @@
+     public String[] getNodesList();
+     
+ 
++    public PhaseTrackingDetail getPhaseTracking();
+     public PhaseTrackingDetail getPhaseTracking(int phase);
+     
+     public TrackingDetail getTrackingDetail(String nodeID);
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java	2007-03-06 09:07:47 UTC (rev 2556)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java	2007-03-06 09:12:44 UTC (rev 2557)
+@@ -24,9 +24,7 @@
+ package org.jetel.graph.runtime;
+ 
+ import java.io.Serializable;
+-import java.util.Arrays;
+ 
+-import org.jetel.graph.Node;
+ import org.jetel.graph.Result;
+ 
+ public class NodeTrackingDetail implements TrackingDetail, Serializable {
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java	2007-03-06 09:07:47 UTC (rev 2556)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java	2007-03-06 09:12:44 UTC (rev 2557)
+@@ -31,13 +31,18 @@
+     
+     private int execTime;
+     private long memUtilization;
+-
++    private int phaseNumber;
+     
+-    public PhaseTrackingDetail(int execTime,long memUtilization) {
++    public PhaseTrackingDetail(int phaseNumber, int execTime,long memUtilization) {
++        this.phaseNumber = phaseNumber;
+         this.execTime=execTime;
+         this.memUtilization=memUtilization;
+     }
+ 
++    public int getPhaseNumber() {
++        return phaseNumber;
++    }
++
+     /**
+      * @return the phaseExecTime in milliseconds
+      * @since 27.2.2007
+@@ -80,4 +85,5 @@
+     public void setMemUtilization(long phaseMemUtilization) {
+         this.memUtilization = phaseMemUtilization;
+     }
++
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-03-06 09:07:47 UTC (rev 2556)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-03-06 09:12:44 UTC (rev 2557)
+@@ -317,8 +317,8 @@
+             
+             // is there any node running ?
+ 			if (leafNodes.isEmpty()) {
+-                PhaseTrackingDetail phaseTracking=new PhaseTrackingDetail((int) (System.currentTimeMillis() - startTimestamp)
+-                                                    ,phaseMemUtilizationMax);
++                PhaseTrackingDetail phaseTracking = 
++                    new PhaseTrackingDetail(phase.getPhaseNum(), (int) (System.currentTimeMillis() - startTimestamp) ,phaseMemUtilizationMax);
+ 				phase.setPhaseTracking(phaseTracking);
+                 logger.info(&quot;Execution of phase [&quot; + phase.getPhaseNum() + &quot;] successfully finished - elapsed time(sec): &quot;
+ 						+ phaseTracking.getExecTime() / 1000);
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000194.html">[Cloveretl-svn-commits] CloverETL repos r2556 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+	<LI>Next message: <A HREF="000196.html">[Cloveretl-svn-commits] CloverETL repos r2558 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#195">[ date ]</a>
+              <a href="thread.html#195">[ thread ]</a>
+              <a href="subject.html#195">[ subject ]</a>
+              <a href="author.html#195">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

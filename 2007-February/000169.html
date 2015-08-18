@@ -1,0 +1,487 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2531 -	trunk/cloveretl.engine/src/org/jetel/data/tape
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2531%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/tape&In-Reply-To=%3C200702271940.l1RJe8ex031472%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000168.html">
+   <LINK REL="Next"  HREF="000170.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2531 -	trunk/cloveretl.engine/src/org/jetel/data/tape</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2531%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/tape&In-Reply-To=%3C200702271940.l1RJe8ex031472%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2531 -	trunk/cloveretl.engine/src/org/jetel/data/tape">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 20:40:08 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000168.html">[Cloveretl-svn-commits] CloverETL repos r2530 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+        <LI>Next message: <A HREF="000170.html">[Cloveretl-svn-commits] CloverETL repos r2532 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#169">[ date ]</a>
+              <a href="thread.html#169">[ thread ]</a>
+              <a href="subject.html#169">[ subject ]</a>
+              <a href="author.html#169">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-02-27 20:39:58 +0100 (Tue, 27 Feb 2007)
+New Revision: 2531
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/tape/DataRecordTape.java
+Log:
+UPDATE:added reget() methods
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/tape/DataRecordTape.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/tape/DataRecordTape.java	2007-02-27 19:37:08 UTC (rev 2530)
++++ trunk/cloveretl.engine/src/org/jetel/data/tape/DataRecordTape.java	2007-02-27 19:39:58 UTC (rev 2531)
+@@ -33,6 +33,7 @@
+ import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
++import org.jetel.util.ByteBufferUtils;
+ 
+ 
+ /**
+@@ -79,7 +80,7 @@
+ 	
+ 	private DataChunk currentDataChunk;
+ 	private int currentDataChunkIndex;
+-	
++    
+ 	// size of BUFFER - used for push &amp; shift operations
+ 	private final static int DEFAULT_BUFFER_SIZE = Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE; 
+ 
+@@ -308,9 +309,40 @@
+ 	    
+ 	}
+ 	
++	/**
++     * Returns number of chunks this tape contains.
++     * 
++	 * @return
++	 * @since 1.2.2007
++	 */
+ 	public int getNumChunks(){
+ 	    return dataChunks.size();
+ 	}
++    
++    
++    /**
++     * For specified chunk number returns its
++     * length (in bytes).
++     * 
++     * @param chunk
++     * @return
++     * @since 1.2.2007
++     */
++    public long getChunkLength(int chunk) {
++        return ((DataChunk)dataChunks.get(chunk)).getLength();
++    }
++    
++    /**
++     * For specified chunk number returns how
++     * many records it contains.
++     * 
++     * @param chunk
++     * @return
++     * @since 1.2.2007
++     */
++    public int getChunkRecNum(int chunk) {
++        return ((DataChunk)dataChunks.get(chunk)).getNumRecords();
++    }
+ 	
+ 	/**
+ 	 * Stores data in current/active chunk. Must not be mixed with calls to
+@@ -326,6 +358,26 @@
+ 	        throw new RuntimeException(&quot;No DataChunk has been created !&quot;);
+ 	    }
+ 	}
++    
++    
++    /**
++     * Bulk-copy of data (1 record) from one tape to the other (directly)
++     * 
++     * @param source DataRecordTape from which to copy data 
++     * @return new size of chunk or -1 in case of problem
++     */
++    public long put(DataRecordTape sourceTape) throws IOException{
++        try{
++            if (sourceTape.currentDataChunk!=null){
++                return currentDataChunk.put(sourceTape.currentDataChunk);
++            }else{
++                return -1;
++            }
++        }catch(NullPointerException ex){
++            throw new RuntimeException(&quot;No DataChunk has been created !&quot;);
++        }
++    }
++    
+ 	
+ 	/**
+ 	 * Stores data record in current/active chunk.
+@@ -360,6 +412,22 @@
+ 	    }
+ 	}
+ 	
++    /**
++     * Reads again previously read record.
++     * 
++     * @param data
++     * @return
++     * @throws IOException
++     * @since 27.2.2007
++     */
++    public boolean reget(ByteBuffer data) throws IOException{
++        if (currentDataChunk!=null){
++            return currentDataChunk.reget(data);
++        }else{
++            return false;
++        }
++    }
++    
+ 	/**
+ 	 * Reads data record from current chunk
+ 	 * 
+@@ -374,6 +442,22 @@
+ 	        return false;
+ 	    }
+ 	}
++    
++    /**
++     * Reads again previously read record.
++     * 
++     * @param data
++     * @return
++     * @throws IOException
++     * @since 27.2.2007
++     */
++    public boolean reget(DataRecord data) throws IOException{
++        if (currentDataChunk!=null){
++            return currentDataChunk.reget(data);
++        }else{
++            return false;
++        }
++    }
+ 
+ 	/* Returns String containing short summary of chunks stored on tape.
+ 	 * 
+@@ -416,20 +500,19 @@
+ 	 * @author david
+ 	 * @since  20.1.2005
+ 	 *
+-	 * TODO To change the template for this generated type comment go to
+-	 * Window - Preferences - Java - Code Style - Code Templates
+ 	 */
+ 	private static class DataChunk{
+ 	    //	size of integer variable used to keep record length
++        // this is the maximum size, can be between 1 &amp; 4 bytes
+ 	    private final static int LEN_SIZE_SPECIFIER = 4;
+ 	    ByteBuffer dataBuffer;
+ 	    FileChannel tmpFileChannel;
+ 	    long offsetStart;
+ 	    long length;
+-	    long position;
+ 	    int recordsRead;
+ 	    int nRecords;
+ 	    boolean canRead;
++        int recordSize;
+ 	    
+ 	    private DataChunk(FileChannel channel,ByteBuffer buffer){
+ 	        tmpFileChannel=channel;
+@@ -460,7 +543,6 @@
+ 	        dataBuffer.clear();
+ 	        tmpFileChannel.read(dataBuffer);
+ 	        dataBuffer.flip();
+-	        position=0;
+ 	    }
+ 	    
+ 	    /**
+@@ -472,48 +554,96 @@
+ 		 *@return number of bytes in the chunk after saveing data
+ 		 */
+ 		long put(ByteBuffer recordBuffer) throws IOException {
+-			int recordSize = recordBuffer.remaining();
+-			
++			recordSize = recordBuffer.remaining();
++			final int lengthSize=ByteBufferUtils.lengthEncoded(recordSize);
+ 			// check that internal buffer has enough space
+-			if ((recordSize + LEN_SIZE_SPECIFIER) &gt; dataBuffer.remaining()){
++			if ((recordSize + lengthSize) &gt; dataBuffer.remaining()){
+ 					flushBuffer();
+ 				}
+ 			
+ 			try {
+-				dataBuffer.putInt(recordSize);
+-				dataBuffer.put(recordBuffer);
++			    ByteBufferUtils.encodeLength(dataBuffer, recordSize);
++                dataBuffer.put(recordBuffer);
+ 			} catch (BufferOverflowException ex) {
+-				throw new RuntimeException(&quot;Input Buffer is not big enough to accomodate data record !&quot;);
++				throw new IOException(&quot;Input Buffer is not big enough to accomodate data record !&quot;);
+ 			}
+ 			
+-			length+=(recordSize+ LEN_SIZE_SPECIFIER);
++			length+=(recordSize+ lengthSize);
+ 			nRecords++;
+ 			return length;
+ 		}
+ 
++       
++        long put(DataChunk sourceChunk) throws IOException {
++            final ByteBuffer sourceDataBuffer=sourceChunk.dataBuffer;
++            if(!sourceChunk.canRead){
++                throw new IOException(&quot;Buffer has not been rewind !&quot;);
++            }
++            
++            if (sourceChunk.nRecords &gt; 0 &amp;&amp; sourceChunk.recordsRead&gt;=sourceChunk.nRecords){
++                return -1;
++            }
++            //  check that internal buffer has enough data to read data size
++            if (LEN_SIZE_SPECIFIER &gt; sourceDataBuffer.remaining()){
++                sourceChunk.reloadBuffer();
++                if(LEN_SIZE_SPECIFIER &gt; sourceDataBuffer.remaining()) return -1;
++            }
++            recordSize = ByteBufferUtils.decodeLength(sourceDataBuffer);
++            
++            //  check that internal buffer has enough data to read data record
++            if (recordSize &gt; sourceDataBuffer.remaining()){
++                sourceChunk.reloadBuffer();
++                if(recordSize &gt; sourceDataBuffer.remaining()) return -1;
++            }
++            
++            int oldLimit = sourceDataBuffer.limit();
++            sourceDataBuffer.limit(sourceDataBuffer.position() + recordSize);
++        
++            //write it here         
++            final int lengthSize=ByteBufferUtils.lengthEncoded(recordSize);
++            // check that internal buffer has enough space
++            if ((recordSize + lengthSize) &gt; dataBuffer.remaining()){
++                    flushBuffer();
++                }
++            
++            try {
++                ByteBufferUtils.encodeLength(dataBuffer, recordSize);
++                dataBuffer.put(sourceDataBuffer);
++            } catch (BufferOverflowException ex) {
++                throw new IOException(&quot;Input Buffer is not big enough to accomodate data record !&quot;);
++            }
++            
++            // end write 
++            sourceDataBuffer.limit(oldLimit);
++            length+=(recordSize+ lengthSize);
++            nRecords++;
++            return length;            
++        }
++        
++        
+ 		 /**
+ 		  * Stores one data record into buffer / file.
+ 		  * 
+ 		 * @param data	DataRecord to be stored
+-		 *@return number of bytes in the chunk after saveing data
++		 *@return number of bytes in the chunk after saving data
+ 		 * @throws IOException
+ 		 */
+ 		long put(DataRecord data) throws IOException {
+-				int recordSize = data.getSizeSerialized();
+-				
++				recordSize = data.getSizeSerialized();
++                final int lengthSize=ByteBufferUtils.lengthEncoded(recordSize);
+ 				// check that internal buffer has enough space
+-				if ((recordSize + LEN_SIZE_SPECIFIER) &gt; dataBuffer.remaining()){
++				if ((recordSize + lengthSize) &gt; dataBuffer.remaining()){
+ 						flushBuffer();
+ 					}
+ 				
+ 				try {
+-					dataBuffer.putInt(recordSize);
++                    ByteBufferUtils.encodeLength(dataBuffer, recordSize);
+ 					data.serialize(dataBuffer);
+ 				} catch (BufferOverflowException ex) {
+-					throw new RuntimeException(&quot;Input Buffer is not big enough to accomodate data record !&quot;);
++					throw new IOException(&quot;Input Buffer is not big enough to accomodate data record !&quot;);
+ 				}
+ 				
+-				length+=(recordSize+ LEN_SIZE_SPECIFIER);
++				length+=(recordSize+ lengthSize);
+ 				nRecords++;
+ 				return length;
+ 			}
+@@ -528,9 +658,8 @@
+ 		 *@since                   September 17, 2002
+ 		 */
+ 		 boolean get(ByteBuffer recordBuffer) throws IOException {
+-			int recordSize;
+ 			if(!canRead){
+-				throw new RuntimeException(&quot;Buffer has not been rewind !&quot;);
++				throw new IOException(&quot;Buffer has not been rewind !&quot;);
+ 			}
+ 			
+ 			if (nRecords &gt; 0 &amp;&amp; recordsRead&gt;=nRecords){
+@@ -541,8 +670,7 @@
+ 			    reloadBuffer();
+ 			    if(LEN_SIZE_SPECIFIER &gt; dataBuffer.remaining()) return false;
+ 			}
+-			recordSize = dataBuffer.getInt();
+-			position+=LEN_SIZE_SPECIFIER;
++			recordSize = ByteBufferUtils.decodeLength(dataBuffer);
+ 			
+ 			//	check that internal buffer has enough data to read data record
+ 			if (recordSize &gt; dataBuffer.remaining()){
+@@ -550,17 +678,72 @@
+ 			    if(recordSize &gt; dataBuffer.remaining()) return false;
+ 			}
+ 			int oldLimit = dataBuffer.limit();
++            dataBuffer.mark(); //could be used later in reget method
+ 			dataBuffer.limit(dataBuffer.position() + recordSize);
+             recordBuffer.clear();
+ 			recordBuffer.put(dataBuffer);
+ 			recordBuffer.flip();
+ 			dataBuffer.limit(oldLimit);
+ 			
+-			position+=recordSize;
+ 			recordsRead++;
+ 			return true;
+ 		}
+ 
++         /**
++          * Read again previously read record. Use caution when calling this
++          * method as it lifts most of the safety checks. Should be used
++          * only immediately after successful get(ByteBuffer) call
++          * 
++         * @param recordBuffer
++         * @return
++         * @throws IOException
++         * @since 27.2.2007
++         */
++        boolean reget(ByteBuffer recordBuffer) throws IOException {
++                dataBuffer.reset();
++                int oldLimit = dataBuffer.limit();
++                dataBuffer.limit(dataBuffer.position() + recordSize);
++                recordBuffer.clear();
++                recordBuffer.put(dataBuffer);
++                recordBuffer.flip();
++                dataBuffer.limit(oldLimit);
++                return true;
++            }
++         
++         
++         protected ByteBuffer bulkGetStart() throws IOException {
++                final int recordSize;
++                if(!canRead){
++                    throw new IOException(&quot;Buffer has not been rewind !&quot;);
++                }
++                
++                if (nRecords &gt; 0 &amp;&amp; recordsRead&gt;=nRecords){
++                    return null;
++                }
++                //  check that internal buffer has enough data to read data size
++                if (LEN_SIZE_SPECIFIER &gt; dataBuffer.remaining()){
++                    reloadBuffer();
++                    if(LEN_SIZE_SPECIFIER &gt; dataBuffer.remaining()) return null;
++                }
++                recordSize = ByteBufferUtils.decodeLength(dataBuffer);
++                
++                //  check that internal buffer has enough data to read data record
++                if (recordSize &gt; dataBuffer.remaining()){
++                    reloadBuffer();
++                    if(recordSize &gt; dataBuffer.remaining()) return null;
++                }
++                int oldLimit = dataBuffer.limit();
++                dataBuffer.limit(dataBuffer.position() + recordSize);
++                //write it here
++                
++                dataBuffer.limit(oldLimit);
++                recordsRead++;
++                return dataBuffer;
++            }
++
++       
++         
++         
+ 		 /**
+ 		  * Returns next record from the buffer - FIFO order.
+ 		 * @param data	DataRecord into which load the data
+@@ -568,9 +751,8 @@
+ 		 * @throws IOException
+ 		 */
+ 		boolean get(DataRecord data) throws IOException {
+-				int recordSize;
+ 				if(!canRead){
+-					throw new RuntimeException(&quot;Buffer has not been rewind !&quot;);
++					throw new IOException(&quot;Buffer has not been rewind !&quot;);
+ 				}
+ 				
+ 				if (nRecords &gt; 0 &amp;&amp; recordsRead&gt;=nRecords){
+@@ -581,21 +763,28 @@
+ 				    reloadBuffer();
+                     if(LEN_SIZE_SPECIFIER &gt; dataBuffer.remaining()) return false;
+ 				}
+-				recordSize = dataBuffer.getInt();
+-				position+=LEN_SIZE_SPECIFIER;
++                recordSize = ByteBufferUtils.decodeLength(dataBuffer);
+ 				
+ 				//	check that internal buffer has enough data to read data record
+ 				if (recordSize &gt; dataBuffer.remaining()){
+ 				    reloadBuffer();
+                     if(recordSize &gt; dataBuffer.remaining()) return false;
+ 				}
++                dataBuffer.mark();//could be used later for reget
+ 				data.deserialize(dataBuffer);
+ 				
+-				position+=recordSize;
+ 				recordsRead++;
+ 				return true;
+ 			}
+-		 
++		
++
++        boolean reget(DataRecord data) throws IOException {
++            dataBuffer.reset();
++            data.deserialize(dataBuffer);
++            return true;
++        }
++        
++        
+ 		/**
+ 		 *  Flushes in memory buffer into TMP file
+ 		 *
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000168.html">[Cloveretl-svn-commits] CloverETL repos r2530 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+	<LI>Next message: <A HREF="000170.html">[Cloveretl-svn-commits] CloverETL repos r2532 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#169">[ date ]</a>
+              <a href="thread.html#169">[ thread ]</a>
+              <a href="subject.html#169">[ subject ]</a>
+              <a href="author.html#169">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

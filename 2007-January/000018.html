@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2380 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2380%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200701261259.l0QCxP1t018626%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000017.html">
+   <LINK REL="Next"  HREF="000019.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2380 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2380%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200701261259.l0QCxP1t018626%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2380 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Jan 26 13:59:25 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000017.html">[Cloveretl-svn-commits] CloverETL repos r2379 -	trunk/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000019.html">[Cloveretl-svn-commits] CloverETL repos r2381 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-01-26 13:59:24 +0100 (Fri, 26 Jan 2007)
+New Revision: 2380
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/SequenceChecker.java
+Log:
+FIX: in execute() - first call writeRecordBroadcast then return
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/SequenceChecker.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/SequenceChecker.java	2007-01-26 09:07:25 UTC (rev 2379)
++++ trunk/cloveretl.component/src/org/jetel/component/SequenceChecker.java	2007-01-26 12:59:24 UTC (rev 2380)
+@@ -35,8 +35,8 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.MiscUtils;
+ import org.jetel.util.StringUtils;
+-import org.jetel.util.MiscUtils;
+ import org.w3c.dom.Element;
+ /**
+  *  &lt;h3&gt;Sequence Checker Component&lt;/h3&gt;
+@@ -142,6 +142,7 @@
+ 		DataRecord[] records = {new DataRecord(inPort.getMetadata()), new DataRecord(inPort.getMetadata())};
+ 		records[0].init();
+ 		records[1].init();
++		Result result = Result.FINISHED_OK;
+ 		
+ 		while ((records[current] = inPort.readRecord(records[current])) != null &amp;&amp; runIt) {
+ 			if (isFirst) {
+@@ -150,13 +151,18 @@
+ 				compareResult = recordComparator.compare(records[current], records[previous]);
+ 
+ 				if (compareResult == 0) {
+-					if (uniqueKeys) 
+-						return Result.ERROR;
++					if (uniqueKeys) {
++						result = Result.ERROR;
++						break;
++					}
+ 				} else if (compareResult &gt; 0) {
+-					if (!sortOrderAscending) 
+-						return Result.ERROR;
++					if (!sortOrderAscending) {
++						result = Result.ERROR;
++						break;
++					}
+ 				} else if (sortOrderAscending) {
+-					return Result.ERROR;
++					result = Result.ERROR;
++					break;
+ 				}
+ 			}
+ 			
+@@ -167,7 +173,7 @@
+ 			previous = previous ^ 1;
+ 		}
+ 		if (isOutPort) broadcastEOF();
+-        return runIt ? Result.FINISHED_OK : Result.ABORTED;
++        return runIt ? result : Result.ABORTED;
+ 	}
+ 
+ 	@Override
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000017.html">[Cloveretl-svn-commits] CloverETL repos r2379 -	trunk/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000019.html">[Cloveretl-svn-commits] CloverETL repos r2381 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#18">[ date ]</a>
+              <a href="thread.html#18">[ thread ]</a>
+              <a href="subject.html#18">[ subject ]</a>
+              <a href="author.html#18">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

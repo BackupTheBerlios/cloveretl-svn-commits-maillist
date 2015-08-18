@@ -1,0 +1,423 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2569 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2569%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples&In-Reply-To=%3C200703080826.l288QC44029588%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000206.html">
+   <LINK REL="Next"  HREF="000208.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2569 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2569%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples&In-Reply-To=%3C200703080826.l288QC44029588%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2569 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Mar  8 09:26:12 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000206.html">[Cloveretl-svn-commits] CloverETL repos r2568 - in	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata:	. delimited fixlen
+</A></li>
+        <LI>Next message: <A HREF="000208.html">[Cloveretl-svn-commits] CloverETL repos r2570 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#207">[ date ]</a>
+              <a href="thread.html#207">[ thread ]</a>
+              <a href="subject.html#207">[ subject ]</a>
+              <a href="author.html#207">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-08 09:26:11 +0100 (Thu, 08 Mar 2007)
+New Revision: 2569
+
+Removed:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDBLookup.java
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDataParsing.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testGraphSort.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testOrdersLookupReformat.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testXMLGraph.java
+Log:
+UPDATE:updated due to changes in engine
+
+Deleted: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDBLookup.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDBLookup.java	2007-03-08 08:25:12 UTC (rev 2568)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDBLookup.java	2007-03-08 08:26:11 UTC (rev 2569)
+@@ -1,104 +0,0 @@
+-/*
+-*    jETeL/Clover - Java based ETL application framework.
+-*    Copyright (C) 2002  David Pavlis
+-*
+-*    This program is free software; you can redistribute it and/or modify
+-*    it under the terms of the GNU General Public License as published by
+-*    the Free Software Foundation; either version 2 of the License, or
+-*    (at your option) any later version.
+-*    This program is distributed in the hope that it will be useful,
+-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-*    GNU General Public License for more details.
+-*
+-*    You should have received a copy of the GNU General Public License
+-*    along with this program; if not, write to the Free Software
+-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-*/
+-
+-package javaExamples;
+-import java.io.FileInputStream;
+-import java.io.FileNotFoundException;
+-
+-import org.jetel.component.ComponentFactory;
+-import org.jetel.connection.DBConnection;
+-import org.jetel.data.DataRecord;
+-import org.jetel.data.Defaults;
+-import org.jetel.lookup.DBLookupTable;
+-import org.jetel.metadata.DataRecordMetadata;
+-import org.jetel.metadata.DataRecordMetadataXMLReaderWriter;
+-
+-public class testDBLookup{
+-
+-	public static void main(String args[]){
+-	DBConnection dbCon;
+-	
+-    //initialization; must be present
+-    Defaults.init();
+-    ComponentFactory.init();
+-
+-	if (args.length!=4){
+-		System.out.println(&quot;Usage: testDBLookup &lt;driver properties file&gt; &lt;sql query&gt; &lt;key&gt; &lt;db metadata file&gt;&quot;);
+-		System.exit(1);
+-	}
+-	System.out.println(&quot;**************** Input parameters: ****************&quot;);
+-	System.out.println(&quot;Driver propeties: &quot;+args[0]);
+-	System.out.println(&quot;SQL query: &quot;+args[1]);
+-	System.out.println(&quot;Key: &quot;+args[2]);
+-	System.out.println(&quot;Metadata file: &quot;+args[3]);
+-	System.out.println(&quot;***************************************************&quot;);
+-	
+-	DataRecordMetadata metadataIn;
+-	DataRecord data;
+-	
+-	DataRecordMetadataXMLReaderWriter metaReader=new DataRecordMetadataXMLReaderWriter();
+-	try{
+-	    metadataIn=metaReader.read(new FileInputStream(args[3]));
+-	}catch(FileNotFoundException ex){
+-	    throw new RuntimeException(ex.getMessage());
+-	}
+-	
+-	//create connection object. Get driver and connect string from cfg file specified as a first argument
+-	dbCon=new DBConnection(&quot;Conn0&quot;,args[0]);
+-	try{
+-		
+-		// create lookup table. Will use previously created connection. The query string
+-		// is specified as a second parameter
+-		// query string should contain ? (questionmark) in where clause
+-		// e.g. select * from customers where customer_id = ? and customer_city= ?
+-		DBLookupTable lookup=new DBLookupTable(&quot;lookup&quot;,dbCon,metadataIn,args[1]);
+-		
+-		/*
+-		* in case the DB doesn't support getMetadata, use following constructor:
+-		* (don't forget to create metadata object first. For example by analyzing DB
+-		* first and then using DataRecordMetadataXMLReaderWriter
+-		
+-		 DBLookupTable lookup=new DBLookupTable(dbCon,metadataIn,args[1]);
+-		
+-		
+-		*/
+-		
+-		// we initialize lookup
+-		lookup.init();
+-		//try to lookup based on specified parameter
+-		//following version of get() method is valid for queries with one parameter only
+-		//in case you have more (as with the example shown above), use array of objects (strings, integers, etc.) and
+-		//call get(Object[])
+-		
+-		
+-		data=lookup.get(args[2]);
+-		
+-		//in case query returns more than one record, continue displaying it.
+-		while(data!=null){
+-			System.out.println(data);
+-			data=lookup.getNext();
+-		}
+-		//System.out.println(lookup.get(args[4]));
+-		
+-	}catch(Exception ex){
+-		ex.printStackTrace();
+-	}
+-	}
+-} 
+-
+-
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDataParsing.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDataParsing.java	2007-03-08 08:25:12 UTC (rev 2568)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testDataParsing.java	2007-03-08 08:26:11 UTC (rev 2569)
+@@ -17,13 +17,18 @@
+ */
+ 
+ package javaExamples;
+-import java.io.*;
+-import org.jetel.metadata.*;
+-import org.jetel.component.ComponentFactory;
+-import org.jetel.data.*;
++import java.io.FileInputStream;
++import java.io.FileNotFoundException;
++import java.io.FileOutputStream;
++import java.io.PrintStream;
++
++import org.jetel.data.DataRecord;
+ import org.jetel.data.parser.DelimitedDataParser;
+ import org.jetel.exception.ComponentNotReadyException;
+ import org.jetel.exception.JetelException;
++import org.jetel.main.runGraph;
++import org.jetel.metadata.DataFieldMetadata;
++import org.jetel.metadata.DataRecordMetadata;
+ 
+ public class testDataParsing {
+ 
+@@ -33,16 +38,18 @@
+ 	PrintStream out=null;
+ 	DataRecord record;
+ 	
+-    //initialization; must be present
+-    Defaults.init();
+-    ComponentFactory.init();
+-    
+-	System.out.println(&quot;Input file: &quot;+args[0]);
+-	System.out.println(&quot;Output file: &quot;+args[1]);
++	System.out.println(&quot;Usage: testDataParsing &lt;plugins directory&gt;&quot;);
++
++	//initialization; must be present
++	if (args.length == 1) {
++		runGraph.initEngine(args[0], null);
++	}else{
++		runGraph.initEngine(null, null);
++	}
+ 	
+ 	try{
+-		in=new FileInputStream(args[0]);
+-		out=new PrintStream(new FileOutputStream(args[1]));
++		in=new FileInputStream(&quot;data/delimited/bonus.csv&quot;);
++		out=new PrintStream(new FileOutputStream(&quot;output/bonus.out&quot;));
+ 	}
+ 	catch(FileNotFoundException e){
+ 		e.printStackTrace();
+@@ -50,9 +57,9 @@
+ 	
+ 	DataRecordMetadata metadata=new DataRecordMetadata(&quot;TestInput&quot;,DataRecordMetadata.DELIMITED_RECORD);
+ 	
+-	metadata.addField(new DataFieldMetadata(&quot;Name&quot;,DataFieldMetadata.STRING_FIELD, &quot;;&quot;));
+-	metadata.addField(new DataFieldMetadata(&quot;Age&quot;,DataFieldMetadata.NUMERIC_FIELD, &quot;|&quot;));
+-	metadata.addField(new DataFieldMetadata(&quot;City&quot;,DataFieldMetadata.STRING_FIELD, &quot;\n&quot;));
++	metadata.addField(new DataFieldMetadata(&quot;Client_id&quot;,DataFieldMetadata.INTEGER_FIELD, &quot;;&quot;));
++	metadata.addField(new DataFieldMetadata(&quot;Revenue&quot;,DataFieldMetadata.NUMERIC_FIELD, &quot;;&quot;));
++	metadata.addField(new DataFieldMetadata(&quot;Contract_nr&quot;,DataFieldMetadata.INTEGER_FIELD, &quot;\r\n&quot;));
+ 	
+ 	DelimitedDataParser parser=new DelimitedDataParser();
+ 	try{
+@@ -66,14 +73,12 @@
+ 	
+ 	try {
+ 		while((record=parser.getNext(record))!=null){
+-			out.print(&quot;Name:&quot;+record.getField(0).toString());
+-			out.print(&quot; Age:&quot;+record.getField(1).toString());
+-			out.println(&quot; City:&quot;+record.getField(2).toString());
+-			//System.out.println(&quot;Name:&quot;+record.getField(0).toString());
+-			//System.out.println(&quot;Age:&quot;+record.getField(1).toString());
+-			//System.out.println(&quot;City:&quot;+record.getField(2).toString());
+-			//System.out.println();
++			out.print(&quot;Client:&quot;+record.getField(0).toString());
++			out.print(&quot; Revenue:&quot;+record.getField(1).toString());
++			out.println(&quot; Contract:&quot;+record.getField(2).toString());
+ 		}
++		
++		System.out.println(&quot;Parsing succecsfull. See file ./output/bonus.out&quot;);
+ 	} catch (JetelException e1) {
+ 		// TODO Auto-generated catch block
+ 		e1.printStackTrace();
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testGraphSort.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testGraphSort.java	2007-03-08 08:25:12 UTC (rev 2568)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testGraphSort.java	2007-03-08 08:26:11 UTC (rev 2569)
+@@ -20,16 +20,16 @@
+ import java.io.FileInputStream;
+ import java.io.IOException;
+ 
+-import org.jetel.component.ComponentFactory;
+ import org.jetel.component.DelimitedDataReader;
+ import org.jetel.component.DelimitedDataWriter;
+ import org.jetel.component.Sort;
+-import org.jetel.data.Defaults;
+ import org.jetel.exception.GraphConfigurationException;
+ import org.jetel.graph.Edge;
+ import org.jetel.graph.Node;
+ import org.jetel.graph.Phase;
++import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
++import org.jetel.main.runGraph;
+ import org.jetel.metadata.DataRecordMetadata;
+ import org.jetel.metadata.DataRecordMetadataXMLReaderWriter;
+ 
+@@ -40,16 +40,20 @@
+ 
+ 	public static void main(String args[]){
+ 	
+-	//initialization; must be present
+-    Defaults.init();
+-    ComponentFactory.init();
+     
+-	if (args.length!=4){
++	if (args.length &lt; 4){
+ 		System.out.println(&quot;Example graph which sorts input data according to specified key.&quot;);
+ 		System.out.println(&quot;The key must be a name of field(or comma delimited fields) from input data.&quot;);
+-		System.out.println(&quot;Usage: testGraphSort &lt;input data filename&gt; &lt;output sorted filename&gt; &lt;metadata filename&gt; &lt;key&gt;&quot;);
++		System.out.println(&quot;Usage: testGraphSort &lt;input data filename&gt; &lt;output sorted filename&gt; &lt;metadata filename&gt; &lt;key&gt; [&lt;plugin directory&gt;]&quot;);
+ 		System.exit(1);
+ 	}
++	//initialization; must be present
++	if (args.length == 5) {
++		runGraph.initEngine(args[4], null);
++	}else{
++		runGraph.initEngine(null, null);
++	}
++
+ 	System.out.println(&quot;**************** Input parameters: ****************&quot;);
+ 	System.out.println(&quot;Input file: &quot;+args[0]);
+ 	System.out.println(&quot;Output file: &quot;+args[1]);
+@@ -112,7 +116,7 @@
+ 	//graph.dumpGraphConfiguration();
+ 	
+ 	
+-	if (!graph.run()){ // start all Nodes (each node is one thread)
++	if (!graph.run().equals(Result.FINISHED_OK)){ // start all Nodes (each node is one thread)
+ 		System.out.println(&quot;Failed starting all nodes!&quot;);
+ 		return;		
+ 	}
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testOrdersLookupReformat.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testOrdersLookupReformat.java	2007-03-08 08:25:12 UTC (rev 2568)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testOrdersLookupReformat.java	2007-03-08 08:26:11 UTC (rev 2569)
+@@ -26,17 +26,18 @@
+ import org.jetel.data.GetVal;
+ import org.jetel.data.RecordKey;
+ import org.jetel.data.SetVal;
++import org.jetel.data.lookup.LookupTable;
++import org.jetel.data.lookup.LookupTableFactory;
+ import org.jetel.data.parser.DelimitedDataParser;
+ import org.jetel.data.parser.Parser;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.lookup.SimpleLookupTable;
+ import org.jetel.metadata.DataRecordMetadata;
+ import org.jetel.metadata.DataRecordMetadataXMLReaderWriter;
+ 
+ 
+ public class testOrdersLookupReformat extends DataRecordTransform{
+ 		int counter=0;
+-		SimpleLookupTable lookup;
++		LookupTable lookup;
+ 		RecordKey key;
+ 	
+ 	public boolean init(DataRecordMetadata sourceMetadata[], DataRecordMetadata targetMetadata[]){
+@@ -49,7 +50,10 @@
+ 			Parser parser=new DelimitedDataParser();
+ 			parser.init(lookupMetadata);
+ 			parser.setDataSource(new FileInputStream(&quot;employees.dat&quot;));
+-			lookup=new SimpleLookupTable(&quot;lookup&quot;,lookupMetadata,lookupKey,parser );
++			lookup = LookupTableFactory.createLookupTable(getGraph(), &quot;simpleLookup&quot;, 
++					new Object[]{&quot;lookup&quot;,lookupMetadata,lookupKey,parser}, 
++					new Class[]{String.class,DataRecordMetadata.class,String[].class,Parser.class});
++//			lookup=new SimpleLookupTable(&quot;lookup&quot;,lookupMetadata,lookupKey,parser );
+ //			try {
+ 				lookup.init();
+ //			} catch (JetelException e) {
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testXMLGraph.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testXMLGraph.java	2007-03-08 08:25:12 UTC (rev 2568)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/javaExamples/testXMLGraph.java	2007-03-08 08:26:11 UTC (rev 2569)
+@@ -23,8 +23,10 @@
+ 
+ import org.jetel.component.ComponentFactory;
+ import org.jetel.data.Defaults;
++import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.graph.TransformationGraphXMLReaderWriter;
++import org.jetel.main.runGraph;
+ import org.jetel.plugin.Plugins;
+ 
+ public class testXMLGraph{
+@@ -36,20 +38,17 @@
+ 		}
+ 		
+ 		FileInputStream in;
+-		String plugins;
+-		if (args.length==1){
+-			plugins = &quot;../plugins&quot;;
+-		}else{
+-			plugins = args[1];
+-		}
+         
+         //initialization; must be present
+-        Defaults.init();
+-        Plugins.init(plugins);
+-        ComponentFactory.init();
++		//initialization; must be present
++		if (args.length == 2) {
++			runGraph.initEngine(args[1], null);
++		}else{
++			runGraph.initEngine(null, null);
++		}
+ 
+ 		System.out.println(&quot;Graph definition file: &quot;+args[0]);
+-		System.out.println(&quot;Plugins directory: &quot;+plugins);
++		System.out.println(&quot;Plugins directory: &quot;+ args[1] != null ? args[1] : Defaults.DEFAULT_PLUGINS_DIRECTORY);
+ 		
+ 		try{
+ 			in=new FileInputStream(args[0]);
+@@ -76,7 +75,7 @@
+ 		
+ 		graph.dumpGraphConfiguration();
+ 		
+-		if (!graph.run()){ // start all Nodes (each node is one thread)
++		if (!graph.run().equals(Result.FINISHED_OK)){ // start all Nodes (each node is one thread)
+ 		System.out.println(&quot;Failed starting all nodes!&quot;);
+ 		return;		
+ 		}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000206.html">[Cloveretl-svn-commits] CloverETL repos r2568 - in	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata:	. delimited fixlen
+</A></li>
+	<LI>Next message: <A HREF="000208.html">[Cloveretl-svn-commits] CloverETL repos r2570 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#207">[ date ]</a>
+              <a href="thread.html#207">[ thread ]</a>
+              <a href="subject.html#207">[ subject ]</a>
+              <a href="author.html#207">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

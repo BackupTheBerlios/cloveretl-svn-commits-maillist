@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2525 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2525%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702271659.l1RGx152030587%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000162.html">
+   <LINK REL="Next"  HREF="000164.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2525 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2525%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702271659.l1RGx152030587%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2525 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 17:59:01 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000162.html">[Cloveretl-svn-commits] CloverETL repos r2524 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+        <LI>Next message: <A HREF="000164.html">[Cloveretl-svn-commits] CloverETL repos r2526 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#163">[ date ]</a>
+              <a href="thread.html#163">[ thread ]</a>
+              <a href="subject.html#163">[ subject ]</a>
+              <a href="author.html#163">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-02-27 17:59:00 +0100 (Tue, 27 Feb 2007)
+New Revision: 2525
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+Log:
+UPDATE:extended tracking info (on nodes &amp; phases)
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-02-27 16:58:37 UTC (rev 2524)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMX.java	2007-02-27 16:59:00 UTC (rev 2525)
+@@ -29,6 +29,8 @@
+ 
+ import javax.management.*; 
+ 
++import org.jetel.graph.Phase;
++
+ public class CloverJMX extends NotificationBroadcasterSupport  implements CloverJMXMBean {
+ 
+     private long sequenceNumber = 1;
+@@ -66,6 +68,16 @@
+         return runTimeMS;
+     }
+ 
++    
++    public int[] getPhaseList() {
++        Phase[] phases=watchDog.getTransformationGraph().getPhases();
++        int[] phaseNums=new int[phases.length];
++        for (int i=0;i&lt;phaseNums.length;i++) {
++            phaseNums[i]=phases[i].getPhaseNum();
++        }
++        return phaseNums;
++    }
++    
+     public int getRunningPhase() {
+         return runingPhase;
+     }
+@@ -79,6 +91,15 @@
+         
+     }
+     
++    public TrackingDetail getTrackingDetail(int phase,String nodeID) {
++        return watchDog.getTransformationGraph().getPhase(phase).getTracking().get(nodeID);
++    }
++    
++    public PhaseTrackingDetail getPhaseTracking(int phase) {
++        return watchDog.getTransformationGraph().getPhase(phase).getPhaseTracking();
++    }
++    
++    
+     public String getTrackingDetailString(String nodeID){
+         TrackingDetail detail=trackingMap.get(nodeID);
+         if (detail!=null){
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java	2007-02-27 16:58:37 UTC (rev 2524)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/CloverJMXMBean.java	2007-02-27 16:59:00 UTC (rev 2525)
+@@ -27,19 +27,37 @@
+ 
+ public interface CloverJMXMBean {
+   
++    /**
++     * @return String containing info about which version of CloverETL
++     * is running
++     * @since 26.2.2007
++     */
+     public String getCloverVersion();
+     
+     public int getUpdateInterval();
+     public void setUpdateInterval(int updateInterval);
+     
++    /**
++     * @return  number of phase being executed
++     * @since 26.2.2007
++     */
+     public int getRunningPhase();
++    
++    public int[] getPhaseList();
++    
+     public String getRunningGraphName();
+     public long getRunningGraphTime();
+     
+     public int getRunningNodesCount();
+     public String[] getNodesList();
+     
++
++    public PhaseTrackingDetail getPhaseTracking(int phase);
++    
+     public TrackingDetail getTrackingDetail(String nodeID);
++    public TrackingDetail getTrackingDetail(int phase,String nodeID);
++    
++    
+     public String getTrackingDetailString(String nodeID);
+     
+     public void stopGraphExecution();
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-02-27 16:58:37 UTC (rev 2524)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-02-27 16:59:00 UTC (rev 2525)
+@@ -73,7 +73,6 @@
+ 	private Phase currentPhase;
+ 	private int currentPhaseNum;
+ 	private Runtime javaRuntime;
+-	private int usedMemoryStampKB;
+     private MemoryMXBean memMXB;
+     private ThreadMXBean threadMXB;
+     private BlockingQueue &lt;Message&gt; inMsgQueue;
+@@ -109,7 +108,6 @@
+ 		watchDogStatus = Result.READY;
+ 		javaRuntime = Runtime.getRuntime();
+         memMXB=ManagementFactory.getMemoryMXBean();
+-		usedMemoryStampKB = (int) memMXB.getHeapMemoryUsage().getUsed() /1024;
+         threadMXB= ManagementFactory.getThreadMXBean();
+         
+         inMsgQueue=new PriorityBlockingQueue&lt;Message&gt;();
+@@ -153,16 +151,15 @@
+ //        trackingThread.start();
+         
+ 		for (currentPhaseNum = 0; currentPhaseNum &lt; phases.length; currentPhaseNum++) {
+-			switch( executePhase(phases[currentPhaseNum]) ){
++			switch( (executePhase(phases[currentPhaseNum])) ){
+             case ABORTED:
+-                watchDogStatus = Result.ABORTED;
+                 logger.error(&quot;!!! Phase execution aborted !!!&quot;);
+                 return;
+             case ERROR:
+-                watchDogStatus = Result.ERROR;
+ 				logger.error(&quot;!!! Phase finished with error - stopping graph run !!!&quot;);
+ 				return;
+             }
++            
+ 			// force running of garbage collector
+ 			logger.info(&quot;Forcing garbage collection ...&quot;);
+ 			javaRuntime.runFinalization();
+@@ -171,7 +168,6 @@
+ 
+         //disabled by Kokon
+ //        trackingThread.interrupt();
+-		watchDogStatus = Result.FINISHED_OK;
+ 		printPhasesSummary();
+ 	}
+ 
+@@ -263,7 +259,7 @@
+ 	 * @since             July 29, 2002
+ 	 */
+ 	public Result watch(Phase phase) throws InterruptedException {
+-		int phaseMemUtilizationMaxKB;
++		long phaseMemUtilizationMax;
+ 		Iterator leafNodesIterator;
+         Message message;
+ 		int ticker = Defaults.WatchDog.NUMBER_OF_TICKS_BETWEEN_STATUS_CHECKS;
+@@ -280,7 +276,7 @@
+         phase.setTracking(tracking);
+             
+ 		//get current memory utilization
+-		phaseMemUtilizationMaxKB=(int)memMXB.getHeapMemoryUsage().getUsed()/1024;
++		phaseMemUtilizationMax=memMXB.getHeapMemoryUsage().getUsed();
+ 		//let's take timestamp so we can measure processing
+ 		startTimestamp = lastTimestamp = System.currentTimeMillis();
+         // also let's take nanotime to measure how much CPU we spend processing
+@@ -321,10 +317,10 @@
+             
+             // is there any node running ?
+ 			if (leafNodes.isEmpty()) {
+-				phase.setPhaseMemUtilization(phaseMemUtilizationMaxKB);
+-				phase.setPhaseExecTime((int) (System.currentTimeMillis() - startTimestamp));
++                PhaseTrackingDetail phaseTracking=new PhaseTrackingDetail((int) (System.currentTimeMillis() - startTimestamp)
++                                                    ,phaseMemUtilizationMax);
+ 				logger.info(&quot;Execution of phase [&quot; + phase.getPhaseNum() + &quot;] successfully finished - elapsed time(sec): &quot;
+-						+ phase.getPhaseExecTime() / 1000);
++						+ phaseTracking.getExecTime() / 1000);
+ 				//printProcessingStatus(phase.getNodes().iterator(), phase.getPhaseNum());
+                 printTracking.execute();// print tracking
+ 				return Result.FINISHED_OK;
+@@ -352,9 +348,8 @@
+                 // reinitialize ticker
+                 ticker = Defaults.WatchDog.NUMBER_OF_TICKS_BETWEEN_STATUS_CHECKS;
+                 // get memory usage mark
+-                phaseMemUtilizationMaxKB = (int) Math.max(
+-                        phaseMemUtilizationMaxKB, memMXB.getHeapMemoryUsage()
+-                                .getUsed() / 1024);
++                phaseMemUtilizationMax = Math.max(
++                        phaseMemUtilizationMax, memMXB.getHeapMemoryUsage().getUsed() );
+                 }
+             
+                 long elapsedNano=System.nanoTime()-startTimeNano;
+@@ -439,9 +434,9 @@
+ 	void printPhasesSummary() {
+ 		logger.info(&quot;-----------------------** Summary of Phases execution **---------------------&quot;);
+ 		logger.info(&quot;Phase#            Finished Status         RunTime(sec)    MemoryAllocation(KB)&quot;);
+-		for (int i = 0; i &lt; phases.length; i++) {
+-			Object nodeInfo[] = {new Integer(phases[i].getPhaseNum()), new Integer(0),
+-					new Integer(phases[i].getPhaseExecTime()/1000), new Integer(phases[i].getPhaseMemUtilization())};
++		for (Phase phase : phases) {
++			Object nodeInfo[] = {new Integer(phase.getPhaseNum()), phase.getResult().message(),
++					new Integer(phase.getPhaseTracking().getExecTimeSec()), new Integer(phase.getPhaseTracking().getMemUtilizationKB())};
+ 			int nodeSizes[] = {-18, -24, 12, 18};
+ 			logger.info(StringUtils.formatString(nodeInfo, nodeSizes));
+ 		}
+@@ -526,7 +521,7 @@
+ 		
+         //end of phase, destroy it
+ 		phase.free();
+-        
++        phase.setResult(watchDogStatus);
+ 		return watchDogStatus;
+ 	}
+ 
+@@ -615,11 +610,11 @@
+             trackingLogger.info(&quot;Time: &quot;
+                 + DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM, Locale.FRANCE).
+                     format(Calendar.getInstance().getTime()));
+-            trackingLogger.info(&quot;Node                   Status     Port      #Records         #KB  Rec/s   KB/s&quot;);
++            trackingLogger.info(&quot;Node                   Status     Port      #Records         #KB  Rec/s    KB/s&quot;);
+             trackingLogger.info(&quot;----------------------------------------------------------------------------------&quot;);
+             for (TrackingDetail nodeDetail : tracking.values()){
+                 Object nodeInfo[] = {nodeDetail.getNodeId(), nodeDetail.getResult().message()};
+-                int nodeSizes[] = {-23, -10};
++                int nodeSizes[] = {-23, -15};
+                 trackingLogger.info(StringUtils.formatString(nodeInfo, nodeSizes));
+                 //in ports
+                 Object portInfo[];
+@@ -628,13 +623,14 @@
+                 for(int i=0;i&lt;nodeDetail.getNumInputPorts();i++){
+                     if (i==0){
+                         cpuPrinted=true;
+-                        portInfo = new Object[] {&quot;%CPU:&quot;,Float.toString(nodeDetail.getUsageCPU()),
++                        final float cpuUsage=nodeDetail.getUsageCPU();
++                        portInfo = new Object[] {&quot; %cpu:&quot;,cpuUsage&gt;=0.01f ? Float.toString(cpuUsage) : &quot;..&quot;,
+                                 &quot;In:&quot;, Integer.toString(i), 
+                                 Integer.toString(nodeDetail.getTotalRows(TrackingDetail.IN_PORT, i)),
+                                 Long.toString(nodeDetail.getTotalBytes(TrackingDetail.IN_PORT, i)&gt;&gt;10),
+                                 Integer.toString(nodeDetail.getAvgRows(TrackingDetail.IN_PORT, i)),
+                                 Integer.toString(nodeDetail.getAvgBytes(TrackingDetail.IN_PORT, i)&gt;&gt;10)};
+-                        portSizes = new int[] {-5,-4,29, -5, 9,12,7,8};
++                        portSizes = new int[] {-6,-4,28, -5, 9,12,7,8};
+                     }else{
+                             portInfo = new Object[] {&quot;In:&quot;, Integer.toString(i), 
+                             Integer.toString(nodeDetail.getTotalRows(TrackingDetail.IN_PORT, i)),
+@@ -648,13 +644,14 @@
+                 //out ports
+                 for(int i=0;i&lt;nodeDetail.getNumOutputPorts();i++){
+                     if (i==0 &amp;&amp; !cpuPrinted){
+-                        portInfo = new Object[] {&quot;%CPU:&quot;,Float.toString(nodeDetail.getUsageCPU()),
++                        final float cpuUsage=nodeDetail.getUsageCPU();
++                        portInfo = new Object[] {&quot; %cpu:&quot;,cpuUsage&gt;=0.01f ? Float.toString(cpuUsage) : &quot;..&quot;,
+                                 &quot;Out:&quot;, Integer.toString(i), 
+                                 Integer.toString(nodeDetail.getTotalRows(TrackingDetail.OUT_PORT, i)),
+                                 Long.toString(nodeDetail.getTotalBytes(TrackingDetail.OUT_PORT, i)&gt;&gt;10),
+                                 Integer.toString(nodeDetail.getAvgRows(TrackingDetail.OUT_PORT, i)),
+                                 Integer.toString(nodeDetail.getAvgBytes(TrackingDetail.OUT_PORT, i)&gt;&gt;10)};
+-                        portSizes = new int[] {-5,-4,29, -5, 9,12,7,8};
++                        portSizes = new int[] {-6,-4,28, -5, 9,12,7,8};
+                     }else{
+                         portInfo = new Object[] {&quot;Out:&quot;, Integer.toString(i), 
+                             Integer.toString(nodeDetail.getTotalRows(TrackingDetail.OUT_PORT, i)),
+@@ -743,6 +740,15 @@
+     public void stopRun() {
+         this.runIt = false;
+     }
++
++
++    /**
++     * @return the graph
++     * @since 26.2.2007
++     */
++    public TransformationGraph getTransformationGraph() {
++        return graph;
++    }
+     
+     
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000162.html">[Cloveretl-svn-commits] CloverETL repos r2524 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+	<LI>Next message: <A HREF="000164.html">[Cloveretl-svn-commits] CloverETL repos r2526 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#163">[ date ]</a>
+              <a href="thread.html#163">[ thread ]</a>
+              <a href="subject.html#163">[ subject ]</a>
+              <a href="author.html#163">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2423 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2423%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200702011026.l11AQfR8028441%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000059.html">
+   <LINK REL="Next"  HREF="000061.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2423 -	trunk/cloveretl.engine/src/org/jetel/data/parser</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2423%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200702011026.l11AQfR8028441%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2423 -	trunk/cloveretl.engine/src/org/jetel/data/parser">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  1 11:26:41 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000059.html">[Cloveretl-svn-commits] CloverETL repos r2422 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000061.html">[Cloveretl-svn-commits] CloverETL repos r2424 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-01 11:26:41 +0100 (Thu, 01 Feb 2007)
+New Revision: 2423
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java
+   trunk/cloveretl.engine/src/org/jetel/data/parser/DelimitedDataParser.java
+Log:
+MINOR:removed enum BOOLEXt
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java	2007-02-01 10:20:59 UTC (rev 2422)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java	2007-02-01 10:26:41 UTC (rev 2423)
+@@ -56,12 +56,6 @@
+  */
+ public class DataParser implements Parser {
+ 	
+-	public enum BoolExt{
+-		TRUE,
+-		FALSE,
+-		NOT_SET;
+-	}
+-
+ 	private IParserExceptionHandler exceptionHandler;
+ 
+ 	private DataRecordMetadata metadata;
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/DelimitedDataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/DelimitedDataParser.java	2007-02-01 10:20:59 UTC (rev 2422)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/DelimitedDataParser.java	2007-02-01 10:26:41 UTC (rev 2423)
+@@ -35,7 +35,6 @@
+ import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+-import org.jetel.data.parser.DataParser.BoolExt;
+ import org.jetel.exception.BadDataFormatException;
+ import org.jetel.exception.ComponentNotReadyException;
+ import org.jetel.exception.IParserExceptionHandler;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000059.html">[Cloveretl-svn-commits] CloverETL repos r2422 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000061.html">[Cloveretl-svn-commits] CloverETL repos r2424 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#60">[ date ]</a>
+              <a href="thread.html#60">[ thread ]</a>
+              <a href="subject.html#60">[ subject ]</a>
+              <a href="author.html#60">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

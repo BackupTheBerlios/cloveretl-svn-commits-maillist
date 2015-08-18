@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2516 -	trunk/cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2516%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702271417.l1REHJvL008161%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000153.html">
+   <LINK REL="Next"  HREF="000155.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2516 -	trunk/cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2516%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702271417.l1REHJvL008161%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2516 -	trunk/cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 15:17:19 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000153.html">[Cloveretl-svn-commits] CloverETL repos r2515 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+        <LI>Next message: <A HREF="000155.html">[Cloveretl-svn-commits] CloverETL repos r2517 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-27 15:17:15 +0100 (Tue, 27 Feb 2007)
+New Revision: 2516
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java
+Log:
+UPDATE:NumberIterator can now handle negative numbers too
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java	2007-02-27 14:15:59 UTC (rev 2515)
++++ trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java	2007-02-27 14:17:15 UTC (rev 2516)
+@@ -1,7 +1,7 @@
+ package org.jetel.util;
+ 
+ import java.util.Iterator;
+-import java.util.regex.Pattern;
++import java.util.NoSuchElementException;
+ 
+ 
+ /**
+@@ -23,41 +23,46 @@
+  */
+ public class NumberIterator implements Iterator&lt;Integer&gt;{
+ 	
+-	private final static int FIRST_ELEMENT = 0;
+-
+ 	private String pattern;
+ 	private String subPattern;
+ 	private int index = 0;
+ 	private int comaIndex;
+-	private int next = FIRST_ELEMENT;
+-	private PositiveIntervalIterator intervalIterator = null;
++	private int last;
++	private int first;
++	private IntervalIterator intervalIterator = null;
++	private Integer next = null;
++	private Integer tmp;
+ 	
+ 	/**
+ 	 * Constructor from given mask
+ 	 * 
+ 	 * @param pattern
+ 	 */
+-	public NumberIterator(String pattern){
++	public NumberIterator(String pattern, int first,int last){
++		this.first = first;
++		this.last = last;
+ 		this.pattern = pattern.trim();
+ 		if (pattern.equals(&quot;*&quot;)) {
+ 			subPattern = pattern;
+ 		}
++		next = getNext();
+ 	}
+ 	
+-	/* (non-Javadoc)
+-	 * @see java.util.Iterator#hasNext()
+-	 */
+-	public boolean hasNext() {
++	public NumberIterator(String pattern){
++		this(pattern, IntervalIterator.FIRST_ELEMENT, IntervalIterator.LAST_ELEMENT);
++	}
++	
++	private Integer getNext(){
+ 		if (pattern.equals(&quot;*&quot;)) {
+-			return true;
++			return next &lt; last ? next++ : null;
+ 		}		
+ 		//check if in current interval there is more numbers
+ 		if (intervalIterator != null &amp;&amp; intervalIterator.hasNext() ) {
+-			return true;
++			return intervalIterator.next();
+ 		}
+ 		//get next part of pattern
+ 		if (index == pattern.length()) {//end of mask
+-			return false;
++			return null;
+ 		}
+ 		comaIndex = pattern.indexOf(',', index);
+ 		if (comaIndex == -1) {
+@@ -69,26 +74,34 @@
+ 		}
+ 		if (StringUtils.isInteger(subPattern)) {
+ 			intervalIterator = null;
+-			return true;
++			return Integer.parseInt(subPattern);
+ 		}else {
+-			intervalIterator = new PositiveIntervalIterator(subPattern);
+-			return intervalIterator.hasNext();
++			intervalIterator = new IntervalIterator(subPattern,first,last);
++			if (intervalIterator.hasNext()) {
++				return intervalIterator.next();
++			}else{
++				return getNext();
++			}
+ 		}
+ 	}
+ 	
+ 	/* (non-Javadoc)
++	 * @see java.util.Iterator#hasNext()
++	 */
++	public boolean hasNext() {
++		return next != null;
++	}
++	
++	/* (non-Javadoc)
+ 	 * @see java.util.Iterator#next()
+ 	 */
+ 	public Integer next() {
+-		if (intervalIterator != null) {//next from current interval
+-			return intervalIterator.next();
+-		}else{//subPattern is number or &quot;*&quot;
+-			if (StringUtils.isInteger(subPattern)) {
+-				return Integer.parseInt(subPattern);
+-			}else{
+-				return next++;
+-			}
++		tmp = new Integer(next);
++		if (next == null) {
++			throw new NoSuchElementException();
+ 		}
++		next = getNext();
++		return tmp;
+ 	}
+ 	
+ 	public void remove() {
+@@ -107,36 +120,51 @@
+ 	 * @since Feb 23, 2007
+ 	 *
+ 	 */
+-	private class PositiveIntervalIterator implements Iterator&lt;Integer&gt;{
++	private class IntervalIterator implements Iterator&lt;Integer&gt;{
+ 		
+-		private final static int FIRST_ELEMENT = 0;
++		public final static int FIRST_ELEMENT = Integer.MIN_VALUE;
++		public final static int LAST_ELEMENT = Integer.MAX_VALUE;
+ 		
++		private final static char DASH = '-';
++		
+ 		private String firstPattern;
+ 		private String lastPattern;
+-		private int next = FIRST_ELEMENT;
+-		private int last = FIRST_ELEMENT - 1;
++		private int next;
++		private Integer last;
+ 		
+ 		/**
+ 		 * Constructor from given pattern
+ 		 * 
+ 		 * @param pattern
+ 		 */
+-		PositiveIntervalIterator(String pattern) {
+-			if (!Pattern.matches(&quot;[0-9]*-[0-9]*|[0-9]*-\\*|\\*-[0-9]*&quot;, pattern)){
+-				throw new IllegalArgumentException(&quot;Not positive integer interval: &quot; + pattern);
++		IntervalIterator(String pattern) {
++			this(pattern,FIRST_ELEMENT,LAST_ELEMENT);
++		}
++		
++		IntervalIterator(String pattern, int first, int last) {
++			next = first;
++			this.last = last;
++			int dashIndex= pattern.trim().indexOf(DASH);
++			if (dashIndex == -1) {
++				throw new IllegalArgumentException(&quot;Not integer interval: &quot; + pattern);
++			}else if (dashIndex == 0) {
++				dashIndex = pattern.indexOf(DASH, 1);
++				if (dashIndex == -1) {
++					throw new IllegalArgumentException(&quot;Not integer interval: &quot; + pattern);
++				}
+ 			}
+-			firstPattern = pattern.substring(0,pattern.indexOf('-')).trim();
+-			lastPattern = pattern.substring(pattern.indexOf('-') + 1).trim();
++			firstPattern = pattern.substring(0,dashIndex).trim();
++			lastPattern = pattern.substring(dashIndex + 1).trim();
+ 			if (!firstPattern.equals(&quot;*&quot;)) {
+ 				next = Integer.parseInt(firstPattern);
+ 			}
+ 			if (!lastPattern.equals(&quot;*&quot;)){
+-				last = Integer.parseInt(lastPattern);
++				this.last = Integer.parseInt(lastPattern);
+ 			}
+ 		}
+ 		
+ 		public boolean hasNext() {
+-			return (last == FIRST_ELEMENT -1 || next &lt;= last);
++			return (next &lt;= last);
+ 		}
+ 
+ 		public Integer next() {
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000153.html">[Cloveretl-svn-commits] CloverETL repos r2515 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+	<LI>Next message: <A HREF="000155.html">[Cloveretl-svn-commits] CloverETL repos r2517 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#154">[ date ]</a>
+              <a href="thread.html#154">[ thread ]</a>
+              <a href="subject.html#154">[ subject ]</a>
+              <a href="author.html#154">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

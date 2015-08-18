@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2436 -	trunk/cloveretl.engine/src/org/jetel/exception
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2436%20-%0A%09trunk/cloveretl.engine/src/org/jetel/exception&In-Reply-To=%3C200702061114.l16BEJ29021189%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000072.html">
+   <LINK REL="Next"  HREF="000074.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2436 -	trunk/cloveretl.engine/src/org/jetel/exception</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2436%20-%0A%09trunk/cloveretl.engine/src/org/jetel/exception&In-Reply-To=%3C200702061114.l16BEJ29021189%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2436 -	trunk/cloveretl.engine/src/org/jetel/exception">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb  6 12:14:19 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000072.html">[Cloveretl-svn-commits] CloverETL repos r2435 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+        <LI>Next message: <A HREF="000074.html">[Cloveretl-svn-commits] CloverETL repos r2437 -	trunk/cloveretl.engine/test/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#73">[ date ]</a>
+              <a href="thread.html#73">[ thread ]</a>
+              <a href="subject.html#73">[ subject ]</a>
+              <a href="author.html#73">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-06 12:14:19 +0100 (Tue, 06 Feb 2007)
+New Revision: 2436
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/exception/TransformException.java
+Log:
+UPDATE:TransformException - implemented method getMessage
+
+Modified: trunk/cloveretl.engine/src/org/jetel/exception/TransformException.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/exception/TransformException.java	2007-02-06 11:13:27 UTC (rev 2435)
++++ trunk/cloveretl.engine/src/org/jetel/exception/TransformException.java	2007-02-06 11:14:19 UTC (rev 2436)
+@@ -81,6 +81,16 @@
+ 		this.recNo = recNo;
+ 	}
+ 
+-
++	@Override
++	public String getMessage() {
++		StringBuilder msg = new StringBuilder();
++		msg.append(&quot;Record number: &quot;);
++		msg.append(recNo);
++		msg.append(&quot;, field number: &quot;);
++		msg.append(fieldNo);
++		msg.append(&quot;. Message: &quot;);
++		msg.append(super.getMessage());
++		return msg.toString();
++	}
+     
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000072.html">[Cloveretl-svn-commits] CloverETL repos r2435 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+	<LI>Next message: <A HREF="000074.html">[Cloveretl-svn-commits] CloverETL repos r2437 -	trunk/cloveretl.engine/test/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#73">[ date ]</a>
+              <a href="thread.html#73">[ thread ]</a>
+              <a href="subject.html#73">[ subject ]</a>
+              <a href="author.html#73">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2371 -	trunk/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2371%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701251353.l0PDr1Gf028264%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000008.html">
+   <LINK REL="Next"  HREF="000010.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2371 -	trunk/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2371%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701251353.l0PDr1Gf028264%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2371 -	trunk/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Jan 25 14:53:01 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000008.html">[Cloveretl-svn-commits] CloverETL repos r2370 -	trunk/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000010.html">[Cloveretl-svn-commits] CloverETL repos r2372 -	trunk/cloveretl.engine/examples/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-25 14:53:00 +0100 (Thu, 25 Jan 2007)
+New Revision: 2371
+
+Modified:
+   trunk/cloveretl.engine/examples/graphDBLoad5.grf
+Log:
+UPDATE:changed values of attributes cloverFields and fieldMap
+
+Modified: trunk/cloveretl.engine/examples/graphDBLoad5.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphDBLoad5.grf	2007-01-25 13:51:53 UTC (rev 2370)
++++ trunk/cloveretl.engine/examples/graphDBLoad5.grf	2007-01-25 13:53:00 UTC (rev 2371)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph illustrates usage of dbFields and cloverFields parameters of&#10;DB_OUTPUT_TABLE component.&#10;Parameter dbFields allows to specify that only certain fields of target DB table&#10;will be populated.&#10;Parameter cloverFields allows to specify which input/Clover fields are used&#10;for populating target fields.&#10;The final mapping is determined by the order in which Clover fields and DB fields appear&#10;in the parameters.&#10;Note: in this example, input field LAST_NAME is mapped onto FIRST_NAME in DB and&#10;input field FIRST_NAME onto LAST_NAME in DB.&#10;Note2: parameter batchMode allows for grouping of inserts into DB thus increasing throughput. It works&#10;only with DBs/JDBC drivers which support this feature (e.g. Oracle).&#10;&quot; name=&quot;TestingDBOutputTable&quot;&gt;
++&lt;Graph created=&quot;Wed Jan 24 09:02:52 CET 2007&quot; description=&quot;This graph illustrates usage of dbFields and cloverFields parameters of&#10;DB_OUTPUT_TABLE component.&#10;Parameter dbFields allows to specify that only certain fields of target DB table&#10;will be populated.&#10;Parameter cloverFields allows to specify which input/Clover fields are used&#10;for populating target fields.&#10;The final mapping is determined by the order in which Clover fields and DB fields appear&#10;in the parameters.&#10;Note: in this example, input field LAST_NAME is mapped onto FIRST_NAME in DB and&#10;input field FIRST_NAME onto LAST_NAME in DB.&#10;Note2: parameter batchMode allows for grouping of inserts into DB thus increasing throughput. It works&#10;only with DBs/JDBC drivers which support this feature (e.g. Oracle).&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Jan 24 10:55:54 CET 2007&quot; name=&quot;TestingDBOutputTable&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/employeeDB.fmt&quot; id=&quot;InMetadata&quot;/&gt;
+ &lt;Connection dbConfig=&quot;koule_postgre.cfg&quot; id=&quot;DBConnection0&quot; type=&quot;JDBC&quot;/&gt;
+@@ -7,7 +7,7 @@
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+ &lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/employees.list.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+-&lt;Node batchMode=&quot;false&quot; cloverFields=&quot;LAST_NAME;FIRST_NAME&quot; commit=&quot;300&quot; dbConnection=&quot;DBConnection0&quot; dbFields=&quot;FIRST_NAME;LAST_NAME&quot; dbTable=&quot;employee_tmp&quot; enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DB_OUTPUT_TABLE&quot;/&gt;
++&lt;Node batchMode=&quot;false&quot; commit=&quot;300&quot; dbConnection=&quot;DBConnection0&quot; dbTable=&quot;employee_tmp&quot; enabled=&quot;enabled&quot; fieldMap=&quot;FIRST_NAME=first_name;LAST_NAME=last_name&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DB_OUTPUT_TABLE&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE2&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000008.html">[Cloveretl-svn-commits] CloverETL repos r2370 -	trunk/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000010.html">[Cloveretl-svn-commits] CloverETL repos r2372 -	trunk/cloveretl.engine/examples/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#9">[ date ]</a>
+              <a href="thread.html#9">[ thread ]</a>
+              <a href="subject.html#9">[ subject ]</a>
+              <a href="author.html#9">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

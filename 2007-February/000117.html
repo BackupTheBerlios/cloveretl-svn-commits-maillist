@@ -1,0 +1,295 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2480 - in	trunk/cloveretl.engine/examples: . data metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2480%20-%20in%0A%09trunk/cloveretl.engine/examples%3A%20.%20data%20metadata&In-Reply-To=%3C200702161522.l1GFMftV008406%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000116.html">
+   <LINK REL="Next"  HREF="000118.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2480 - in	trunk/cloveretl.engine/examples: . data metadata</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2480%20-%20in%0A%09trunk/cloveretl.engine/examples%3A%20.%20data%20metadata&In-Reply-To=%3C200702161522.l1GFMftV008406%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2480 - in	trunk/cloveretl.engine/examples: . data metadata">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Feb 16 16:22:41 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000116.html">[Cloveretl-svn-commits] CloverETL repos r2479 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000118.html">[Cloveretl-svn-commits] CloverETL repos r2481 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#117">[ date ]</a>
+              <a href="thread.html#117">[ thread ]</a>
+              <a href="subject.html#117">[ subject ]</a>
+              <a href="author.html#117">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-02-16 16:22:40 +0100 (Fri, 16 Feb 2007)
+New Revision: 2480
+
+Modified:
+   trunk/cloveretl.engine/examples/data/employees2.dat
+   trunk/cloveretl.engine/examples/data/employees3.dat
+   trunk/cloveretl.engine/examples/graphDBExecute.grf
+   trunk/cloveretl.engine/examples/graphDBRead.grf
+   trunk/cloveretl.engine/examples/graphGenerateData.grf
+   trunk/cloveretl.engine/examples/graphJoinHashInline.grf
+   trunk/cloveretl.engine/examples/graphJoinHashUsingTransform.grf
+   trunk/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf
+   trunk/cloveretl.engine/examples/graphJoinMergeInline.grf
+   trunk/cloveretl.engine/examples/graphParametrizedLookup.grf
+   trunk/cloveretl.engine/examples/metadata/employees.fmt
+   trunk/cloveretl.engine/examples/reformatJoinTest.java
+Log:
+SVN: merge for trunk from 2.1.0 - examples.
+
+Modified: trunk/cloveretl.engine/examples/data/employees2.dat
+===================================================================
+(Binary files differ)
+
+Modified: trunk/cloveretl.engine/examples/data/employees3.dat
+===================================================================
+(Binary files differ)
+
+Modified: trunk/cloveretl.engine/examples/graphDBExecute.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphDBExecute.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphDBExecute.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -5,7 +5,7 @@
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+ &lt;Node dbConnection=&quot;DBConnection0&quot; enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;DB Execute&quot; guiWidth=&quot;0&quot; guiX=&quot;26&quot; guiY=&quot;25&quot; id=&quot;DB_EXECUTE0&quot; type=&quot;DB_EXECUTE&quot;&gt;
+-&lt;attr name=&quot;dbSQL&quot;&gt;drop table employee1;
++&lt;attr name=&quot;sqlQuery&quot;&gt;drop table employee1;
+ drop table employee_TMP;
+ 
+ create table employee1 (EMP_NO NUMERIC not null,FIRST_NAME  VARCHAR(15) not null,LAST_NAME VARCHAR(20) not null,PHONE_EXT VARCHAR(4),HIRE_DATE DATE not null,DEPT_NO CHAR(3) not null,JOB_CODE VARCHAR(5) not null,JOB_GRADE NUMERIC(4,2) not null,JOB_COUNTRY VARCHAR(15) not null,SALARY NUMERIC(15,2) not null,FULL_NAME VARCHAR(35));
+
+Modified: trunk/cloveretl.engine/examples/graphDBRead.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphDBRead.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphDBRead.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -89,7 +89,7 @@
+ &lt;/Phase&gt;
+ &lt;Phase number=&quot;1&quot;&gt;
+ &lt;Node dbConnection=&quot;DBConnection0&quot; enabled=&quot;enabled&quot; guiHeight=&quot;75&quot; guiName=&quot;drop customer_tmp&quot; guiWidth=&quot;124&quot; guiX=&quot;57&quot; guiY=&quot;495&quot; id=&quot;DB_EXECUTE0&quot; type=&quot;DB_EXECUTE&quot;&gt;
+-&lt;attr name=&quot;dbSQL&quot;&gt;drop table customer_tmp;&lt;/attr&gt;
++&lt;attr name=&quot;sqlQuery&quot;&gt;drop table customer_tmp;&lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: trunk/cloveretl.engine/examples/graphGenerateData.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphGenerateData.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphGenerateData.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -1,19 +1,15 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Thu Jan 11 09:49:56 CET 2007&quot; guiVersion=&quot;1.5&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Fri Jan 12 15:34:56 CET 2007&quot; name=&quot;graphGenerateData&quot; revision=&quot;1.13&quot;&gt;
++&lt;Graph created=&quot;Thu Jan 11 09:49:56 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:19:56 CET 2007&quot; name=&quot;graphGenerateData&quot; revision=&quot;1.14&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/ordersFix.fmt&quot; id=&quot;Metadata1&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
++&lt;Property id=&quot;GraphParameter1&quot; name=&quot;ORDER_DATE&quot; value=&quot;01.01.2007&quot;/&gt;
++&lt;Property id=&quot;GraphParameter2&quot; name=&quot;REQUIRED_DATE&quot; value=&quot;31.01.2007&quot;/&gt;
+ &lt;Sequence cached=&quot;20&quot; fileURL=&quot;seq.seq&quot; id=&quot;Sequence0&quot; name=&quot;ordersID&quot; start=&quot;1&quot; step=&quot;1&quot; type=&quot;SIMPLE_SEQUENCE&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Data Generator&quot; guiWidth=&quot;0&quot; guiX=&quot;68&quot; guiY=&quot;278&quot; id=&quot;DATA_GENERATOR1&quot; type=&quot;DATA_GENERATOR&quot;&gt;
+-&lt;attr name=&quot;randomFields&quot;&gt;EmployeeID=random(1,1000);ShippedDate=random(${ORDER_DATE},${REQUIRED_DATE})&lt;/attr&gt;
+-&lt;attr name=&quot;recordsNumber&quot;&gt;10000&lt;/attr&gt;
+-&lt;attr name=&quot;sequenceFields&quot;&gt;OrderID&lt;/attr&gt;
+-&lt;attr name=&quot;pattern&quot;&gt;                 aga${ORDER_DATE}${REQUIRED_DATE}  1      10                name          adressPragu   EU   12000CZ
+-&lt;/attr&gt;
+-&lt;/Node&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Data Generator&quot; guiWidth=&quot;0&quot; guiX=&quot;68&quot; guiY=&quot;278&quot; id=&quot;DATA_GENERATOR1&quot; pattern=&quot;                 aga${ORDER_DATE}${REQUIRED_DATE}  1      10                name          adressPragu   EU   12000CZ&#10;&quot; randomFields=&quot;EmployeeID=random(1,1000);ShippedDate=random(${ORDER_DATE},${REQUIRED_DATE})&quot; recordsNumber=&quot;10000&quot; sequenceFields=&quot;OrderID&quot; type=&quot;DATA_GENERATOR&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Simple Copy&quot; guiWidth=&quot;0&quot; guiX=&quot;245&quot; guiY=&quot;278&quot; id=&quot;SIMPLE_COPY0&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;398&quot; guiY=&quot;278&quot; id=&quot;XLS_WRITER0&quot; namesRow=&quot;1&quot; type=&quot;XLS_WRITER&quot;/&gt;
+ &lt;Edge fromNode=&quot;DATA_GENERATOR1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge3&quot; inPort=&quot;0 (Simple Copy)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (Data Generator)&quot; toNode=&quot;SIMPLE_COPY0:0&quot;/&gt;
+
+Modified: trunk/cloveretl.engine/examples/graphJoinHashInline.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphJoinHashInline.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphJoinHashInline.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -1,28 +1,18 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates how to use HASH_JOIN component for 3way join. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; name=&quot;Testing Hash Joiner&quot;&gt;
++&lt;Graph created=&quot;Fri Feb 16 10:01:53 CET 2007&quot; description=&quot;This graph demonstrates how to use HASH_JOIN component for 3way join. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:47:07 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.1&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/customers.fmt&quot; id=&quot;InMetadata3&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders3way.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${HOME}/${WORKSPACE}/data/orders.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT2&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${HOME}/${WORKSPACE}/data/employees.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT3&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${HOME}/${WORKSPACE}/data/customers_delimited.txt&quot;
+-/&gt;
+-
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;JOIN&quot; type=&quot;HASH_JOIN&quot;
+-joinKey=&quot;EmployeeID=EmployeeID#CustomerID=CUSTOMERID&quot;
+-joinType=&quot;leftOuter&quot;
+-slaveDuplicates=&quot;true&quot;
+-&gt;&lt;attr name=&quot;transform&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;48&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT2&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;136&quot; id=&quot;INPUT2&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/customers_delimited.txt&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT3&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;223&quot; id=&quot;INPUT3&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;JOIN&quot; guiWidth=&quot;50&quot; guiX=&quot;256&quot; guiY=&quot;48&quot; id=&quot;JOIN&quot; joinKey=&quot;EmployeeID=EmployeeID#CustomerID=CUSTOMERID&quot; joinType=&quot;leftOuter&quot; slaveDuplicates=&quot;true&quot; type=&quot;EXT_HASH_JOIN&quot;&gt;
++&lt;attr name=&quot;transform&quot;&gt;
+ import org.jetel.component.DataRecordTransform;
+ import org.jetel.data.*;
+ 
+@@ -54,14 +44,10 @@
+ 
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-
+-&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${HOME}/${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;448&quot; guiY=&quot;48&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;InMetadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;JOIN:0&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT2:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE2&quot; inPort=&quot;1 (JOIN)&quot; metadata=&quot;InMetadata2&quot; outPort=&quot;0 (INPUT2)&quot; toNode=&quot;JOIN:1&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT3:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE3&quot; inPort=&quot;2 (JOIN)&quot; metadata=&quot;InMetadata3&quot; outPort=&quot;0 (INPUT3)&quot; toNode=&quot;JOIN:2&quot;/&gt;
+-
+ &lt;Edge fromNode=&quot;JOIN:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+-
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: trunk/cloveretl.engine/examples/graphJoinHashUsingTransform.grf
+===================================================================
+(Binary files differ)
+
+Modified: trunk/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates functionality of HASH_JOIN components. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; name=&quot;Testing Hash Joiner&quot;&gt;
++&lt;Graph created=&quot;Fri Feb 16 10:01:53 CET 2007&quot; description=&quot;This graph demonstrates functionality of HASH_JOIN components. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:50:49 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
+@@ -15,7 +15,7 @@
+ $OrderID := $OrderID;
+ $CustomerID := $CustomerID;
+ $EmployeeID := $EmployeeID;
+-$EmployeeID2 := $1.EmployeeID;
++$EmployeeID2 := num2str($1.EmployeeID);
+ $LastName := concat($1.LastName,&quot;:&quot;,$1.FirstName);
+ }
+ &lt;/attr&gt;
+
+Modified: trunk/cloveretl.engine/examples/graphJoinMergeInline.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphJoinMergeInline.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphJoinMergeInline.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -13,7 +13,7 @@
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;83&quot; id=&quot;EXT_SORT0&quot; sortKey=&quot;EmployeeID&quot; type=&quot;EXT_SORT&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;190&quot; id=&quot;EXT_SORT1&quot; sortKey=&quot;EmployeeID&quot; type=&quot;EXT_SORT&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;276&quot; id=&quot;EXT_SORT2&quot; sortKey=&quot;ReportsTo&quot; type=&quot;EXT_SORT&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Merge Join&quot; guiWidth=&quot;0&quot; guiX=&quot;480&quot; guiY=&quot;190&quot; id=&quot;MERGE_JOIN1&quot; joinKey=&quot;EmployeeID=EmployeeID#EmployeeID=ReportsTo&quot; type=&quot;MERGE_JOIN&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Merge Join&quot; guiWidth=&quot;0&quot; guiX=&quot;480&quot; guiY=&quot;190&quot; id=&quot;MERGE_JOIN1&quot; joinKey=&quot;EmployeeID=EmployeeID#EmployeeID=ReportsTo&quot; type=&quot;EXT_MERGE_JOIN&quot;&gt;
+ &lt;attr name=&quot;transform&quot;&gt;
+ import org.jetel.component.DataRecordTransform;
+ import org.jetel.data.*;
+
+Modified: trunk/cloveretl.engine/examples/graphParametrizedLookup.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphParametrizedLookup.grf	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/graphParametrizedLookup.grf	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Fri Jan 12 15:46:21 CET 2007&quot; description=&quot;This graph demonstrates usage of Node-level parameters&quot; guiVersion=&quot;1.5&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Fri Jan 12 16:33:07 CET 2007&quot; name=&quot;Testing Simple Lookup with parameters&quot; revision=&quot;1.0&quot;&gt;
++&lt;Graph created=&quot;Fri Jan 12 15:46:21 CET 2007&quot; description=&quot;This graph demonstrates usage of Node-level parameters&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 14:05:16 CET 2007&quot; name=&quot;Testing Simple Lookup with parameters&quot; revision=&quot;1.2&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
+@@ -58,7 +58,7 @@
+ 		target[0].getField(0).setValue(source[0].getField(0).getValue());&#13;
+   		target[0].getField(1).setValue(source[0].getField(1).getValue());&#13;
+ 		target[0].getField(2).setValue(source[0].getField(2).getValue());&#13;
+-		target[0].getField(3).setValue(employee.getField(0).getValue());&#13;
++		target[0].getField(3).setValue(employee.getField(0).getValue().toString());&#13;
+ 		target[0].getField(4).setValue(employee.getField(1).getValue());&#13;
+ &#13;
+ 		return true;&#13;
+
+Modified: trunk/cloveretl.engine/examples/metadata/employees.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/employees.fmt	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/metadata/employees.fmt	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -16,5 +16,5 @@
+ &lt;Field delimiter=&quot;;&quot; name=&quot;Extension&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;Field delimiter=&quot;;&quot; name=&quot;Photo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;Field delimiter=&quot;;&quot; name=&quot;Memo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;ReportsTo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; name=&quot;ReportsTo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+
+Modified: trunk/cloveretl.engine/examples/reformatJoinTest.java
+===================================================================
+--- trunk/cloveretl.engine/examples/reformatJoinTest.java	2007-02-16 13:20:38 UTC (rev 2479)
++++ trunk/cloveretl.engine/examples/reformatJoinTest.java	2007-02-16 15:22:40 UTC (rev 2480)
+@@ -33,11 +33,11 @@
+ 		target[0].getField(1).setValue(source[0].getField(1).getValue());
+ 		System.out.print(&quot;|&quot;);
+ 		System.out.print(source[0].getField(2).toString());
+-		target[0].getField(2).setValue(source[0].getField(2).getValue());
++		target[0].getField(2).setValue(source[0].getField(2).getValue().toString());
+ 		if (source[1]!=null){
+ 			System.out.print(&quot;|&quot;);
+ 			System.out.print(source[1].getField(0).toString());
+-			target[0].getField(3).setValue(source[1].getField(0).getValue());
++			target[0].getField(3).setValue(source[1].getField(0).getValue().toString());
+ 			System.out.print(&quot;|&quot;);
+ 			System.out.print(source[1].getField(1).toString());
+ 			target[0].getField(4).setValue(source[1].getField(1).getValue());
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000116.html">[Cloveretl-svn-commits] CloverETL repos r2479 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000118.html">[Cloveretl-svn-commits] CloverETL repos r2481 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#117">[ date ]</a>
+              <a href="thread.html#117">[ thread ]</a>
+              <a href="subject.html#117">[ subject ]</a>
+              <a href="author.html#117">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

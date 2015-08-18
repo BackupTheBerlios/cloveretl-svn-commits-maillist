@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2547%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200703051016.l25AGlk7026073%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000184.html">
+   <LINK REL="Next"  HREF="000186.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2547%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200703051016.l25AGlk7026073%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 11:16:47 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000184.html">[Cloveretl-svn-commits] CloverETL repos r2546 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000186.html">[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#185">[ date ]</a>
+              <a href="thread.html#185">[ thread ]</a>
+              <a href="subject.html#185">[ subject ]</a>
+              <a href="author.html#185">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 11:16:46 +0100 (Mon, 05 Mar 2007)
+New Revision: 2547
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java
+   trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java
+Log:
+UPDATE:XLSReader - better error mesaging in checkConfig() method
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java	2007-03-05 10:15:59 UTC (rev 2546)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java	2007-03-05 10:16:46 UTC (rev 2547)
+@@ -244,7 +244,9 @@
+        }catch(Exception ex){
+             throw new ComponentNotReadyException(ex);
+         }
+-         currentRow = firstRow;
++       logger.info(&quot;Reading data from sheet &quot; + sheetCounter + &quot; (&quot; + 
++       		sheet.getName() + &quot;).&quot; );
++        currentRow = firstRow;
+          sheetCounter = -1;
+          if (sheetNumber != null){
+         	 sheetNumberIterator = new NumberIterator(sheetNumber,0,Integer.MAX_VALUE);
+@@ -267,8 +269,9 @@
+     		if (!sheetNumberIterator.hasNext()){
+     			return false;
+     		}
++    		sheetCounter = sheetNumberIterator.next().shortValue();
+     		try{
+-    			sheet = wb.getSheet(sheetNumberIterator.next());
++    			sheet = wb.getSheet(sheetCounter);
+     		}catch(IndexOutOfBoundsException e){
+     			return false;
+     		}
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java	2007-03-05 10:15:59 UTC (rev 2546)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java	2007-03-05 10:16:46 UTC (rev 2547)
+@@ -193,6 +193,8 @@
+         if (!getNextSheet()) {
+         	throw new ComponentNotReadyException(&quot;There is no sheet conforming sheet name nor sheet number pattern&quot;);
+         }
++        logger.info(&quot;Reading data from sheet &quot; + sheetCounter + &quot; (&quot; + 
++        		wb.getSheetName(sheetCounter) + &quot;).&quot; );
+ 		if (metadata != null) {
+         	fieldNumber = new int[metadata.getNumFields()][2];
+         	mapFields();
+@@ -208,8 +210,9 @@
+     		if (!sheetNumberIterator.hasNext()){
+     			return false;
+     		}
++    		sheetCounter = sheetNumberIterator.next().shortValue();
+     		try{
+-    			sheet = wb.getSheetAt(sheetNumberIterator.next());
++    			sheet = wb.getSheetAt(sheetCounter);
+     		}catch(IndexOutOfBoundsException e){
+     			return false;
+     		}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000184.html">[Cloveretl-svn-commits] CloverETL repos r2546 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000186.html">[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#185">[ date ]</a>
+              <a href="thread.html#185">[ thread ]</a>
+              <a href="subject.html#185">[ subject ]</a>
+              <a href="author.html#185">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

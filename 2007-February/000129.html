@@ -1,0 +1,512 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2492 - in	trunk/cloveretl.engine/src/org/jetel/util: . dml2clover
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2492%20-%20in%0A%09trunk/cloveretl.engine/src/org/jetel/util%3A%20.%20dml2clover&In-Reply-To=%3C200702201336.l1KDaLw1024491%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000128.html">
+   <LINK REL="Next"  HREF="000130.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2492 - in	trunk/cloveretl.engine/src/org/jetel/util: . dml2clover</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2492%20-%20in%0A%09trunk/cloveretl.engine/src/org/jetel/util%3A%20.%20dml2clover&In-Reply-To=%3C200702201336.l1KDaLw1024491%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2492 - in	trunk/cloveretl.engine/src/org/jetel/util: . dml2clover">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 20 14:36:21 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000128.html">[Cloveretl-svn-commits] CloverETL repos r2491 - in trunk:	cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence
+</A></li>
+        <LI>Next message: <A HREF="000130.html">[Cloveretl-svn-commits] CloverETL repos r2493 -	trunk/cloveretl.engine/src/org/jetel/util/dml2clover
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#129">[ date ]</a>
+              <a href="thread.html#129">[ thread ]</a>
+              <a href="subject.html#129">[ subject ]</a>
+              <a href="author.html#129">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-20 14:36:20 +0100 (Tue, 20 Feb 2007)
+New Revision: 2492
+
+Added:
+   trunk/cloveretl.engine/src/org/jetel/util/dml2clover/
+   trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DML2Clover.jj
+   trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DataType.java
+Log:
+INIT: create metadata from create statement
+
+Added: trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DML2Clover.jj
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DML2Clover.jj	2007-02-19 16:14:18 UTC (rev 2491)
++++ trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DML2Clover.jj	2007-02-20 13:36:20 UTC (rev 2492)
+@@ -0,0 +1,408 @@
++/**
++ * JavaCC file
++ */
++ 
++options
++{ 
++	JDK_VERSION = &quot;1.5&quot;;
++	STATIC=false;
++	CACHE_TOKENS=true;
++	IGNORE_CASE=true;
++}
++
++PARSER_BEGIN(DML2Clover)
++package org.jetel.util.dml2clover;
++
++import java.util.*;
++import java.io.*;
++import org.jetel.metadata.*;
++import java.math.*;
++
++public class DML2Clover {
++
++	/**
++		 * The class parses sql script containing only create statements. Output is a DataRecordMetadata List.
++		 */
++	 
++	private List&lt;DataRecordMetadata&gt; list = new LinkedList&lt;DataRecordMetadata&gt;();
++	private String fieldDelimiter;
++	private String recordDelimiter;
++	
++	private static final Long booleanLenght = Long.valueOf(5); // false / true
++	private static final Long byteLenght = Long.valueOf(String.valueOf(Byte.MIN_VALUE).length());
++	private static final Long integerLenght = Long.valueOf(String.valueOf(Integer.MIN_VALUE).length());
++	private static final Long longLenght = Long.valueOf(String.valueOf(Long.MIN_VALUE).length());
++	private static final Long floatLenght = Long.valueOf(String.valueOf(7));
++	private static final Long doubleLenght = Long.valueOf(String.valueOf(15));
++	private static final Long dateLenght = Long.valueOf(10); // &quot;10.10.2007&quot;
++	private static final Long dateTimeLenght = Long.valueOf(24); // &quot;10.10.2007 23:10:10.111&quot;
++	
++	public static void main(String args[]) throws ParseException, FileNotFoundException {
++		DML2Clover parser = new DML2Clover(new FileInputStream(new File(&quot;text.txt&quot;)));
++		parser.getDataRecordMetadataList(&quot;;&quot;, &quot;\n&quot;);
++		parser.testPrint(parser.list);
++		System.out.println(&quot;Ok&quot;);
++	}
++
++	public List&lt;DataRecordMetadata&gt; getDataRecordMetadataList() throws ParseException {
++		return getDataRecordMetadataList(null, null);
++	}
++
++	public List&lt;DataRecordMetadata&gt; getDataRecordMetadataList(String fieldDelimiter, String recordDelimiter) throws ParseException {
++		this.fieldDelimiter = fieldDelimiter;
++		this.recordDelimiter = recordDelimiter;
++		while (!isEOF()) {
++			list.add(createTableStatement());
++		}
++		return list;
++	}
++	
++	private void testPrint(List&lt;DataRecordMetadata&gt; list) {
++		DataRecordMetadataXMLReaderWriter writer = new DataRecordMetadataXMLReaderWriter();
++   		for (DataRecordMetadata dataRecordMetadata : list) {
++			writer.write(dataRecordMetadata, System.out);
++			System.out.println();
++   		}		
++	}
++	
++}
++
++PARSER_END(DML2Clover)
++
++// The SQL lexical grammar
++
++SKIP:
++{
++	// blank space
++		&quot; &quot;
++	|	&quot;\t&quot;
++	|	&quot;\n&quot;
++	|	&quot;\r&quot;
++	|	&quot;\n\r&quot;
++}
++
++// HANDLING COMMENTS
++SPECIAL_TOKEN: 
++{
++	&lt;&quot;/*&quot;&gt; : WithinComment 
++}
++
++&lt;WithinComment&gt; SPECIAL_TOKEN:	{ &lt;&quot;*/&quot;&gt; : DEFAULT }
++&lt;WithinComment&gt; MORE: { &lt;~[]&gt; }
++
++SPECIAL_TOKEN: 
++{  
++	&lt;&quot;//&quot;&gt; : WithinLineComment 
++}
++
++&lt;WithinLineComment&gt; SPECIAL_TOKEN: { &lt;&quot;\n&quot;&gt; : DEFAULT }
++&lt;WithinLineComment&gt; MORE: { &lt;~[]&gt; }
++
++
++TOKEN:
++{
++	// keywords
++		&lt; BOOLEAN: &quot;boolean&quot; &gt;
++	|	&lt; BLOB: &quot;blob&quot; &gt;
++	|	&lt; CHAR: &quot;char&quot; &gt;
++	|	&lt; CHARACTER: &quot;character&quot; &gt;
++	|	&lt; CLOB: &quot;clob&quot; &gt;
++	|	&lt; COMMIT: &quot;commit&quot; &gt;
++	|	&lt; CREATE: &quot;create&quot; &gt;
++	|	&lt; DATE:&quot;date&quot; &gt;
++	|	&lt; DATETIME:&quot;datetime&quot; &gt;
++	|	&lt; DEC:&quot;dec&quot; &gt;
++	|	&lt; DECIMAL:&quot;decimal&quot; &gt;
++	|	&lt; DEFAULT_: &quot;default&quot; &gt;
++	|	&lt; DELETE: &quot;delete&quot; &gt;
++	|	&lt; FLOAT:&quot;float&quot; &gt;
++	|	&lt; GLOBAL: &quot;global&quot; &gt;
++	|	&lt; INT: &quot;int&quot; &gt;
++	|	&lt; INTEGER: &quot;integer&quot; &gt;
++	|	&lt; KEY: &quot;key&quot; &gt;
++	|	&lt; LOCAL: &quot;local&quot; &gt;
++	|	&lt; NOT: &quot;not&quot; &gt;
++	|	&lt; NULL: &quot;null&quot; &gt;
++	|	&lt; NUMBER: &quot;number&quot; &gt;
++	|	&lt; NUMERIC: &quot;numeric&quot; &gt;
++	|	&lt; ON: &quot;on&quot; &gt;
++	|	&lt; PRESERVE:&quot;preserve&quot; &gt;
++	|	&lt; PRIMARY:&quot;primary&quot; &gt;
++	|	&lt; REFERENCES:&quot;references&quot; &gt;
++	|	&lt; ROWS: &quot;rows&quot; &gt;
++	|	&lt; SMALLINT: &quot;smallint&quot; &gt;
++	|	&lt; TABLE: &quot;table&quot; &gt;
++	|	&lt; TIMESTAMP: &quot;timestamp&quot; &gt;
++	|	&lt; TEMPORARY: &quot;TEMPORARY&quot; &gt;
++	|	&lt; UNIQUE: &quot;unique&quot; &gt;
++	|	&lt; VARCHAR: &quot;varchar&quot; &gt;
++	|	&lt; VARCHAR2: &quot;varchar2&quot; &gt;
++
++	// literals
++	|	&lt; STRING_LITERAL: &quot;'&quot; (~[&quot;'&quot;])* ( &quot;''&quot; (~[&quot;'&quot;])* )* &quot;'&quot; &gt;
++	|	&lt; INTEGER_LITERAL: 	([&quot;0&quot;-&quot;9&quot;])+ &gt;
++	|	&lt; FLOAT_LITERAL:	([&quot;0&quot;-&quot;9&quot;])+ &quot;.&quot; ([&quot;0&quot;-&quot;9&quot;])+ (&lt;EXP&gt;)?
++							|	&quot;.&quot; ([&quot;0&quot;-&quot;9&quot;])+ (&lt;EXP&gt;)?
++							|	([&quot;0&quot;-&quot;9&quot;])+ (&lt;EXP&gt;)?&gt;
++	|	&lt; #EXP: [&quot;e&quot;,&quot;E&quot;] ([&quot;+&quot;,&quot;-&quot;])? ([&quot;0&quot;-&quot;9&quot;])+ &gt;
++
++	// identifiers
++	|	&lt; IDENTIFIER: ( &lt;LETTER&gt; )+ ( &quot;_&quot; | &quot;$&quot; | &quot;#&quot; | &lt;DIGIT&gt; | &lt;LETTER&gt; )* &gt;
++	|	&lt; LETTER: [&quot;A&quot;-&quot;Z&quot;, &quot;a&quot;-&quot;z&quot;] &gt;
++	|	&lt; DIGIT: [&quot;0&quot;-&quot;9&quot;] &gt;
++
++	// separators and operators
++	|	&lt; CLOSEPAREN: &quot;)&quot; &gt;
++	|	&lt; COMA: &quot;,&quot; &gt;
++	|	&lt; DOT: &quot;.&quot; &gt;
++	|	&lt; OPENPAREN: &quot;(&quot; &gt;
++	|	&lt; SEMICOLON: &quot;;&quot; &gt;
++}
++
++/*******************************************************************
++ * The SQL syntatic grammar starts here
++ *******************************************************************/
++
++DataRecordMetadata createTableStatement() : {
++	DataRecordMetadata dataRecordMetadata;
++	List&lt;DataFieldMetadata&gt; list;
++}
++{
++	&lt;CREATE&gt; [tableScope()] &lt;TABLE&gt; [LOOKAHEAD(2)(&lt;IDENTIFIER&gt;&lt;DOT&gt;)] {dataRecordMetadata = new DataRecordMetadata(identifier());}
++		// table element list
++		{
++			list = tableElementList(); 
++			for (DataFieldMetadata field : list) {
++				dataRecordMetadata.addField(field);
++			}
++		}
++		// | OF  &lt;path-resolved user-defined type name&gt; [ &lt;subtable clause&gt; ] [ &lt;table element list&gt; ]
++		// | &lt;as subquery clause&gt;
++	[ &lt;ON&gt; &lt;COMMIT&gt; (&lt;PRESERVE&gt; | &lt;DELETE&gt;)? &lt;ROWS&gt;]
++	&lt;SEMICOLON&gt;
++	{
++		if (fieldDelimiter != null &amp;&amp; recordDelimiter != null) {
++			dataRecordMetadata.setRecType(DataRecordMetadata.DELIMITED_RECORD);
++		} else if (fieldDelimiter == null &amp;&amp; recordDelimiter == null) {
++			dataRecordMetadata.setRecType(DataRecordMetadata.FIXEDLEN_RECORD);
++		}
++	}
++	{ return dataRecordMetadata; }
++}
++
++List&lt;DataFieldMetadata&gt; tableElementList() :
++{
++	List&lt;DataFieldMetadata&gt; list = new LinkedList&lt;DataFieldMetadata&gt;();
++	DataFieldMetadata ret;
++}
++{
++	&lt;OPENPAREN&gt; 
++	ret = tableElement() 			
++	{ 
++		ret.setDelimiter(fieldDelimiter);
++		list.add(ret); 
++	}
++	(&lt;COMA&gt; ret = tableElement() 	
++	{
++		ret.setDelimiter(fieldDelimiter);
++		list.add(ret); 
++	})*
++	{ret.setDelimiter(recordDelimiter);}
++	&lt;CLOSEPAREN&gt; 
++	{ return list; }
++}
++
++void tableScope() :
++{}
++{
++	[&lt;GLOBAL&gt; | &lt;LOCAL&gt;]  &lt;TEMPORARY&gt;
++}
++
++
++boolean isEOF() :
++{
++	boolean isEof = false;
++}
++{
++	(&lt;EOF&gt; isEof = t())?
++	{return isEof;}
++}
++
++boolean t() :
++{
++}
++{
++	{return true;}
++}
++
++//+
++void columnConstraintDefinition() :
++{}
++{
++	(	&lt;NOT&gt; &lt;NULL&gt;
++	|	&lt;UNIQUE&gt;
++	|	&lt;PRIMARY&gt; &lt;KEY&gt;
++//	|	&lt;CHECK&gt; &lt;OPENPAREN&gt; &lt;CLOSEPAREN&gt;
++	|	&lt;REFERENCES&gt; tableName() &lt;OPENPAREN&gt; identifierList() &lt;CLOSEPAREN&gt;
++	)
++}
++
++//+
++DataFieldMetadata columnDefinition() :
++{
++	DataFieldMetadata dataFieldMetadata;
++	String name;
++	DataType type;
++	Object value = null;
++}
++{
++	name = columnName() 
++	type = dataType()
++	(&lt;DEFAULT_&gt; value = defaultValue())?
++	(columnConstraintDefinition())?
++	{ if (type.length == null) {
++		dataFieldMetadata = new DataFieldMetadata(name, type.type, null);
++	  } else {
++		//dataFieldMetadata = new DataFieldMetadata(name, type.type, type.length.shortValue());
++		dataFieldMetadata = new DataFieldMetadata(name, type.type, type.length.shortValue());
++	  }
++	  dataFieldMetadata.setDefaultValue(value);
++	  return dataFieldMetadata; 
++	}
++}
++
++DataFieldMetadata tableElement() :
++{
++	DataFieldMetadata ret = null;
++}
++{
++	(	ret = columnDefinition()
++	// | tableConstraintDefinition()
++	// | &lt;like clause&gt;
++	// | &lt;self-referencing column specification&gt;
++	// | &lt;column options&gt;
++	)
++	{ return ret; }
++}
++
++//+
++String columnName() :
++{
++	String ret;
++}
++{
++	(LOOKAHEAD(2) identifier() &lt;DOT&gt;)? ret = identifier()
++	{ return ret; }
++}
++
++//+TODO dodelat dalsi typu jako DATE, VARCHAR,...
++DataType dataType() :
++{
++	char type;
++	Long temp;
++	Long lenght = null;
++	Long scale = null;
++}
++{
++	(	&lt;BOOLEAN&gt; { type = DataFieldMetadata.INTEGER_FIELD;		lenght = integerLenght;}
++	|	&lt;BLOB&gt; { type = DataFieldMetadata.BYTE_FIELD; } 		(&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;CHAR&gt; { type = DataFieldMetadata.STRING_FIELD; } 		(&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;CHARACTER&gt; { type = DataFieldMetadata.STRING_FIELD; } 	(&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;CLOB&gt; { type = DataFieldMetadata.BYTE_FIELD; } 		(&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;DATE&gt; { type = DataFieldMetadata.DATE_FIELD; 			lenght = dateLenght;}
++	|	&lt;DATETIME&gt; { type = DataFieldMetadata.DATE_FIELD;	    lenght = dateTimeLenght;}
++	|	&lt;DEC&gt; { type = DataFieldMetadata.DECIMAL_FIELD; }		(&lt;OPENPAREN&gt; temp = integerLiteral() (&lt;COMA&gt; scale = integerLiteral() )? &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;DECIMAL&gt; { type = DataFieldMetadata.DECIMAL_FIELD; }	(&lt;OPENPAREN&gt; temp = integerLiteral() (&lt;COMA&gt; scale = integerLiteral() )? &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;FLOAT&gt; { type = DataFieldMetadata.NUMERIC_FIELD; 		lenght = floatLenght;}
++	|	&lt;INT&gt; { type = DataFieldMetadata.INTEGER_FIELD; 		lenght = integerLenght;}
++	|	&lt;INTEGER&gt; { type = DataFieldMetadata.INTEGER_FIELD; 	lenght = integerLenght;}
++	|	&lt;SMALLINT&gt; { type = DataFieldMetadata.INTEGER_FIELD; 	lenght = integerLenght;}
++	|	&lt;TIMESTAMP&gt; { type = DataFieldMetadata.DATE_FIELD;		lenght = dateTimeLenght;}
++	|	&lt;NUMERIC&gt; { type = DataFieldMetadata.DECIMAL_FIELD; }	(&lt;OPENPAREN&gt; temp = integerLiteral() (&lt;COMA&gt; scale = integerLiteral() )? &lt;CLOSEPAREN&gt; { lenght = temp; })?
++	|	&lt;VARCHAR&gt; { type = DataFieldMetadata.STRING_FIELD; }	&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; }
++	|	&lt;VARCHAR2&gt; { type = DataFieldMetadata.STRING_FIELD; }	&lt;OPENPAREN&gt; temp = integerLiteral() &lt;CLOSEPAREN&gt; { lenght = temp; }
++	)
++	{ return new DataType(type, lenght, scale); }
++}
++
++//+
++Object defaultValue() : 
++{
++	Object ret;
++}
++{
++	(	ret = literal()
++	|	ret = nullLiteral() 
++	)
++	{ return ret; }
++}
++
++//+
++BigDecimal floatLiteral() :
++{}
++{
++	&lt;FLOAT_LITERAL&gt; { return new BigDecimal(token.image); }
++}
++
++//+
++String identifier() :
++{}
++{
++	&lt;IDENTIFIER&gt;
++	{ return token.image; }
++}
++
++//+
++void identifierList() :
++{
++}
++{
++	identifier()
++	(&lt;COMA&gt; identifier())*	
++}
++
++//+
++Object literal() :
++{
++	Object ret;
++}
++{
++	(	ret = integerLiteral()
++	|	ret = floatLiteral()
++	|	ret = stringLiteral()
++	)
++	{ return ret; }
++}
++
++//+
++Long integerLiteral() :
++{}
++{
++	&lt;INTEGER_LITERAL&gt; { return new Long(token.image); }
++}
++
++//+
++Object nullLiteral() : 
++{}
++{
++	&lt;NULL&gt; { return	null; }
++}
++	
++//+
++String stringLiteral() :
++{}
++{
++	&lt;STRING_LITERAL&gt; 
++	{ 
++		String value = token.image.intern();
++		return value.substring(1, value.length() - 1); 
++	}
++}
++
++//+
++void tableName() :
++{}
++{
++	&lt;IDENTIFIER&gt;
++}
++
+
+Added: trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DataType.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DataType.java	2007-02-19 16:14:18 UTC (rev 2491)
++++ trunk/cloveretl.engine/src/org/jetel/util/dml2clover/DataType.java	2007-02-20 13:36:20 UTC (rev 2492)
+@@ -0,0 +1,19 @@
++package org.jetel.util.dml2clover;
++public final class DataType {
++
++    /** Data type, based on java.sql.Types */
++    public final char type;
++
++    /** Used when data type has fixed length */
++    public final Number length;
++
++    /** Used when data type has scale */
++    public final Number scale;
++
++    public DataType(char type, Number length, Number scale) {
++        this.type = type;
++        this.length = length;
++        this.scale = scale;
++    }
++
++}
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000128.html">[Cloveretl-svn-commits] CloverETL repos r2491 - in trunk:	cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence
+</A></li>
+	<LI>Next message: <A HREF="000130.html">[Cloveretl-svn-commits] CloverETL repos r2493 -	trunk/cloveretl.engine/src/org/jetel/util/dml2clover
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#129">[ date ]</a>
+              <a href="thread.html#129">[ thread ]</a>
+              <a href="subject.html#129">[ subject ]</a>
+              <a href="author.html#129">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2440 -	trunk/cloveretl.engine/src/org/jetel/main
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2440%20-%0A%09trunk/cloveretl.engine/src/org/jetel/main&In-Reply-To=%3C200702061540.l16FeBLb021602%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000076.html">
+   <LINK REL="Next"  HREF="000078.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2440 -	trunk/cloveretl.engine/src/org/jetel/main</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2440%20-%0A%09trunk/cloveretl.engine/src/org/jetel/main&In-Reply-To=%3C200702061540.l16FeBLb021602%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2440 -	trunk/cloveretl.engine/src/org/jetel/main">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb  6 16:40:11 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000076.html">[Cloveretl-svn-commits] CloverETL repos r2439 - in trunk:	cloveretl.component cloveretl.engine/plugins/org.jetel.component
+</A></li>
+        <LI>Next message: <A HREF="000078.html">[Cloveretl-svn-commits] CloverETL repos r2441 -	trunk/cloveretl.engine/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-02-06 16:40:10 +0100 (Tue, 06 Feb 2007)
+New Revision: 2440
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/main/runGraph.java
+Log:
+INIT: into runGraph class was added new command line option -checkconfig.
+
+Modified: trunk/cloveretl.engine/src/org/jetel/main/runGraph.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/main/runGraph.java	2007-02-06 15:00:02 UTC (rev 2439)
++++ trunk/cloveretl.engine/src/org/jetel/main/runGraph.java	2007-02-06 15:40:10 UTC (rev 2440)
+@@ -82,6 +82,7 @@
+  *  &lt;tr&gt;&lt;td nowrap&gt;-pass &lt;i&gt;password&lt;/i&gt;&lt;/td&gt;&lt;td&gt;password for decrypting of hidden connections passwords&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;tr&gt;&lt;td nowrap&gt;-stdin&lt;/td&gt;&lt;td&gt;load graph layout from STDIN&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;tr&gt;&lt;td nowrap&gt;-loghost&lt;/td&gt;&lt;td&gt;define host and port number for socket appender of log4j (log4j library is required); i.e. localhost:4445&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-checkconfig&lt;/td&gt;&lt;td&gt;only check graph configuration&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;filename&lt;/b&gt;&lt;/td&gt;&lt;td&gt;filename or URL of the file (even remote) containing graph's layout in XML (this must be the last parameter passed)&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;/table&gt;
+  *  &lt;/pre&gt;&lt;/tt&gt;
+@@ -103,6 +104,7 @@
+     public final static String PASSWORD_SWITCH = &quot;-pass&quot;;
+     public final static String LOAD_FROM_STDIN_SWITCH = &quot;-stdin&quot;;
+     public final static String LOG_HOST_SWITCH = &quot;-loghost&quot;;
++    public final static String CHECK_CONFIG_SWITCH = &quot;-checkconfig&quot;;
+ 	
+     
+     /**
+@@ -162,7 +164,8 @@
+         String pluginsRootDirectory = null;
+         String password = null;
+         String logHost = null;
+-
++        boolean onlyCheckConfig = false;
++        
+         System.out
+                 .println(&quot;***  CloverETL framework/transformation graph runner ver &quot;
+                         + RUN_GRAPH_VERSION
+@@ -223,6 +226,8 @@
+             } else if (args[i].startsWith(LOG_HOST_SWITCH)) {
+                 i++;
+                 logHost = args[i];
++            } else if (args[i].startsWith(CHECK_CONFIG_SWITCH)) {
++                onlyCheckConfig = true;
+             } else if (args[i].startsWith(&quot;-&quot;)) {
+                 System.err.println(&quot;Unknown option: &quot; + args[i]);
+                 System.exit(-1);
+@@ -254,7 +259,7 @@
+         // engine initialization - should be called only once
+         runGraph.initEngine(pluginsRootDirectory, password);
+ 
+-        // prapere input stream with XML graph definition
++        // prepare input stream with XML graph definition
+         InputStream in = null;
+         if (loadFromSTDIN) {
+             System.out.println(&quot;Graph definition loaded from STDIN&quot;);
+@@ -285,6 +290,8 @@
+                 status.log();
+             } catch(Exception e) {
+                 logger.error(&quot;Checking graph failed! (&quot; + e.getMessage() + &quot;)&quot;);
++            } finally {
++                if(onlyCheckConfig) System.exit(0);
+             }
+ 
+             if (!graph.init()) {
+@@ -365,6 +372,7 @@
+         System.out.println(&quot;-pass\t\tpassword for decrypting of hidden connections passwords&quot;);
+         System.out.println(&quot;-stdin\t\tload graph definition from STDIN&quot;);
+         System.out.println(&quot;-loghost\t\tdefine host and port number for socket appender of log4j (log4j library is required); i.e. localhost:4445&quot;);
++        System.out.println(&quot;-checkconfig\t\tonly check graph configuration&quot;);
+         System.out.println();
+         System.out.println(&quot;Note: &lt;graph definition file&gt; can be either local filename or URL of local/remote file&quot;);
+         
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000076.html">[Cloveretl-svn-commits] CloverETL repos r2439 - in trunk:	cloveretl.component cloveretl.engine/plugins/org.jetel.component
+</A></li>
+	<LI>Next message: <A HREF="000078.html">[Cloveretl-svn-commits] CloverETL repos r2441 -	trunk/cloveretl.engine/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#77">[ date ]</a>
+              <a href="thread.html#77">[ thread ]</a>
+              <a href="subject.html#77">[ subject ]</a>
+              <a href="author.html#77">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

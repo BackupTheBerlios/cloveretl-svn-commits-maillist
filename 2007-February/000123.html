@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2486 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2486%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702191310.l1JDAq3a005024%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000122.html">
+   <LINK REL="Next"  HREF="000124.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2486 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2486%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702191310.l1JDAq3a005024%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2486 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 19 14:10:52 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000122.html">[Cloveretl-svn-commits] CloverETL repos r2485 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000124.html">[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-19 14:10:51 +0100 (Mon, 19 Feb 2007)
+New Revision: 2486
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java
+Log:
+BUGFIX:DBInputTable - fixed error handling: when BadDataFormatException catched and dataPolicy is strict reading data continues
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java	2007-02-19 08:33:19 UTC (rev 2485)
++++ trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java	2007-02-19 13:10:51 UTC (rev 2486)
+@@ -175,17 +175,19 @@
+ 			parser.initSQLDataMap(record);
+ 
+ 			// till it reaches end of data or it is stopped from outside
+-			try {
+-				while (((record = parser.getNext(record)) != null) &amp;&amp; runIt) {
+-					//broadcast the record to all connected Edges
+-					writeRecordBroadcast(record);
++			while (record != null &amp;&amp; runIt){
++				try{
++					record = parser.getNext();
++					if (record != null) {
++						writeRecordBroadcast(record);
++					}
++				}catch(BadDataFormatException bdfe){
++			        if(policyType == PolicyType.STRICT) {
++			            throw bdfe;
++			        } else {
++			            logger.info(bdfe.getMessage());
++			        }
+ 				}
+-			} catch (BadDataFormatException bdfe) {
+-		        if(policyType == PolicyType.STRICT) {
+-		            throw bdfe;
+-		        } else {
+-		            logger.info(bdfe.getMessage());
+-		        }
+ 			}
+ 		} catch (Exception e) {
+ 			throw e;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000122.html">[Cloveretl-svn-commits] CloverETL repos r2485 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000124.html">[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#123">[ date ]</a>
+              <a href="thread.html#123">[ thread ]</a>
+              <a href="subject.html#123">[ subject ]</a>
+              <a href="author.html#123">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2457 -	trunk/cloveretl.connection/test
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2457%20-%0A%09trunk/cloveretl.connection/test&In-Reply-To=%3C200702080828.l188SPLk023064%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000093.html">
+   <LINK REL="Next"  HREF="000095.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2457 -	trunk/cloveretl.connection/test</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2457%20-%0A%09trunk/cloveretl.connection/test&In-Reply-To=%3C200702080828.l188SPLk023064%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2457 -	trunk/cloveretl.connection/test">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  8 09:28:25 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000093.html">[Cloveretl-svn-commits] CloverETL repos r2456 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000095.html">[Cloveretl-svn-commits] CloverETL repos r2458 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/main	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-08 09:28:24 +0100 (Thu, 08 Feb 2007)
+New Revision: 2457
+
+Modified:
+   trunk/cloveretl.connection/test/BadDataFormatExceptionHandler_SQLDataParser_Test.java
+   trunk/cloveretl.connection/test/SQLDataParserTest.java
+Log:
+UPDATE:updated due to changes in engine
+
+Modified: trunk/cloveretl.connection/test/BadDataFormatExceptionHandler_SQLDataParser_Test.java
+===================================================================
+--- trunk/cloveretl.connection/test/BadDataFormatExceptionHandler_SQLDataParser_Test.java	2007-02-08 08:27:48 UTC (rev 2456)
++++ trunk/cloveretl.connection/test/BadDataFormatExceptionHandler_SQLDataParser_Test.java	2007-02-08 08:28:24 UTC (rev 2457)
+@@ -221,15 +221,15 @@
+ 			 fail(&quot;Should throw Exception&quot;);
+ 		 }
+ 	 } catch (BadDataFormatException e){	
+-		 fail(&quot;Should not raise an BadDataFormatException&quot;);
+-		 e.printStackTrace();
+-	 } catch (RuntimeException re) {
+ 		 failed = true;
++		System.out.println(e.getMessage());
++	 } catch (RuntimeException re) {
++		 fail(&quot;Should throw RuntimeException&quot;);
+ 	 } catch (Exception ee){
+ 		 ee.printStackTrace();
+ 	 }
+ 	 if(!failed)
+-		 fail(&quot;Should raise an RuntimeException&quot;);
++		 fail(&quot;Should raise an BadDataFormatException&quot;);
+  }
+ 	
+ 
+@@ -276,8 +276,7 @@
+ 			 recCount++;
+ 		 }
+ 	 } catch (BadDataFormatException e){	
+-		 fail(&quot;Should not raise an BadDataFormatException&quot;);
+-		 e.printStackTrace();
++		 System.out.println(e.getMessage());
+ 	 } catch (Exception ee){
+ 		 fail(&quot;Should not throw Exception&quot;);
+ 		 ee.printStackTrace();
+
+Modified: trunk/cloveretl.connection/test/SQLDataParserTest.java
+===================================================================
+--- trunk/cloveretl.connection/test/SQLDataParserTest.java	2007-02-08 08:27:48 UTC (rev 2456)
++++ trunk/cloveretl.connection/test/SQLDataParserTest.java	2007-02-08 08:28:24 UTC (rev 2457)
+@@ -1,5 +1,4 @@
+ 
+-
+ import java.io.FileInputStream;
+ import java.io.FileNotFoundException;
+ 
+@@ -8,6 +7,7 @@
+ import org.jetel.data.DataRecord;
+ import org.jetel.exception.BadDataFormatException;
+ import org.jetel.exception.ComponentNotReadyException;
++import org.jetel.main.runGraph;
+ import org.jetel.metadata.DataRecordMetadata;
+ import org.jetel.metadata.DataRecordMetadataXMLReaderWriter;
+ 
+@@ -15,80 +15,91 @@
+ 
+ /**
+  * @author maciorowski
+- *
++ * 
+  */
+-public class SQLDataParserTest  extends TestCase {
+-private SQLDataParser aParser2 = null;
+-private DataRecord record;
+-	
+-protected void setUp() { 
+-	DataRecordMetadata metadata = null;
+-	DataRecordMetadataXMLReaderWriter xmlReader = new DataRecordMetadataXMLReaderWriter();
+-	DBConnection aDBConnection = null;
+-				
+-	try {
+-//		metadata = xmlReader.read(new FileInputStream(&quot;config\\test\\rec_def\\db_null_def_rec.xml&quot;));
+-//		aDBConnection = new DBConnection(&quot;&quot;, &quot;config\\test\\msaccess.clover_test.txt&quot;);
+-		metadata = xmlReader.read(new FileInputStream(&quot;../cloveretl.engine/config/test/rec_def/db_def_rec.xml&quot;));
+-		aDBConnection = new DBConnection(&quot;conn&quot;, &quot;../cloveretl.engine/examples/koule_postgre.cfg&quot;);
+-	} catch(FileNotFoundException e){
+-		e.printStackTrace();
++public class SQLDataParserTest extends TestCase {
++	private SQLDataParser aParser2 = null;
++
++	private DataRecord record;
++
++	protected void setUp() {
++		DataRecordMetadata metadata = null;
++		DataRecordMetadataXMLReaderWriter xmlReader = new DataRecordMetadataXMLReaderWriter();
++		DBConnection aDBConnection = null;
++
++		runGraph.initEngine(&quot;../cloveretl.engine/plugins&quot;, null);
++		try {
++			// metadata = xmlReader.read(new
++			// FileInputStream(&quot;config\\test\\rec_def\\db_null_def_rec.xml&quot;));
++			// aDBConnection = new DBConnection(&quot;&quot;,
++			// &quot;config\\test\\msaccess.clover_test.txt&quot;);
++			metadata = xmlReader.read(new FileInputStream(
++					&quot;../cloveretl.engine/config/test/rec_def/db_def_rec.xml&quot;));
++			aDBConnection = new DBConnection(&quot;conn&quot;,
++					&quot;../cloveretl.engine/examples/koule_postgre.cfg&quot;);
++		} catch (FileNotFoundException e) {
++			e.printStackTrace();
++		}
++
++		try {
++			aDBConnection.init();
++		} catch (ComponentNotReadyException e) {
++			// TODO Auto-generated catch block
++			e.printStackTrace();
++		}
++
++		record = new DataRecord(metadata);
++		record.init();
++
++		aParser2 = new SQLDataParser(&quot;connection&quot;, &quot;SELECT * FROM good&quot;);
++		try {
++			aParser2.init(metadata);
++			aParser2.setDataSource(aDBConnection);
++			aParser2.initSQLDataMap(record);
++		} catch (ComponentNotReadyException e1) {
++			e1.printStackTrace();
++		}
+ 	}
+-	
+-	record = new DataRecord(metadata);
+-	record.init();
+ 
+-	aParser2 = new SQLDataParser(&quot;connection&quot;,&quot;SELECT * FROM bad&quot;);
+-	try {
+-		aParser2.init(metadata);
+-		aParser2.setDataSource(aDBConnection);
+-		aParser2.initSQLDataMap(record);
+-	} catch (ComponentNotReadyException e1) {
+-		e1.printStackTrace();
++	protected void tearDown() {
++		aParser2.close();
++		aParser2 = null;
++		record = null;
+ 	}
+-}
+-	
+-   protected void tearDown() {
+-	   aParser2.close();
+-	   aParser2 = null;
+-	   record  = null;
+-   }
+ 
+-public void test_parsing() {
+-// the content of the test file
+-//	  N/AStone          01/11/93
+-//	-15.5          112  11/03/02
+-//	 -0.7Bone Broo    99        
+-	int recCount = 0;
+-	try{
+-		while((record=aParser2.getNext(record))!=null){
+-			if(recCount==0) {
+-				assertEquals(record.getField(0).toString(),&quot;1.0&quot;);
+-				assertTrue(record.getField(1).isNull());
+-				assertEquals(record.getField(2).toString(),&quot;101&quot;);
+-				assertEquals(record.getField(3).toString(),&quot;1993-01-11 00:00:00&quot;);
+-			} else if(recCount==1) {
+-				assertEquals(record.getField(0).toString(),&quot;-15.5&quot;);
+-				assertTrue(record.getField(3).isNull());
+-				assertEquals(record.getField(2).toString(),&quot;112&quot;);
+-				assertEquals(record.getField(1).toString(),&quot;Brook&quot;);
+-			} else if(recCount==2) {
+-				assertTrue(record.getField(0).isNull());
+-				assertEquals(record.getField(1).toString(),&quot;Bone Broo&quot;);
+-				assertTrue(record.getField(2).isNull());
+-				assertEquals(record.getField(3).toString(),&quot;2003-01-01 00:00:00&quot;);
++	public void test_parsing() {
++		int recCount = 0;
++		try {
++			while ((record = aParser2.getNext(record)) != null) {
++				if (recCount == 0) {
++					assertEquals(record.getField(0).toString(), &quot;1.0&quot;);
++					assertEquals(record.getField(1).toString(), &quot;Stone&quot;);
++					assertEquals(record.getField(2).toString(), &quot;101&quot;);
++					assertEquals(record.getField(3).toString(),
++							&quot;1993-01-11 00:00:00&quot;);
++				} else if (recCount == 2) {
++					assertEquals(record.getField(0).toString(), &quot;-15.5&quot;);
++					assertEquals(record.getField(2).toString(), &quot;112&quot;);
++					assertEquals(record.getField(1).toString(), &quot;Brook&quot;);
++					assertEquals(record.getField(3).toString(),
++							&quot;2002-11-03 00:00:00&quot;);
++				} else if (recCount == 3) {
++					assertEquals(record.getField(0).toString(), &quot;-0.7&quot;);
++					assertEquals(record.getField(1).toString(), &quot;Bone Broo&quot;);
++					assertEquals(record.getField(2).toString(), &quot;99&quot;);
++					assertEquals(record.getField(3).toString(),
++							&quot;1993-01-01 00:00:00&quot;);
++				}
++				recCount++;
+ 			}
+-			recCount++;
++		} catch (BadDataFormatException e) {
++			fail(&quot;Should not raise an BadDataFormatException&quot;);
++			e.printStackTrace();
++		} catch (Exception ee) {
++			fail(&quot;Should not throw Exception&quot;);
++			ee.printStackTrace();
+ 		}
+-	} catch (BadDataFormatException e){	
+-		fail(&quot;Should not raise an BadDataFormatException&quot;);
+-		e.printStackTrace();
+-	} catch (Exception ee){
+-		fail(&quot;Should not throw Exception&quot;);
+-		ee.printStackTrace();
++		assertEquals(4, recCount);
+ 	}
+-   assertEquals(3,recCount);
+-}
+-	
+ 
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000093.html">[Cloveretl-svn-commits] CloverETL repos r2456 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000095.html">[Cloveretl-svn-commits] CloverETL repos r2458 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/main	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#94">[ date ]</a>
+              <a href="thread.html#94">[ thread ]</a>
+              <a href="subject.html#94">[ subject ]</a>
+              <a href="author.html#94">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

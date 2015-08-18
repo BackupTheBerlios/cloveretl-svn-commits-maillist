@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2518 -	trunk/cloveretl.engine/test/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2518%20-%0A%09trunk/cloveretl.engine/test/org/jetel/util&In-Reply-To=%3C200702271421.l1RELc1W008789%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000155.html">
+   <LINK REL="Next"  HREF="000157.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2518 -	trunk/cloveretl.engine/test/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2518%20-%0A%09trunk/cloveretl.engine/test/org/jetel/util&In-Reply-To=%3C200702271421.l1RELc1W008789%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2518 -	trunk/cloveretl.engine/test/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 15:21:38 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000155.html">[Cloveretl-svn-commits] CloverETL repos r2517 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000157.html">[Cloveretl-svn-commits] CloverETL repos r2519 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-27 15:21:35 +0100 (Tue, 27 Feb 2007)
+New Revision: 2518
+
+Added:
+   trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java
+Log:
+UPDATE:NumberIterator can now handle negative numbers too
+
+Added: trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java
+===================================================================
+--- trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java	2007-02-27 14:18:33 UTC (rev 2517)
++++ trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java	2007-02-27 14:21:35 UTC (rev 2518)
+@@ -0,0 +1,33 @@
++package org.jetel.util;
++
++import junit.framework.TestCase;
++
++public class NumberIteratorTest extends TestCase {
++	
++	NumberIterator numbers;
++	
++	@Override
++	protected void setUp() throws Exception {
++		super.setUp();
++    	numbers = new NumberIterator(&quot;*--9,-7--5,-3,-1,1-3,5,7,9-*&quot;,-10,10);
++	}
++	
++	
++    public void test_1(){
++    	while (numbers.hasNext()){
++    		System.out.print(numbers.next() + &quot;,&quot;);
++    	}
++     }
++
++    public void test_2(){
++    	for (int i=0;i&lt;14;i++){
++    		System.out.print(numbers.next() + &quot;,&quot;);
++    	}
++     }
++
++    @Override
++    protected void tearDown() throws Exception {
++    	super.tearDown();
++    	System.out.println();
++    }
++}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000155.html">[Cloveretl-svn-commits] CloverETL repos r2517 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000157.html">[Cloveretl-svn-commits] CloverETL repos r2519 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#156">[ date ]</a>
+              <a href="thread.html#156">[ thread ]</a>
+              <a href="subject.html#156">[ subject ]</a>
+              <a href="author.html#156">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

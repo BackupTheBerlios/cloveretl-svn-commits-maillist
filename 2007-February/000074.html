@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2437 -	trunk/cloveretl.engine/test/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2437%20-%0A%09trunk/cloveretl.engine/test/org/jetel/component&In-Reply-To=%3C200702061116.l16BGbDR021475%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000073.html">
+   <LINK REL="Next"  HREF="000075.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2437 -	trunk/cloveretl.engine/test/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2437%20-%0A%09trunk/cloveretl.engine/test/org/jetel/component&In-Reply-To=%3C200702061116.l16BGbDR021475%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2437 -	trunk/cloveretl.engine/test/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb  6 12:16:37 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000073.html">[Cloveretl-svn-commits] CloverETL repos r2436 -	trunk/cloveretl.engine/src/org/jetel/exception
+</A></li>
+        <LI>Next message: <A HREF="000075.html">[Cloveretl-svn-commits] CloverETL repos r2438 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/component	cloveretl.engine/src/org/jetel/main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-06 12:16:36 +0100 (Tue, 06 Feb 2007)
+New Revision: 2437
+
+Modified:
+   trunk/cloveretl.engine/test/org/jetel/component/CustomizedRecordTransformTest.java
+Log:
+UPDATE: small changes
+
+Modified: trunk/cloveretl.engine/test/org/jetel/component/CustomizedRecordTransformTest.java
+===================================================================
+--- trunk/cloveretl.engine/test/org/jetel/component/CustomizedRecordTransformTest.java	2007-02-06 11:14:19 UTC (rev 2436)
++++ trunk/cloveretl.engine/test/org/jetel/component/CustomizedRecordTransformTest.java	2007-02-06 11:16:36 UTC (rev 2437)
+@@ -125,6 +125,10 @@
+ 	
+ 	public void test_fieldToField() {
+ 		System.out.println(&quot;Field to field test:&quot;);
++		System.out.println(record.getMetadata().getName() + &quot;:\n&quot; + record.toString());
++		System.out.println(record1.getMetadata().getName() + &quot;:\n&quot; + record1.toString());
++		System.out.println(out.getMetadata().getName() + &quot;:\n&quot; + out.toString());
++		System.out.println(out1.getMetadata().getName() + &quot;:\n&quot; + out1.toString());
+ //		transform.setFieldPolicy(PolicyType.CONTROLLED);
+ //		transform.setFieldPolicy(PolicyType.STRICT);
+ 		transform.addFieldToFieldRule(&quot;0.1&quot;, &quot;0.1&quot;);
+@@ -185,13 +189,9 @@
+ 		try {
+ 			transform.transform(new DataRecord[]{record, record1}, new DataRecord[]{out,out1});
+ 		} catch (TransformException e) {
+-			e.printStackTrace();
+-			System.out.println(&quot;Record number: &quot; + e.getRecNo() + &quot; , field number &quot; + e.getFieldNo());
++			System.out.println(e.getMessage());
++//			System.out.println(&quot;Record number: &quot; + e.getRecNo() + &quot; , field number &quot; + e.getFieldNo());
+ 		}
+-		System.out.println(record.getMetadata().getName() + &quot;:\n&quot; + record.toString());
+-		System.out.println(record1.getMetadata().getName() + &quot;:\n&quot; + record1.toString());
+-		System.out.println(out.getMetadata().getName() + &quot;:\n&quot; + out.toString());
+-		System.out.println(out1.getMetadata().getName() + &quot;:\n&quot; + out1.toString());
+ 		assertEquals(out.getField(0).toString(), record1.getField(3).getValue().toString());
+ //		assertEquals(out.getField(1).getValue(), record.getField(1).getValue());
+ 		assertEquals(out.getField(2).getValue().toString(), record.getField(2).getValue().toString());
+@@ -271,13 +271,17 @@
+ 
+ 	public void test_sequenceToField(){
+ 		System.out.println(&quot;Sequence to field test:&quot;);
++		System.out.println(record.toString());
++		System.out.println(record1.toString());
++		System.out.println(out.toString());
++		System.out.println(out1.toString());
+ 		transform.addSequenceToFieldRule(&quot;*.Age&quot;, graph.getSequence(&quot;ID&quot;));
+ 		transform.addSequenceToFieldRule(4, &quot;ID&quot;);
+ 		transform.addSequenceToFieldRule(&quot;${1.Na*}&quot;, &quot;ID.currentValueString()&quot;);
+ 		transform.addSequenceToFieldRule(1, 2, &quot;${seq.ID.nextValueString()}&quot;);
+ 		transform.addSequenceToFieldRule(0, &quot;Name&quot;, &quot;id&quot;);
+ 		transform.addRule(&quot;out.City&quot;, &quot;${seq.ID.nextString}&quot;);
+-		transform.addSequenceToFieldRule(&quot;out.Born&quot;, graph.getSequence(&quot;ID&quot;));
++//		transform.addSequenceToFieldRule(&quot;out.Born&quot;, graph.getSequence(&quot;ID&quot;));
+ 		transform.deleteRule(&quot;${o*.Value}&quot;);
+ 		try {
+ 			transform.init(null, new DataRecordMetadata[]{metadata, metadata1}, 
+@@ -324,10 +328,6 @@
+ 		assertEquals(out1.getField(0).getValue().toString(), &quot;2&quot;);
+ 		assertEquals(out1.getField(2).getValue().toString(), &quot;3&quot;);
+ 		assertEquals(out.getField(2).getValue().toString(), &quot;4&quot;);
+-		System.out.println(record.toString());
+-		System.out.println(record1.toString());
+-		System.out.println(out.toString());
+-		System.out.println(out1.toString());
+ 	}
+ 	
+ 	public void test_parameterToField(){
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000073.html">[Cloveretl-svn-commits] CloverETL repos r2436 -	trunk/cloveretl.engine/src/org/jetel/exception
+</A></li>
+	<LI>Next message: <A HREF="000075.html">[Cloveretl-svn-commits] CloverETL repos r2438 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/component	cloveretl.engine/src/org/jetel/main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#74">[ date ]</a>
+              <a href="thread.html#74">[ thread ]</a>
+              <a href="subject.html#74">[ subject ]</a>
+              <a href="author.html#74">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

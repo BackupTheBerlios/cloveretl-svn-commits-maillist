@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2464 -	trunk/cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2464%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702091259.l19CxwnU021583%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000100.html">
+   <LINK REL="Next"  HREF="000102.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2464 -	trunk/cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2464%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702091259.l19CxwnU021583%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2464 -	trunk/cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Feb  9 13:59:58 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000100.html">[Cloveretl-svn-commits] CloverETL repos r2463 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000102.html">[Cloveretl-svn-commits] CloverETL repos r2465 -	trunk/cloveretl.engine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-09 13:59:57 +0100 (Fri, 09 Feb 2007)
+New Revision: 2464
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/util/PropertyRefResolver.java
+Log:
+UPDADE:PropertyRefResolver - if parameter is not found in graph properties it try to find it among enviroment variables and then in system properties
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/PropertyRefResolver.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/PropertyRefResolver.java	2007-02-09 09:44:51 UTC (rev 2463)
++++ trunk/cloveretl.engine/src/org/jetel/util/PropertyRefResolver.java	2007-02-09 12:59:57 UTC (rev 2464)
+@@ -186,6 +186,10 @@
+ 				if (resolvedReference == null){
+ 					resolvedReference = System.getenv(reference);
+ 				}
++				if (resolvedReference == null){
++					reference = reference.replace('_','.');
++					resolvedReference = System.getProperty(reference);
++				}
+ 				if (resolvedReference == null) {
+ 				    logger.warn(&quot;Can't resolve reference to graph property: &quot; + reference);
+                    // if (strict)
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000100.html">[Cloveretl-svn-commits] CloverETL repos r2463 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000102.html">[Cloveretl-svn-commits] CloverETL repos r2465 -	trunk/cloveretl.engine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#101">[ date ]</a>
+              <a href="thread.html#101">[ thread ]</a>
+              <a href="subject.html#101">[ subject ]</a>
+              <a href="author.html#101">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

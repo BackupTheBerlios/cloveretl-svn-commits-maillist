@@ -1,0 +1,384 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2370 -	trunk/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2370%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701251351.l0PDptgV028197%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000007.html">
+   <LINK REL="Next"  HREF="000009.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2370 -	trunk/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2370%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701251351.l0PDptgV028197%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2370 -	trunk/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Jan 25 14:51:55 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000007.html">[Cloveretl-svn-commits] CloverETL repos r2369 -	trunk/cloveretl.engine/examples/data
+</A></li>
+        <LI>Next message: <A HREF="000009.html">[Cloveretl-svn-commits] CloverETL repos r2371 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-25 14:51:53 +0100 (Thu, 25 Jan 2007)
+New Revision: 2370
+
+Added:
+   trunk/cloveretl.engine/examples/customizedTransformExample.java
+Modified:
+   trunk/cloveretl.engine/examples/graphAproximativeJoin.grf
+Log:
+UPDATE:example with CustizedRecordTransform class usage
+
+Added: trunk/cloveretl.engine/examples/customizedTransformExample.java
+===================================================================
+--- trunk/cloveretl.engine/examples/customizedTransformExample.java	2007-01-25 13:49:25 UTC (rev 2369)
++++ trunk/cloveretl.engine/examples/customizedTransformExample.java	2007-01-25 13:51:53 UTC (rev 2370)
+@@ -0,0 +1,28 @@
++import java.util.Properties;
++
++import org.apache.commons.logging.LogFactory;
++import org.jetel.component.CustomizedRecordTransform;
++import org.jetel.component.DataRecordTransform;
++import org.jetel.data.DataRecord;
++import org.jetel.exception.ComponentNotReadyException;
++import org.jetel.exception.TransformException;
++import org.jetel.metadata.DataRecordMetadata;
++
++
++public class customizedTransformExample extends DataRecordTransform {
++	
++	CustomizedRecordTransform transformation;
++	
++	public boolean init(Properties arg0, DataRecordMetadata[] arg1, DataRecordMetadata[] arg2) throws ComponentNotReadyException {
++		transformation = new CustomizedRecordTransform(LogFactory.getLog(customizedTransformExample.class));
++		transformation.addFieldToFieldRule(&quot;*.*&quot;, &quot;*.*&quot;);
++		transformation.setGraph(this.getGraph());
++		return transformation.init(arg0, arg1, arg2);
++	}
++
++	public boolean transform(DataRecord[] arg0, DataRecord[] arg1)
++			throws TransformException {
++		return transformation.transform(arg0, arg1);
++	}
++
++}
+
+Modified: trunk/cloveretl.engine/examples/graphAproximativeJoin.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphAproximativeJoin.grf	2007-01-25 13:49:25 UTC (rev 2369)
++++ trunk/cloveretl.engine/examples/graphAproximativeJoin.grf	2007-01-25 13:51:53 UTC (rev 2370)
+@@ -1,143 +1,137 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Tue Oct 24 13:04:40 CEST 2006&quot; description=&quot;This graph ilustrates usage of Aproximative Join component.&#10;This component requires prepared data: they have &#10;to have a key (component Key Generator creates it) &#10;and be sorted by this key.&quot; guiVersion=&quot;1.4&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Tue Oct 24 14:01:53 CEST 2006&quot; name=&quot;graphFixedLengthData&quot;&gt;
++&lt;Graph created=&quot;Tue Oct 24 13:04:40 CEST 2006&quot; description=&quot;This graph ilustrates usage of Aproximative Join component.&#10;This component requires prepared data: they have &#10;to have a key (component Key Generator creates it) &#10;and be sorted by this key.&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Thu Jan 25 12:43:25 CET 2007&quot; name=&quot;graphFixedLengthData&quot; revision=&quot;1.3&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata id=&quot;Metadata4&quot;&gt;
+-&lt;Record name=&quot;conforming_out&quot; type=&quot;fixed&quot;&gt;
+-&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;last_name&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;first_name&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;_total_conformity_&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;conforming_out&quot; recordDelimiter=&quot;\n&quot; recordSize=&quot;68&quot; type=&quot;fixed&quot;&gt;
++&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;last_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;first_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;_total_conformity_&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;8&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata0&quot;&gt;
+-&lt;Record name=&quot;customer&quot; recordDelimiter=&quot;\n&quot; type=&quot;fixed&quot;&gt;
+-&lt;Field name=&quot;customer_id&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;account_num&quot; nullable=&quot;true&quot; size=&quot;11&quot; type=&quot;long&quot;/&gt;
+-&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;mi&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;address1&quot; nullable=&quot;true&quot; size=&quot;30&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;city&quot; nullable=&quot;true&quot; size=&quot;7&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;state_province&quot; nullable=&quot;true&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;postal_code&quot; nullable=&quot;true&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;country&quot; nullable=&quot;true&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;customer_region_id&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;phone1&quot; nullable=&quot;true&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;phone2&quot; nullable=&quot;true&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
+-&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;false&quot; size=&quot;15&quot; type=&quot;date&quot;/&gt;
+-&lt;Field name=&quot;marital_status&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;yearly_income&quot; nullable=&quot;true&quot; size=&quot;13&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;gender&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;total_children&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;num_children_at_home&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;education&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;date_accnt_opened&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;date&quot;/&gt;
+-&lt;Field name=&quot;member_card&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;occupation&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;houseowner&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;num_cars_owned&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;customer&quot; recordDelimiter=&quot;&#10;&quot; recordSize=&quot;212&quot; type=&quot;fixed&quot;&gt;
++&lt;Field name=&quot;customer_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;account_num&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;11&quot; type=&quot;long&quot;/&gt;
++&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;mi&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;address1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;30&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;city&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;7&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;state_province&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;postal_code&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;country&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;customer_region_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;phone1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;phone2&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
++&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;false&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;date&quot;/&gt;
++&lt;Field name=&quot;marital_status&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;yearly_income&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;13&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;total_children&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;num_children_at_home&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;education&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;date_accnt_opened&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;date&quot;/&gt;
++&lt;Field name=&quot;member_card&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;occupation&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;houseowner&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;num_cars_owned&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata2&quot;&gt;
+-&lt;Record name=&quot;customer_with_key&quot; type=&quot;fixed&quot;&gt;
+-&lt;Field name=&quot;customer_id&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;account_num&quot; nullable=&quot;true&quot; size=&quot;11&quot; type=&quot;long&quot;/&gt;
+-&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;mi&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;address1&quot; nullable=&quot;true&quot; size=&quot;30&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;city&quot; nullable=&quot;true&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;state_province&quot; nullable=&quot;true&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;postal_code&quot; nullable=&quot;true&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;country&quot; nullable=&quot;true&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;customer_region_id&quot; nullable=&quot;true&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;phone1&quot; nullable=&quot;true&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;phone2&quot; nullable=&quot;true&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
+-&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;true&quot; size=&quot;28&quot; type=&quot;date&quot;/&gt;
+-&lt;Field name=&quot;marital_status&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;yearly_income&quot; nullable=&quot;true&quot; size=&quot;13&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;gender&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;total_children&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;num_children_at_home&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;education&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;date_accnt_opened&quot; nullable=&quot;true&quot; size=&quot;28&quot; type=&quot;date&quot;/&gt;
+-&lt;Field name=&quot;member_card&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;occupation&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;houseowner&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;num_cars_owned&quot; nullable=&quot;true&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field locale=&quot;en.US&quot; name=&quot;key&quot; nullable=&quot;true&quot; size=&quot;7&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;customer_with_key&quot; recordSize=&quot;239&quot; type=&quot;fixed&quot;&gt;
++&lt;Field name=&quot;customer_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;account_num&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;11&quot; type=&quot;long&quot;/&gt;
++&lt;Field name=&quot;lname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;fname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;mi&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;address1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;30&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;city&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;state_province&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;6&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;postal_code&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;country&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;customer_region_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;4&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;phone1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;phone2&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;12&quot; type=&quot;string&quot;/&gt;
++&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;28&quot; type=&quot;date&quot;/&gt;
++&lt;Field name=&quot;marital_status&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;yearly_income&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;13&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;total_children&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;num_children_at_home&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Field name=&quot;education&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
++&lt;Field format=&quot;EEE MMM dd yyyy&quot; name=&quot;date_accnt_opened&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;28&quot; type=&quot;date&quot;/&gt;
++&lt;Field name=&quot;member_card&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;occupation&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;houseowner&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;num_cars_owned&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;1&quot; type=&quot;integer&quot;/&gt;
++&lt;Field locale=&quot;en.US&quot; name=&quot;key&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;7&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata1&quot;&gt;
+-&lt;Record name=&quot;employee&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;employee&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata3&quot;&gt;
+-&lt;Record name=&quot;employee_with_key&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; locale=&quot;en.US&quot; name=&quot;key&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;employee_with_key&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; locale=&quot;en.US&quot; name=&quot;key&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata5&quot;&gt;
+-&lt;Record name=&quot;suspicious&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;lname&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;fname&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;gender1&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; length=&quot;8&quot; name=&quot;_lname_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; length=&quot;8&quot; name=&quot;_fname_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; length=&quot;8&quot; name=&quot;_total_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;suspicious&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;lname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;fname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birthdate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; format=&quot;EEE MMM dd yyyy&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;gender1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; length=&quot;8&quot; name=&quot;_lname_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; length=&quot;8&quot; name=&quot;_fname_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; length=&quot;8&quot; name=&quot;_total_conformity_&quot; nullable=&quot;true&quot; scale=&quot;2&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Connection dbConfig=&quot;koule_postgre.cfg&quot; id=&quot;DBConnection0&quot; type=&quot;JDBC&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node conformity=&quot;0.8&quot; enabled=&quot;enabled&quot; guiHeight=&quot;67&quot; guiName=&quot;aproximative join&quot; guiWidth=&quot;122&quot; guiX=&quot;444&quot; guiY=&quot;176&quot; id=&quot;APROX_MERGE_JOIN1&quot; joinKey=&quot;lname 4 0.5 true false false false;fname 3 0.5 true false false false&quot; matchingKey=&quot;key&quot; type=&quot;APROX_MERGE_JOIN&quot;&gt;
+-&lt;attr name=&quot;transform&quot;&gt;${out.0.lname} = ${in.0.lname};
+-${out.0.fname} = ${in.0.fname};
+-${out.0.last_name} = ${in.1.last_name};
+-${out.0.first_name} = ${in.1.first_name};
+-&lt;/attr&gt;
+-&lt;attr name=&quot;slaveOverrideKey&quot;&gt;last_name;first_name&lt;/attr&gt;
++&lt;Node conformity=&quot;0.8&quot; enabled=&quot;enabled&quot; guiHeight=&quot;67&quot; guiName=&quot;aproximative join&quot; guiWidth=&quot;122&quot; guiX=&quot;444&quot; guiY=&quot;176&quot; id=&quot;APROX_MERGE_JOIN1&quot; joinKey=&quot;lname 4 0.5 true false false false;fname 3 0.5 true false false false&quot; matchingKey=&quot;key&quot; slaveOverrideKey=&quot;last_name;first_name&quot; transformClass=&quot;customizedTransformExample&quot; type=&quot;APROX_MERGE_JOIN&quot;&gt;
+ &lt;attr name=&quot;transformForSuspicious&quot;&gt;${out.0.lname} = ${in.0.lname};
+ ${out.0.fname} = ${in.0.fname};
+ ${out.0.birthdate} = ${in.0.birthdate};
+@@ -152,9 +146,15 @@
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/employee.out&quot; guiHeight=&quot;69&quot; guiName=&quot;employee without pair&quot; guiWidth=&quot;118&quot; guiX=&quot;596&quot; guiY=&quot;303&quot; id=&quot;DELIMITED_DATA_WRITER_NIO1&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;64&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;95&quot; guiX=&quot;296&quot; guiY=&quot;92&quot; id=&quot;EXT_SORT0&quot; sortKey=&quot;key&quot; type=&quot;EXT_SORT&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;64&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;111&quot; guiX=&quot;296&quot; guiY=&quot;259&quot; id=&quot;EXT_SORT1&quot; sortKey=&quot;key&quot; type=&quot;EXT_SORT&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/customers.dat&quot; guiHeight=&quot;72&quot; guiName=&quot;customer&quot; guiWidth=&quot;119&quot; guiX=&quot;7&quot; guiY=&quot;92&quot; id=&quot;FIXLEN_DATA_READER_NIO0&quot; type=&quot;FIXLEN_DATA_READER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/conforming.txt&quot; guiHeight=&quot;69&quot; guiName=&quot;joined - similarity greater then 0.8&quot; guiWidth=&quot;111&quot; guiX=&quot;596&quot; guiY=&quot;54&quot; id=&quot;FIXLEN_DATA_WRITER_NIO0&quot; type=&quot;FIXLEN_DATA_WRITER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/customers.out&quot; guiHeight=&quot;54&quot; guiName=&quot;customer without pair&quot; guiWidth=&quot;123&quot; guiX=&quot;596&quot; guiY=&quot;215&quot; id=&quot;FIXLEN_DATA_WRITER_NIO1&quot; type=&quot;FIXLEN_DATA_WRITER&quot;/&gt;
++&lt;Node byteMode=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/customers.dat&quot; guiHeight=&quot;72&quot; guiName=&quot;customer&quot; guiWidth=&quot;119&quot; guiX=&quot;7&quot; guiY=&quot;92&quot; id=&quot;FIXLEN_DATA_READER_NIO0&quot; type=&quot;FIXLEN_DATA_READER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/conforming.txt&quot; guiHeight=&quot;69&quot; guiName=&quot;joined - similarity greater then 0.8&quot; guiWidth=&quot;111&quot; guiX=&quot;596&quot; guiY=&quot;54&quot; id=&quot;FIXLEN_DATA_WRITER_NIO0&quot; type=&quot;FIXLEN_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/customers.out&quot; guiHeight=&quot;54&quot; guiName=&quot;customer without pair&quot; guiWidth=&quot;123&quot; guiX=&quot;596&quot; guiY=&quot;215&quot; id=&quot;FIXLEN_DATA_WRITER_NIO1&quot; type=&quot;FIXLEN_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;70&quot; guiName=&quot;Key generator&quot; guiWidth=&quot;138&quot; guiX=&quot;152&quot; guiY=&quot;92&quot; id=&quot;KEY_GEN0&quot; keyExpression=&quot;lname 4;fname 3&quot; type=&quot;KEY_GEN&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;88&quot; guiName=&quot;Key generator&quot; guiWidth=&quot;145&quot; guiX=&quot;152&quot; guiY=&quot;259&quot; id=&quot;KEY_GEN1&quot; keyExpression=&quot;last_name 4;first_name 3&quot; type=&quot;KEY_GEN&quot;/&gt;
+ &lt;Edge fromNode=&quot;APROX_MERGE_JOIN1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge0&quot; inPort=&quot;0 (joined - similarity greater then 0.8)&quot; metadata=&quot;Metadata4&quot; outPort=&quot;0 (aproximative join)&quot; toNode=&quot;FIXLEN_DATA_WRITER_NIO0:0&quot;/&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000007.html">[Cloveretl-svn-commits] CloverETL repos r2369 -	trunk/cloveretl.engine/examples/data
+</A></li>
+	<LI>Next message: <A HREF="000009.html">[Cloveretl-svn-commits] CloverETL repos r2371 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#8">[ date ]</a>
+              <a href="thread.html#8">[ thread ]</a>
+              <a href="subject.html#8">[ subject ]</a>
+              <a href="author.html#8">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

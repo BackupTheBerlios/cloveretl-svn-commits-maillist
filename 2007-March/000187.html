@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2549%20-%0A%09trunk/cloveretl.engine/test/org/jetel/util&In-Reply-To=%3C200703051018.l25AIKgn026281%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000186.html">
+   <LINK REL="Next"  HREF="000188.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2549%20-%0A%09trunk/cloveretl.engine/test/org/jetel/util&In-Reply-To=%3C200703051018.l25AIKgn026281%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 11:18:20 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000186.html">[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000188.html">[Cloveretl-svn-commits] CloverETL repos r2550 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#187">[ date ]</a>
+              <a href="thread.html#187">[ thread ]</a>
+              <a href="subject.html#187">[ subject ]</a>
+              <a href="author.html#187">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 11:18:20 +0100 (Mon, 05 Mar 2007)
+New Revision: 2549
+
+Modified:
+   trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java
+Log:
+BUGFIX:NumberIterator didn't work for pattern &quot;*&quot;
+
+Modified: trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java
+===================================================================
+--- trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java	2007-03-05 10:17:41 UTC (rev 2548)
++++ trunk/cloveretl.engine/test/org/jetel/util/NumberIteratorTest.java	2007-03-05 10:18:20 UTC (rev 2549)
+@@ -2,6 +2,7 @@
+ 
+ import java.util.NoSuchElementException;
+ 
++
+ import junit.framework.TestCase;
+ 
+ public class NumberIteratorTest extends TestCase {
+@@ -32,6 +33,16 @@
+     		
+     	}
+      }
++    
++    public void test_3(){
++    	numbers = new NumberIterator(&quot;*&quot;,0,10);
++    	int i=0;
++    	while (numbers.hasNext()){
++    		System.out.print(numbers.next() + &quot;,&quot;);
++    		i++;
++    	}
++    	assertEquals(i, 11);
++     }
+ 
+     @Override
+     protected void tearDown() throws Exception {
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000186.html">[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000188.html">[Cloveretl-svn-commits] CloverETL repos r2550 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#187">[ date ]</a>
+              <a href="thread.html#187">[ thread ]</a>
+              <a href="subject.html#187">[ subject ]</a>
+              <a href="author.html#187">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

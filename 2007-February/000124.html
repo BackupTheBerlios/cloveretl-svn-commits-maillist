@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2487%20-%0A%09trunk/cloveretl.engine/src/org/jetel/metadata&In-Reply-To=%3C200702191447.l1JEl2NU013562%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000123.html">
+   <LINK REL="Next"  HREF="000125.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2487%20-%0A%09trunk/cloveretl.engine/src/org/jetel/metadata&In-Reply-To=%3C200702191447.l1JEl2NU013562%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 19 15:47:02 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000123.html">[Cloveretl-svn-commits] CloverETL repos r2486 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000125.html">[Cloveretl-svn-commits] CloverETL repos r2488 - in	branches/cloveretl.engine.rel-2-1-0: cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/lib cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/interpreter	cloveretl.engine/src/org/jetel/metadata	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#124">[ date ]</a>
+              <a href="thread.html#124">[ thread ]</a>
+              <a href="subject.html#124">[ subject ]</a>
+              <a href="author.html#124">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-02-19 15:47:01 +0100 (Mon, 19 Feb 2007)
+New Revision: 2487
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java
+Log:
+FIX: better error handling.
+
+Modified: trunk/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java	2007-02-19 13:10:51 UTC (rev 2486)
++++ trunk/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java	2007-02-19 14:47:01 UTC (rev 2487)
+@@ -312,6 +312,11 @@
+             	metadata = xmlReader.read(new BufferedInputStream(input));
+             else 
+             	metadata = xmlReader.read(new BufferedInputStream(input), metadataId);
++            
++            if(metadata == null) {
++                System.err.println(&quot;Metadata doesn't exist.&quot; + (metadataId != null ? &quot; (&quot; + metadataId + &quot;)&quot; : &quot;&quot;));
++                return;
++            }
+ 			(new XsdMetadata(metadata)).write(output);
+ 		} catch (FileNotFoundException e) {
+ 			e.printStackTrace();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000123.html">[Cloveretl-svn-commits] CloverETL repos r2486 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000125.html">[Cloveretl-svn-commits] CloverETL repos r2488 - in	branches/cloveretl.engine.rel-2-1-0: cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/lib cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/interpreter	cloveretl.engine/src/org/jetel/metadata	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#124">[ date ]</a>
+              <a href="thread.html#124">[ thread ]</a>
+              <a href="subject.html#124">[ subject ]</a>
+              <a href="author.html#124">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

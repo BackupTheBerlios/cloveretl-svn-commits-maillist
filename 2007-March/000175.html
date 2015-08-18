@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2537 - in	trunk/cloveretl.engine/test/org/jetel/data: . lookup
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2537%20-%20in%0A%09trunk/cloveretl.engine/test/org/jetel/data%3A%20.%20lookup&In-Reply-To=%3C200703011226.l21CQs3Z032428%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000176.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2537 - in	trunk/cloveretl.engine/test/org/jetel/data: . lookup</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2537%20-%20in%0A%09trunk/cloveretl.engine/test/org/jetel/data%3A%20.%20lookup&In-Reply-To=%3C200703011226.l21CQs3Z032428%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2537 - in	trunk/cloveretl.engine/test/org/jetel/data: . lookup">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Mar  1 13:26:54 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000176.html">[Cloveretl-svn-commits] CloverETL repos r2538 -	trunk/cloveretl.lookup/src/org/jetel/lookup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#175">[ date ]</a>
+              <a href="thread.html#175">[ thread ]</a>
+              <a href="subject.html#175">[ subject ]</a>
+              <a href="author.html#175">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-01 13:26:51 +0100 (Thu, 01 Mar 2007)
+New Revision: 2537
+
+Added:
+   trunk/cloveretl.engine/test/org/jetel/data/lookup/
+   trunk/cloveretl.engine/test/org/jetel/data/lookup/RangeLookupTest.java
+Log:
+INIT:RangeLookupTable
+
+Added: trunk/cloveretl.engine/test/org/jetel/data/lookup/RangeLookupTest.java
+===================================================================
+--- trunk/cloveretl.engine/test/org/jetel/data/lookup/RangeLookupTest.java	2007-02-28 16:18:39 UTC (rev 2536)
++++ trunk/cloveretl.engine/test/org/jetel/data/lookup/RangeLookupTest.java	2007-03-01 12:26:51 UTC (rev 2537)
+@@ -0,0 +1,186 @@
++package org.jetel.data.lookup;
++
++
++import java.io.IOException;
++import java.util.Random;
++
++import org.jetel.data.DataRecord;
++import org.jetel.data.RecordKey;
++import org.jetel.data.parser.Parser;
++import org.jetel.main.runGraph;
++import org.jetel.metadata.DataFieldMetadata;
++import org.jetel.metadata.DataRecordMetadata;
++
++import junit.framework.TestCase;
++
++public class RangeLookupTest extends TestCase {
++
++    LookupTable lookup,lookupNotOverlap;
++    DataRecordMetadata lookupMetadata, metadata;
++    DataRecord record;
++    Random random = new Random();
++    
++    /* (non-Javadoc)
++     * @see junit.framework.TestCase#setUp()
++     */
++    protected void setUp() throws Exception {
++        runGraph.initEngine(null, null);
++        lookupMetadata = new DataRecordMetadata(&quot;lookupTest&quot;,DataRecordMetadata.DELIMITED_RECORD);
++        lookupMetadata.addField(new DataFieldMetadata(&quot;name&quot;,DataFieldMetadata.STRING_FIELD,&quot;;&quot;));
++        lookupMetadata.addField(new DataFieldMetadata(&quot;start&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++        lookupMetadata.addField(new DataFieldMetadata(&quot;end&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++        lookupMetadata.addField(new DataFieldMetadata(&quot;start1&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++        lookupMetadata.addField(new DataFieldMetadata(&quot;end1&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++        lookup = LookupTableFactory.createLookupTable(null, &quot;rangeLookup&quot;, 
++        		new Object[]{&quot;RangeLookup&quot;,lookupMetadata,null}, 
++        		new Class[]{String.class,DataRecordMetadata.class,Parser.class});
++        lookupNotOverlap = LookupTableFactory.createLookupTable(null, &quot;rangeLookup&quot;, 
++        		new Object[]{&quot;RangeLookup&quot;,lookupMetadata,null,false}, 
++        		new Class[]{String.class,DataRecordMetadata.class,Parser.class,boolean.class});
++        lookup.init();
++        lookupNotOverlap.init();
++    	record = new DataRecord(lookupMetadata);
++    	record.init();
++      	record.getField(&quot;name&quot;).setValue(&quot;10-20,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(10);
++       	record.getField(&quot;end&quot;).setValue(20);
++      	record.getField(&quot;start1&quot;).setValue(100);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookup.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;20-30,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(20);
++       	record.getField(&quot;end&quot;).setValue(30);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookup.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;20-30,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(20);
++       	record.getField(&quot;end&quot;).setValue(30);
++      	record.getField(&quot;start1&quot;).setValue(100);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookup.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;30-40,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(30);
++       	record.getField(&quot;end&quot;).setValue(40);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookup.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;30-40,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(30);
++       	record.getField(&quot;end&quot;).setValue(40);
++      	record.getField(&quot;start1&quot;).setValue(100);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookup.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;0-10,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(0);
++      	record.getField(&quot;end&quot;).setValue(10);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookup.put(record, record.duplicate());
++       	record.getField(&quot;name&quot;).setValue(&quot;0-10,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(0);
++       	record.getField(&quot;start1&quot;).setValue(100);
++      	record.getField(&quot;end&quot;).setValue(10);
++      	record.getField(&quot;end1&quot;).setValue(200);
++      	lookup.put(record, record.duplicate());
++      	record.getField(&quot;name&quot;).setValue(&quot;10-20,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(10);
++       	record.getField(&quot;end&quot;).setValue(20);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookup.put(record, record.duplicate());
++
++      	record.getField(&quot;name&quot;).setValue(&quot;10-20,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(11);
++       	record.getField(&quot;end&quot;).setValue(20);
++      	record.getField(&quot;start1&quot;).setValue(101);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookupNotOverlap.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;20-30,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(21);
++       	record.getField(&quot;end&quot;).setValue(30);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookupNotOverlap.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;20-30,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(21);
++       	record.getField(&quot;end&quot;).setValue(30);
++      	record.getField(&quot;start1&quot;).setValue(101);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookupNotOverlap.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;30-40,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(31);
++       	record.getField(&quot;end&quot;).setValue(40);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookupNotOverlap.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;30-40,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(31);
++       	record.getField(&quot;end&quot;).setValue(40);
++      	record.getField(&quot;start1&quot;).setValue(101);
++      	record.getField(&quot;end1&quot;).setValue(200);
++       	lookupNotOverlap.put(record, record.duplicate());
++    	record.getField(&quot;name&quot;).setValue(&quot;0-10,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(0);
++      	record.getField(&quot;end&quot;).setValue(10);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookupNotOverlap.put(record, record.duplicate());
++       	record.getField(&quot;name&quot;).setValue(&quot;0-10,100-200&quot;);
++    	record.getField(&quot;start&quot;).setValue(0);
++       	record.getField(&quot;start1&quot;).setValue(101);
++      	record.getField(&quot;end&quot;).setValue(10);
++      	record.getField(&quot;end1&quot;).setValue(200);
++      	lookupNotOverlap.put(record, record.duplicate());
++      	record.getField(&quot;name&quot;).setValue(&quot;10-20,0-100&quot;);
++    	record.getField(&quot;start&quot;).setValue(11);
++       	record.getField(&quot;end&quot;).setValue(20);
++      	record.getField(&quot;start1&quot;).setValue(0);
++      	record.getField(&quot;end1&quot;).setValue(100);
++       	lookupNotOverlap.put(record, record.duplicate());
++
++       	metadata = new DataRecordMetadata(&quot;in&quot;,DataRecordMetadata.DELIMITED_RECORD);
++       	metadata.addField(new DataFieldMetadata(&quot;id&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++       	metadata.addField(new DataFieldMetadata(&quot;value&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++       	metadata.addField(new DataFieldMetadata(&quot;value1&quot;,DataFieldMetadata.INTEGER_FIELD,&quot;;&quot;));
++      	record = new DataRecord(metadata);
++    	record.init();
++       	RecordKey key = new RecordKey(new int[]{1,2},metadata);
++       	lookup.setLookupKey(key);
++       	lookupNotOverlap.setLookupKey(key);
++    }
++
++    public void test_1() throws IOException{
++    	DataRecord tmp,tmp1;
++    	for (int i=0;i&lt;500;i++){
++    		record.getField(&quot;id&quot;).setValue(i);
++    		record.getField(&quot;value&quot;).setValue(random.nextInt(41));
++    		record.getField(&quot;value1&quot;).setValue(random.nextInt(201));
++    		tmp = lookup.get(record);
++    		tmp1 = lookupNotOverlap.get(record);
++    		System.out.println(&quot;Input record &quot; + i + &quot;:\n&quot; + record + &quot;From lookup table:\n&quot; + tmp);
++    		assertTrue((Integer)record.getField(&quot;value&quot;).getValue() &gt;= (Integer)tmp.getField(&quot;start&quot;).getValue());
++    		assertTrue((Integer)record.getField(&quot;value&quot;).getValue() &lt;= (Integer)tmp.getField(&quot;end&quot;).getValue());
++    		assertTrue((Integer)record.getField(&quot;value1&quot;).getValue() &gt;= (Integer)tmp.getField(&quot;start1&quot;).getValue());
++    		assertTrue((Integer)record.getField(&quot;value1&quot;).getValue() &lt;= (Integer)tmp.getField(&quot;end1&quot;).getValue());
++    		System.out.println(&quot;From lookupNotOverlap table:\n&quot; + tmp1);
++    		assertEquals(tmp.getField(&quot;end&quot;), tmp1.getField(&quot;end&quot;));
++    		assertEquals(tmp.getField(&quot;end1&quot;), tmp1.getField(&quot;end1&quot;));
++//    		if ((Integer)record.getField(&quot;value&quot;).getValue()%10 == 0 || 
++//    				(Integer)record.getField(&quot;value1&quot;).getValue()%100 == 0 ){
++//    			System.in.read();
++//    		}
++    		tmp = lookup.getNext();
++    		tmp1 = lookupNotOverlap.getNext();
++    		while (tmp != null) {
++    			System.out.println(&quot;Next:\n&quot; + tmp);
++        		assertTrue((Integer)record.getField(&quot;value&quot;).getValue() &gt;= (Integer)tmp.getField(&quot;start&quot;).getValue());
++        		assertTrue((Integer)record.getField(&quot;value&quot;).getValue() &lt;= (Integer)tmp.getField(&quot;end&quot;).getValue());
++        		assertTrue((Integer)record.getField(&quot;value1&quot;).getValue() &gt;= (Integer)tmp.getField(&quot;start1&quot;).getValue());
++        		assertTrue((Integer)record.getField(&quot;value1&quot;).getValue() &lt;= (Integer)tmp.getField(&quot;end1&quot;).getValue());
++    			System.out.println(&quot;Next1:\n&quot; + tmp1);
++     			tmp = lookup.getNext();
++    		}
++    	}
++  }
++}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000176.html">[Cloveretl-svn-commits] CloverETL repos r2538 -	trunk/cloveretl.lookup/src/org/jetel/lookup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#175">[ date ]</a>
+              <a href="thread.html#175">[ thread ]</a>
+              <a href="subject.html#175">[ subject ]</a>
+              <a href="author.html#175">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

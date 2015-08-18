@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2592 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2592%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121444.l2CEi4LE028410%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000229.html">
+   <LINK REL="Next"  HREF="000231.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2592 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2592%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121444.l2CEi4LE028410%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2592 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar 12 15:44:04 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000229.html">[Cloveretl-svn-commits] CloverETL repos r2591 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000231.html">[Cloveretl-svn-commits] CloverETL repos r2593 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-12 15:44:04 +0100 (Mon, 12 Mar 2007)
+New Revision: 2592
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBRead.grf
+Log:
+MINOR:better description
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBRead.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBRead.grf	2007-03-12 14:43:25 UTC (rev 2591)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBRead.grf	2007-03-12 14:44:04 UTC (rev 2592)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Tue Oct 24 13:04:40 CEST 2006&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Mon Mar 05 15:02:08 CET 2007&quot; name=&quot;DBTest&quot; revision=&quot;1.0&quot;&gt;
++&lt;Graph created=&quot;Tue Oct 24 13:04:40 CEST 2006&quot; description=&quot;This graph reads personal data from three sources and finds records with the same values on corresponding fields (lname &#8211; last_name, fname &#8211; first_name). Matching pairs are transformed into one output record and saved in intersection_customer_employee.txt file.&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Mon Mar 12 11:17:17 CET 2007&quot; name=&quot;DBTest&quot; revision=&quot;1.2&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata id=&quot;Metadata0&quot;&gt;
+ &lt;Record name=&quot;customer&quot; recordDelimiter=&quot;&#10;&quot; recordSize=&quot;212&quot; type=&quot;fixed&quot;&gt;
+@@ -93,7 +93,7 @@
+ &lt;/Phase&gt;
+ &lt;Phase number=&quot;1&quot;&gt;
+ &lt;Node dbConnection=&quot;DBConnection0&quot; enabled=&quot;enabled&quot; guiHeight=&quot;75&quot; guiName=&quot;drop customer_tmp&quot; guiWidth=&quot;124&quot; guiX=&quot;57&quot; guiY=&quot;495&quot; id=&quot;DB_EXECUTE0&quot; type=&quot;DB_EXECUTE&quot;&gt;
+-&lt;attr name=&quot;sqlQuery&quot;&gt;drop table customer_tmp;&lt;/attr&gt;
++&lt;attr name=&quot;sqlQuery&quot;&gt;drop table employee_tmp;&lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000229.html">[Cloveretl-svn-commits] CloverETL repos r2591 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000231.html">[Cloveretl-svn-commits] CloverETL repos r2593 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#230">[ date ]</a>
+              <a href="thread.html#230">[ thread ]</a>
+              <a href="subject.html#230">[ subject ]</a>
+              <a href="author.html#230">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,453 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2497 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2497%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702211013.l1LADa21005179%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000134.html">
+   <LINK REL="Next"  HREF="000136.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2497 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2497%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702211013.l1LADa21005179%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2497 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Feb 21 11:13:36 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000134.html">[Cloveretl-svn-commits] CloverETL repos r2496 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000136.html">[Cloveretl-svn-commits] CloverETL repos r2498 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-21 11:13:34 +0100 (Wed, 21 Feb 2007)
+New Revision: 2497
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+Log:
+UPDATE: numRecord, skip, WritableByteChannel
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-20 15:47:45 UTC (rev 2496)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-21 10:13:34 UTC (rev 2497)
+@@ -29,7 +29,6 @@
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.DataFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.exception.XMLConfigurationException;
+ import org.jetel.graph.InputPort;
+@@ -94,8 +93,8 @@
+     private static final String XML_OUTPUT_FIELD_NAMES = &quot;outputFieldNames&quot;;
+ 	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
+ 	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
+-	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
+-	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 	private String fileURL;
+ 	private boolean appendData;
+ 	private DataFormatter formatter;
+@@ -106,6 +105,7 @@
+ 	private WritableByteChannel writableByteChannel;
+     private int skip;
+ 	private int numRecords;
++	private String charset;
+ 
+ 	static Log logger = LogFactory.getLog(DataWriter.class);
+ 
+@@ -124,6 +124,7 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
++		this.charset = charset;
+ 		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 	
+@@ -131,6 +132,7 @@
+ 		super(id);
+ 		this.writableByteChannel = writableByteChannel;
+ 		this.appendData = appendData;
++		this.charset = charset;
+ 		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+@@ -179,6 +181,7 @@
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
++        writer.setCharset(charset);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+             writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-20 15:47:45 UTC (rev 2496)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-21 10:13:34 UTC (rev 2497)
+@@ -19,13 +19,16 @@
+ */
+ 
+ package org.jetel.component;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
++import java.util.Iterator;
++
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.DelimitedDataFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.exception.XMLConfigurationException;
+ import org.jetel.graph.InputPort;
+@@ -35,7 +38,6 @@
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.FileUtils;
+ import org.jetel.util.MultiFileWriter;
+-import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
+ import org.w3c.dom.Element;
+ 
+@@ -89,6 +91,8 @@
+ 	private static final String XML_OUTPUT_FIELD_NAMES = &quot;outputFieldNames&quot;;
+ 	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
+ 	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 	
+ 	private static final boolean APPEND_DATA_AS_DEFAULT = false;
+ 	
+@@ -100,7 +104,10 @@
+ 	private int recordsPerFile;
+ 	private int bytesPerFile;
+ 	private String charset;
+-    
++    private int skip;
++	private int numRecords;
++	private WritableByteChannel writableByteChannel;
++
+ 	static Log logger = LogFactory.getLog(DelimitedDataWriter.class);
+ 
+ 	public final static String COMPONENT_TYPE = &quot;DELIMITED_DATA_WRITER&quot;;
+@@ -121,6 +128,12 @@
+ 		formatter = new DelimitedDataFormatter();
+ 	}
+ 
++	public DelimitedDataWriter(String id, WritableByteChannel writableByteChannel) {
++		super(id);
++		this.writableByteChannel = writableByteChannel;
++		formatter = new DelimitedDataFormatter();
++	}
++
+ 	public DelimitedDataWriter(String id, String fileURL, String charset, boolean appendData) {
+ 		super(id);
+ 		this.fileURL = fileURL;
+@@ -129,7 +142,14 @@
+ 		formatter = new DelimitedDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
++	public DelimitedDataWriter(String id, WritableByteChannel writableByteChannel, String charset) {
++		super(id);
++		this.writableByteChannel = writableByteChannel;
++        this.charset = charset;
++		formatter = new DelimitedDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++	}
+ 
++
+ 	@Override
+ 	public Result execute() throws Exception {
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+@@ -164,12 +184,21 @@
+ 		}
+         
+         // initialize multifile writer based on prepared formatter
+-        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		if (fileURL != null) {
++	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		} else {
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
++			}
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
++		}
+         writer.setLogger(logger);
+         writer.setBytesPerFile(bytesPerFile);
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+         writer.setCharset(charset);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+             writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+@@ -216,6 +245,12 @@
+ 		if (bytesPerFile &gt; 0) {
+ 			xmlElement.setAttribute(XML_BYTES_PER_FILE, Integer.toString(bytesPerFile));
+ 		}
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
++		}
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
++		}
+ 	}
+ 
+ 	
+@@ -244,6 +279,12 @@
+             if(xattribs.exists(XML_BYTES_PER_FILE)) {
+                 aDelimitedDataWriterNIO.setBytesPerFile(xattribs.getInteger(XML_BYTES_PER_FILE));
+             }
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aDelimitedDataWriterNIO.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aDelimitedDataWriterNIO.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
+ 		}catch(Exception ex){
+ 	           throw new XMLConfigurationException(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(XML_ID_ATTRIBUTE,&quot; unknown ID &quot;) + &quot;:&quot; + ex.getMessage(),ex);
+ 		}
+@@ -275,5 +316,40 @@
+     public void setRecordsPerFile(int recordsPerFile) {
+         this.recordsPerFile = recordsPerFile;
+     }
++    
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
++
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++
++    private class WritableByteChannelIterator implements Iterator&lt;WritableByteChannel&gt; {
++    	WritableByteChannel writableByteChannel;
++    	
++    	public WritableByteChannelIterator(WritableByteChannel writableByteChannel) {
++    		this.writableByteChannel = writableByteChannel;
++    	}
++    	
++		public boolean hasNext() {
++			return true;
++		}
++
++		public WritableByteChannel next() {
++			return writableByteChannel;
++		}
++
++		public void remove() {}
++    }
++
+ }
+ 
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-20 15:47:45 UTC (rev 2496)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-21 10:13:34 UTC (rev 2497)
+@@ -18,13 +18,16 @@
+ *
+ */
+ package org.jetel.component;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
++import java.util.Iterator;
++
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.FixLenDataFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.exception.XMLConfigurationException;
+ import org.jetel.graph.InputPort;
+@@ -93,6 +96,8 @@
+ 	private static final String XML_RECORD_FILLER = &quot;filler&quot;;
+ 	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
+ 	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 	
+ 	private static final boolean DEFAULT_APPEND=false;
+ 	
+@@ -103,6 +108,10 @@
+ 	private boolean outputFieldNames=false;
+ 	private int recordsPerFile;
+ 	private int bytesPerFile;
++    private int skip;
++	private int numRecords;
++	private String charset;
++	private WritableByteChannel writableByteChannel;
+ 
+ 	static Log logger = LogFactory.getLog(FixLenDataWriter.class);
+ 
+@@ -123,9 +132,17 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
++        this.charset = charset;
+ 		formatter = new FixLenDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
++	public FixLenDataWriter(String id, WritableByteChannel writableByteChannel, String charset) {
++		super(id);
++		this.writableByteChannel = writableByteChannel;
++        this.charset = charset;
++		formatter = new FixLenDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++	}
++
+ 	@Override
+ 	public Result execute() throws Exception {
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+@@ -157,12 +174,24 @@
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+         // initialize multifile writer based on prepared formatter
+-        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		if (fileURL != null) {
++	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		} else {
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
++			}
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
++		}
+         writer.setLogger(logger);
+         writer.setBytesPerFile(bytesPerFile);
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+-        //TODO kokon - outputFiledNames
++        writer.setCharset(charset);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
++        if(outputFieldNames) {
++            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++        }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 	
+@@ -197,6 +226,12 @@
+ 		if (bytesPerFile &gt; 0) {
+ 			xmlElement.setAttribute(XML_BYTES_PER_FILE, Integer.toString(bytesPerFile));
+ 		}
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
++		}
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
++		}
+ 		
+ 	}
+ 
+@@ -236,6 +271,12 @@
+             if(xattribs.exists(XML_BYTES_PER_FILE)) {
+                 aFixLenDataWriterNIO.setBytesPerFile(xattribs.getInteger(XML_BYTES_PER_FILE));
+             }
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aFixLenDataWriterNIO.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aFixLenDataWriterNIO.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
+ 		}catch(Exception ex){
+ 	           throw new XMLConfigurationException(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(XML_ID_ATTRIBUTE,&quot; unknown ID &quot;) + &quot;:&quot; + ex.getMessage(),ex);
+ 		}
+@@ -305,5 +346,40 @@
+     public void setRecordsPerFile(int recordsPerFile) {
+         this.recordsPerFile = recordsPerFile;
+     }
++    
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
++
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++
++    private class WritableByteChannelIterator implements Iterator&lt;WritableByteChannel&gt; {
++    	WritableByteChannel writableByteChannel;
++    	
++    	public WritableByteChannelIterator(WritableByteChannel writableByteChannel) {
++    		this.writableByteChannel = writableByteChannel;
++    	}
++    	
++		public boolean hasNext() {
++			return true;
++		}
++
++		public WritableByteChannel next() {
++			return writableByteChannel;
++		}
++
++		public void remove() {}
++    }
++
+ }
+ 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000134.html">[Cloveretl-svn-commits] CloverETL repos r2496 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000136.html">[Cloveretl-svn-commits] CloverETL repos r2498 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#135">[ date ]</a>
+              <a href="thread.html#135">[ thread ]</a>
+              <a href="subject.html#135">[ subject ]</a>
+              <a href="author.html#135">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

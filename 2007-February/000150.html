@@ -1,0 +1,1944 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2512 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2512%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter%0A%09cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702270931.l1R9VIFG026414%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000149.html">
+   <LINK REL="Next"  HREF="000151.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2512 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2512%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter%0A%09cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702270931.l1R9VIFG026414%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2512 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 10:31:18 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000149.html">[Cloveretl-svn-commits] CloverETL repos r2511 - in	trunk/cloveretl.engine/src/org/jetel: data/parser util
+</A></li>
+        <LI>Next message: <A HREF="000151.html">[Cloveretl-svn-commits] CloverETL repos r2513 -	trunk/cloveretl.engine/src/org/jetel/data/formatter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-27 10:31:10 +0100 (Tue, 27 Feb 2007)
+New Revision: 2512
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/Trash.java
+   trunk/cloveretl.component/src/org/jetel/component/XLSWriter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/Formatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/JExcelXLSDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/XLSDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java
+   trunk/cloveretl.engine/src/org/jetel/util/WritableByteChannelIterator.java
+Log:
+UPDATE: writer unification (added countRecord, skip, multifilewriter, ...)
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -87,6 +87,8 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;compressLevel&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;Sets the compression level. The default
+  *   setting is to compress using default ZIP compression level. 
+  *  &lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/table&gt;
+  *
+  *  &lt;h4&gt;Example:&lt;/h4&gt;
+@@ -112,6 +114,8 @@
+ 	private static final String XML_SAVEINDEX_ATRRIBUTE = &quot;saveIndex&quot;;
+ 	private static final String XML_SAVEMETADATA_ATTRIBUTE = &quot;saveMetadata&quot;;
+ 	private static final String XML_COMPRESSLEVEL_ATTRIBUTE = &quot;compressLevel&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 
+ 	public final static String COMPONENT_TYPE = &quot;CLOVER_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+@@ -125,6 +129,8 @@
+ 	private InputPort inPort;
+ 	private int compressLevel;
+ 	String fileName;
++    private int skip;
++	private int numRecords = -1;
+ 	
+     static Log logger = LogFactory.getLog(CloverDataWriter.class);
+ 
+@@ -170,10 +176,14 @@
+ 	@Override
+ 	public Result execute() throws Exception {
+ 		DataRecord record = new DataRecord(metadata);
++		long iRec = 0;
++		int recordTo = numRecords &lt; 0 ? Integer.MAX_VALUE : (skip &lt;= 0 ? numRecords+1 : skip+1 + numRecords);
+ 		record.init();
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
++				iRec++;
+ 				record = inPort.readRecord(record);
++				if (skip &gt;= iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+ 					formatter.write(record);
+ 				}
+@@ -284,6 +294,12 @@
+ 			aDataWriter.setAppend(xattribs.getBoolean(XML_APPEND_ATTRIBUTE,false));
+ 			aDataWriter.setSaveMetadata(xattribs.getBoolean(XML_SAVEMETADATA_ATTRIBUTE,false));
+ 			aDataWriter.setCompressLevel(xattribs.getInteger(XML_COMPRESSLEVEL_ATTRIBUTE,-1));
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aDataWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+ 			return null;
+@@ -304,6 +320,12 @@
+ 		if (compressLevel &gt; -1){
+ 			xmlElement.setAttribute(XML_COMPRESSLEVEL_ATTRIBUTE,String.valueOf(compressLevel));
+ 		}
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
++		}
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
++		}
+ 	}
+ 
+ 	public void setSaveMetadata(boolean saveMetadata) {
+@@ -319,5 +341,20 @@
+ 		formatter.setAppend(append);
+ 	}
+ 
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
+ 
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -105,7 +105,6 @@
+ 	private WritableByteChannel writableByteChannel;
+     private int skip;
+ 	private int numRecords;
+-	private String charset;
+ 
+ 	static Log logger = LogFactory.getLog(DataWriter.class);
+ 
+@@ -124,14 +123,12 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
+-		this.charset = charset;
+ 		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 	
+ 	public DataWriter(String id, WritableByteChannel writableByteChannel, String charset) {
+ 		super(id);
+ 		this.writableByteChannel = writableByteChannel;
+-		this.charset = charset;
+ 		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+@@ -180,10 +177,9 @@
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+-        writer.setCharset(charset);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++        	formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -105,7 +105,6 @@
+ 	private boolean outputFieldNames=false;
+ 	private int recordsPerFile;
+ 	private int bytesPerFile;
+-	private String charset;
+     private int skip;
+ 	private int numRecords;
+ 	private WritableByteChannel writableByteChannel;
+@@ -140,14 +139,12 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
+-        this.charset = charset;
+ 		formatter = new DelimitedDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+ 	public DelimitedDataWriter(String id, WritableByteChannel writableByteChannel, String charset) {
+ 		super(id);
+ 		this.writableByteChannel = writableByteChannel;
+-        this.charset = charset;
+ 		formatter = new DelimitedDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+@@ -198,14 +195,12 @@
+         writer.setBytesPerFile(bytesPerFile);
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+-        writer.setCharset(charset);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++        	formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+-        
+ 	}
+ 	
+ 	public ConfigurationStatus checkConfig(ConfigurationStatus status) {
+@@ -304,6 +299,7 @@
+     public boolean isOutputFieldNames() {
+         return outputFieldNames;
+     }
++    
+     /**
+      * @param outputFieldNames The outputFieldNames to set.
+      */
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -112,7 +112,6 @@
+ 	private int bytesPerFile;
+     private int skip;
+ 	private int numRecords;
+-	private String charset;
+ 	private WritableByteChannel writableByteChannel;
+ 
+ 	static Log logger = LogFactory.getLog(FixLenDataWriter.class);
+@@ -134,14 +133,12 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
+-        this.charset = charset;
+ 		formatter = new FixLenDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+ 	public FixLenDataWriter(String id, WritableByteChannel writableByteChannel, String charset) {
+ 		super(id);
+ 		this.writableByteChannel = writableByteChannel;
+-        this.charset = charset;
+ 		formatter = new FixLenDataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
+ 
+@@ -188,11 +185,10 @@
+         writer.setBytesPerFile(bytesPerFile);
+         writer.setRecordsPerFile(recordsPerFile);
+         writer.setAppendData(appendData);
+-        writer.setCharset(charset);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++        	formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -21,26 +21,25 @@
+ 
+ package org.jetel.component;
+ 
+-import java.io.IOException;
+-import java.nio.ByteBuffer;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
++import org.apache.commons.logging.Log;
++import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.StructureFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.graph.InputPort;
+ import org.jetel.graph.Node;
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+-import org.jetel.util.ByteBufferUtils;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.FileUtils;
+-import org.jetel.util.StringUtils;
++import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.SynchronizeUtils;
++import org.jetel.util.WritableByteChannelIterator;
+ import org.w3c.dom.Element;
+ 
+ /**
+@@ -81,6 +80,8 @@
+  *  where field1 ,.., fieldn are record's fields from metadata&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;header&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write before records&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;footer&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write after records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordsPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of records in one output file&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;bytesPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Max size of output files. To avoid splitting a record to two files, max size could be slightly overreached.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/tr&gt;
+@@ -117,18 +118,23 @@
+ 	public static final String XML_FOOTER_ATTRIBUTE = &quot;footer&quot;;
+ 	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
+ 	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
++	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
+ 
+ 	private String fileURL;
+ 	private boolean appendData;
+ 	private StructureFormatter formatter;
+ 	private String header = null;
+ 	private String footer = null;
+-	private WritableByteChannel writer;
+-	private ByteBuffer buffer;
+-	private String charset;
++	private MultiFileWriter writer;
+     private int skip;
+ 	private int numRecords;
++	private WritableByteChannel writableByteChannel;
++	private int recordsPerFile;
++	private int bytesPerFile;
+ 
++	private static Log logger = LogFactory.getLog(StructureWriter.class);
++
+ 	public final static String COMPONENT_TYPE = &quot;STRUCTURE_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+ 
+@@ -146,9 +152,7 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
+-		this.charset = charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+-		formatter = charset == null ? new StructureFormatter() : 
+-			new StructureFormatter(charset);
++		formatter = new StructureFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 		formatter.setMask(mask);
+ 	}
+ 
+@@ -162,38 +166,20 @@
+ 
+ 	@Override
+ 	public Result execute() throws Exception {
+-		//write header
+-		if (header != null ){
+-			buffer.put(header.getBytes(charset));
+-			ByteBufferUtils.flush(buffer,writer);
+-		}
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+-		int iRec = 0;
+-		int recordTo = numRecords &lt; 0 ? Integer.MAX_VALUE : (skip &lt;= 0 ? numRecords+1 : skip+1 + numRecords);
+ 		record.init();
+-		//write records
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+-				iRec++;
+ 				record = inPort.readRecord(record);
+-				if (skip &gt;= iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+-					formatter.write(record);
++			        writer.write(record);
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+-			formatter.flush();
+-			//write footer
+-			if (footer != null ){
+-				buffer.clear();
+-				buffer.put(footer.getBytes(charset));
+-				ByteBufferUtils.flush(buffer,writer);
+-			}
+ 		} catch (Exception e) {
+ 			throw e;
+ 		}finally{
+-			//close output
+ 			writer.close();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+@@ -232,14 +218,23 @@
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+ 		// based on file mask, create/open output file
+-		try {
+-			writer = fileURL == null ? Channels.newChannel(System.out) : FileUtils.getWritableChannel(getGraph() != null ? getGraph().getProjectURL() : null, fileURL, appendData);
+-			buffer = ByteBuffer.allocateDirect(StringUtils.getMaxLength(header,footer));
+-			formatter.init(getInputPort(READ_FROM_PORT).getMetadata());
+-            formatter.setDataTarget(writer);
+-		} catch (IOException ex) {
+-			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
++		if (fileURL != null) {
++	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		} else {
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
++			}
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
+ 		}
++        writer.setLogger(logger);
++        writer.setBytesPerFile(bytesPerFile);
++        writer.setRecordsPerFile(recordsPerFile);
++        writer.setAppendData(appendData);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
++        formatter.setHeader(header);
++        formatter.setFooter(footer);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 
+ 	/* (non-Javadoc)
+@@ -267,6 +262,12 @@
+ 			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
+ 				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
+ 			}
++            if(xattribs.exists(XML_RECORDS_PER_FILE)) {
++            	aDataWriter.setRecordsPerFile(xattribs.getInteger(XML_RECORDS_PER_FILE));
++            }
++            if(xattribs.exists(XML_BYTES_PER_FILE)) {
++            	aDataWriter.setBytesPerFile(xattribs.getInteger(XML_BYTES_PER_FILE));
++            }
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+ 			return null;
+@@ -298,6 +299,12 @@
+ 		if (numRecords != 0){
+ 			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
+ 		}
++		if (recordsPerFile &gt; 0) {
++			xmlElement.setAttribute(XML_RECORDS_PER_FILE, Integer.toString(recordsPerFile));
++		}
++		if (bytesPerFile &gt; 0) {
++			xmlElement.setAttribute(XML_BYTES_PER_FILE, Integer.toString(bytesPerFile));
++		}
+ 	}
+ 	
+ 	public void setFooter(String footer) {
+@@ -324,4 +331,12 @@
+         this.numRecords = numRecords;
+     }
+ 
++    public void setBytesPerFile(int bytesPerFile) {
++        this.bytesPerFile = bytesPerFile;
++    }
++
++    public void setRecordsPerFile(int recordsPerFile) {
++        this.recordsPerFile = recordsPerFile;
++    }
++
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -21,15 +21,15 @@
+ 
+ package org.jetel.component;
+ 
+-import java.io.IOException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
++import org.apache.commons.logging.Log;
++import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.TextTableFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.graph.InputPort;
+ import org.jetel.graph.Node;
+@@ -37,8 +37,9 @@
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.FileUtils;
+-import org.jetel.util.StringUtils;
++import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.SynchronizeUtils;
++import org.jetel.util.WritableByteChannelIterator;
+ import org.w3c.dom.Element;
+ 
+ /**
+@@ -71,6 +72,8 @@
+  *  minimal length of the number. Name without wildcard specifies only one file.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;charset&lt;/b&gt;&lt;/td&gt;&lt;td&gt;character encoding of the output file (if not specified, then ISO-8859-1 is used)&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;append&lt;/b&gt;&lt;/td&gt;&lt;td&gt;whether to append data at the end if output file exists or replace it (values: true/false)&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordsPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of records in one output file&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;bytesPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Max size of output files. To avoid splitting a record to two files, max size could be slightly overreached.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/tr&gt;
+@@ -91,25 +94,32 @@
+  */
+ public class TextTableWriter extends Node {
+ 
+-	public static final String XML_APPEND_ATTRIBUTE = &quot;append&quot;;
+-	public static final String XML_FILEURL_ATTRIBUTE = &quot;fileURL&quot;;
+-	public static final String XML_CHARSET_ATTRIBUTE = &quot;charset&quot;;
+-	public static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
+-	public static final String XML_HEADER_ATTRIBUTE = &quot;header&quot;;
+-	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
+-	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++	private static final String XML_APPEND_ATTRIBUTE = &quot;append&quot;;
++	private static final String XML_FILEURL_ATTRIBUTE = &quot;fileURL&quot;;
++	private static final String XML_CHARSET_ATTRIBUTE = &quot;charset&quot;;
++	private static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++	private static final String XML_OUTPUT_FIELD_NAMES = &quot;outputFieldNames&quot;;
++	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
++	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
+ 
+ 	private String fileURL;
+ 	private boolean appendData;
+ 	private TextTableFormatter formatter;
+-	private boolean header = true;
+-	private WritableByteChannel writer;
++	private MultiFileWriter writer;
+     private int skip;
+ 	private int numRecords;
++	private WritableByteChannel writableByteChannel;
++	private boolean outputFieldNames=true;
++	private int recordsPerFile;
++	private int bytesPerFile;
+ 	
+ 	public final static String COMPONENT_TYPE = &quot;TEXT_TABLE_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+ 
++	private static Log logger = LogFactory.getLog(TextTableWriter.class);
++
+ 	/**
+ 	 * Constructor
+ 	 * 
+@@ -117,7 +127,7 @@
+ 	 * @param fileURL
+ 	 * @param charset
+ 	 * @param appendData
+-	 * @param mask
++	 * @param fields
+ 	 */
+ 	public TextTableWriter(String id, String fileURL, String charset, 
+ 			boolean appendData, String[] fields) {
+@@ -127,6 +137,24 @@
+ 		formatter = charset == null ? new TextTableFormatter(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER) : new TextTableFormatter(charset);
+ 		formatter.setMask(fields);
+ 	}
++	
++	/**
++	 * Constructor
++	 * 
++	 * @param id
++	 * @param writableByteChannel
++	 * @param charset
++	 * @param appendData
++	 * @param fields
++	 */
++	public TextTableWriter(String id, WritableByteChannel writableByteChannel, String charset, 
++			boolean appendData, String[] fields) {
++		super(id);
++		this.writableByteChannel = writableByteChannel;
++		this.appendData = appendData;
++		formatter = charset == null ? new TextTableFormatter(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER) : new TextTableFormatter(charset);
++		formatter.setMask(fields);
++	}
+ 
+ 	/* (non-Javadoc)
+ 	 * @see org.jetel.graph.Node#getType()
+@@ -138,28 +166,20 @@
+ 
+ 	@Override
+ 	public Result execute() throws Exception {
+-		//write header
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+-		long iRec = 0;
+-		int recordTo = numRecords &lt; 0 ? Integer.MAX_VALUE : (skip &lt;= 0 ? numRecords+1 : skip+1 + numRecords);
+ 		record.init();
+-		//write records
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+-				iRec++;
+ 				record = inPort.readRecord(record);
+-				if (skip &gt;= iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+-					formatter.write(record);
++			        writer.write(record);
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+-			formatter.eof();
+ 		} catch (Exception e) {
+ 			throw e;
+ 		}finally{
+-			//close output
+ 			writer.close();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+@@ -198,14 +218,22 @@
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+ 		// based on file mask, create/open output file
+-		try {
+-			writer = fileURL == null ? Channels.newChannel(System.out) : FileUtils.getWritableChannel(getGraph().getProjectURL(), fileURL, appendData);
+-			formatter.init(getInputPort(READ_FROM_PORT).getMetadata());
+-            formatter.setDataTarget(writer);
+-            formatter.setHeader(header);
+-		} catch (IOException ex) {
+-			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
++		if (fileURL != null) {
++	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		} else {
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
++			}
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
+ 		}
++        writer.setLogger(logger);
++        writer.setBytesPerFile(bytesPerFile);
++        writer.setRecordsPerFile(recordsPerFile);
++        writer.setAppendData(appendData);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
++       	formatter.setOutputFieldNames(outputFieldNames);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 
+ 	/* (non-Javadoc)
+@@ -223,15 +251,21 @@
+ 									xattribs.getString(XML_CHARSET_ATTRIBUTE,null),
+ 									xattribs.getBoolean(XML_APPEND_ATTRIBUTE, false),
+ 									aFields);
+-			if (xattribs.exists(XML_HEADER_ATTRIBUTE)){
+-				aDataWriter.setHeader(Boolean.parseBoolean(xattribs.getString(XML_HEADER_ATTRIBUTE)));
+-			}
+ 			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
+ 				aDataWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
+ 			}
+ 			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
+ 				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
+ 			}
++			if (xattribs.exists(XML_OUTPUT_FIELD_NAMES)){
++				aDataWriter.setOutputFieldNames(xattribs.getBoolean(XML_OUTPUT_FIELD_NAMES));
++			}
++            if(xattribs.exists(XML_RECORDS_PER_FILE)) {
++            	aDataWriter.setRecordsPerFile(xattribs.getInteger(XML_RECORDS_PER_FILE));
++            }
++            if(xattribs.exists(XML_BYTES_PER_FILE)) {
++            	aDataWriter.setBytesPerFile(xattribs.getInteger(XML_BYTES_PER_FILE));
++            }
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+ 			return null;
+@@ -251,19 +285,23 @@
+ 			xmlElement.setAttribute(XML_CHARSET_ATTRIBUTE, this.formatter.getCharsetName());
+ 		}
+ 		xmlElement.setAttribute(XML_APPEND_ATTRIBUTE, String.valueOf(this.appendData));
+-		xmlElement.setAttribute(XML_HEADER_ATTRIBUTE,String.valueOf(header));
+ 		if (skip != 0){
+ 			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
+ 		}
+ 		if (numRecords != 0){
+ 			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
+ 		}
++		if (outputFieldNames){
++		    xmlElement.setAttribute(XML_OUTPUT_FIELD_NAMES, Boolean.toString(outputFieldNames));
++		}
++		if (recordsPerFile &gt; 0) {
++			xmlElement.setAttribute(XML_RECORDS_PER_FILE, Integer.toString(recordsPerFile));
++		}
++		if (bytesPerFile &gt; 0) {
++			xmlElement.setAttribute(XML_BYTES_PER_FILE, Integer.toString(bytesPerFile));
++		}
+ 	}
+ 	
+-	public void setHeader(boolean header) {
+-		this.header = header;
+-	}
+-
+     /**
+      * Sets number of skipped records in next call of getNext() method.
+      * @param skip
+@@ -280,4 +318,19 @@
+         this.numRecords = numRecords;
+     }
+ 
++    /**
++     * @param outputFieldNames The outputFieldNames to set.
++     */
++    public void setOutputFieldNames(boolean outputFieldNames) {
++        this.outputFieldNames = outputFieldNames;
++    }
++
++    public void setBytesPerFile(int bytesPerFile) {
++        this.bytesPerFile = bytesPerFile;
++    }
++
++    public void setRecordsPerFile(int recordsPerFile) {
++        this.recordsPerFile = recordsPerFile;
++    }
++
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/Trash.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -20,23 +20,24 @@
+ package org.jetel.component;
+ 
+ import java.io.IOException;
+-import java.io.PrintWriter;
+-import java.nio.ByteBuffer;
+ import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
+ 
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
++import org.jetel.data.formatter.TextTableFormatter;
+ import org.jetel.exception.ComponentNotReadyException;
+ import org.jetel.exception.ConfigurationStatus;
+-import org.jetel.exception.JetelException;
+ import org.jetel.exception.XMLConfigurationException;
+-import org.jetel.graph.InputPortDirect;
++import org.jetel.graph.InputPort;
+ import org.jetel.graph.Node;
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.FileUtils;
++import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.SynchronizeUtils;
++import org.jetel.util.WritableByteChannelIterator;
+ import org.w3c.dom.Element;
+ 
+ /**
+@@ -88,11 +89,11 @@
+ 	private final static int READ_FROM_PORT = 0;
+ 	private boolean debugPrint;
+ 	private String debugFilename;
+-	private PrintWriter outStream;
+ 
+-	private ByteBuffer recordBuffer;
++	private TextTableFormatter formatter;
++	private MultiFileWriter writer;
++	private WritableByteChannel writableByteChannel;
+ 
+-
+ 	/**
+ 	 *Constructor for the Trash object
+ 	 *
+@@ -102,8 +103,6 @@
+ 		super(id);
+ 		debugPrint = false;
+ 		debugFilename = null;
+-		outStream = null;
+-
+ 	}
+ 
+ 
+@@ -132,39 +131,23 @@
+ 
+ 	@Override
+ 	public Result execute() throws Exception {
+-		int recCounter = 0;
+-		InputPortDirect inPort = (InputPortDirect) getInputPort(READ_FROM_PORT);
+-		boolean isData = true;
+-		DataRecord dataRecord = null;
+-		if (outStream != null) {
+-			dataRecord = new DataRecord(getInputPort(READ_FROM_PORT).getMetadata());
+-			dataRecord.init();
+-		}
+-		String resultMsg = null;
++		InputPort inPort = getInputPort(READ_FROM_PORT);
++		DataRecord record = new DataRecord(inPort.getMetadata());
++		record.init();
+ 		try {
+-			while (isData &amp;&amp; runIt) {
+-				isData = inPort.readRecordDirect(recordBuffer);
+-				if (outStream != null &amp;&amp; isData) {
+-					dataRecord.deserialize(recordBuffer);
+-					outStream.println(&quot;*** Record# &quot; + recCounter++ + &quot; ***&quot;);
+-					outStream.print(dataRecord);
++			while (record != null &amp;&amp; runIt) {
++				record = inPort.readRecord(record);
++				if (writer != null &amp;&amp; record != null) {
++			        writer.write(record);
+ 					if (debugFilename == null)
+-						outStream.flush(); // if we debug into stdout
++						formatter.flush(); // if we debug into stdout
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+-		} catch (Exception ex) {
+-			resultMsg = ex.getClass().getName() + &quot; : &quot; + ex.getMessage();
+-			throw new JetelException(resultMsg);
+-		} finally {
+-	        // close debug file
+-			if (outStream != null &amp;&amp; debugFilename != null) { // debug is
+-																// routed into
+-																// file
+-				outStream.println(&quot;EOF with result &quot; + resultMsg == null ? &quot;OK&quot;
+-						: resultMsg);
+-				outStream.close();
+-			}
++		} catch (Exception e) {
++			throw e;
++		}finally{
++			if (writer != null) writer.close();
+ 			broadcastEOF();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+@@ -178,22 +161,27 @@
+ 	 */
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+-		// test that we have at least one input port and one output
+-		recordBuffer = ByteBuffer.allocateDirect(Defaults.Record.MAX_RECORD_SIZE);
+-		if (recordBuffer == null) {
+-			throw new ComponentNotReadyException(&quot;Can NOT allocate internal record buffer ! Required size:&quot; +
+-					Defaults.Record.MAX_RECORD_SIZE);
+-		}
+ 		if (debugPrint) {
+             if(debugFilename != null) {
+-          		try {
+-    				outStream = new PrintWriter(Channels.newWriter(FileUtils.getWritableChannel(getGraph() != null ? getGraph().getProjectURL() : null, debugFilename, false), Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER));
+-    			} catch (IOException ex) {
+-    				throw new ComponentNotReadyException(ex.getMessage());
+-    			}
++        		formatter = new TextTableFormatter(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++       	        try {
++					writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(
++							FileUtils.getWritableChannel(getGraph() != null ? getGraph().getProjectURL() : null, debugFilename, false)
++					));
++				} catch (IOException e) {
++					e.printStackTrace();
++				}
+             } else {
+-                outStream = new PrintWriter(System.out);
++    			if (writableByteChannel == null) {
++    				formatter = new TextTableFormatter(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++    		        writableByteChannel = Channels.newChannel(System.out);
++        	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
++    			}
+             }
++            if (writer != null) {
++            	formatter.showCounter(&quot;Record&quot;, &quot;### &quot;);
++                writer.init(getInputPort(READ_FROM_PORT).getMetadata());
++            }
+ 		}
+ 	}
+ 
+@@ -251,14 +239,6 @@
+     		checkInputPorts(status, 1, 1);
+             checkOutputPorts(status, 0, 0);
+ 
+-    		recordBuffer = ByteBuffer.allocateDirect(Defaults.Record.MAX_RECORD_SIZE);
+-    		if (recordBuffer == null) {
+-                status.add(&quot;Can NOT allocate internal record buffer ! Required size:&quot; + Defaults.Record.MAX_RECORD_SIZE, 
+-                		ConfigurationStatus.Severity.ERROR, this, 
+-                		ConfigurationStatus.Priority.NORMAL);
+-    		}
+-    		recordBuffer = null;
+-
+     		if (debugPrint &amp;&amp; debugFilename != null) {
+                 try {
+                 	FileUtils.canWrite(getGraph() != null ? 
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/XLSWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/XLSWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.component/src/org/jetel/component/XLSWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -21,8 +21,11 @@
+ 
+ package org.jetel.component;
+ 
+-import java.io.File;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
+ 
++import org.apache.commons.logging.Log;
++import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.formatter.JExcelXLSDataFormatter;
+ import org.jetel.data.formatter.XLSDataFormatter;
+@@ -36,8 +39,10 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
++import org.jetel.util.WritableByteChannelIterator;
+ import org.w3c.dom.Element;
+ 
+ /**
+@@ -73,6 +78,9 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;firstDataRow&lt;/b&gt;&lt;/td&gt;&lt;td&gt;index of row, where to write first data record&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;firstColumn&lt;/b&gt;&lt;/td&gt;&lt;td&gt;code of column from which data will be written&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetName&lt;/b&gt;&lt;/td&gt;&lt;td&gt;name of sheet for writing data. If it is not set data
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordsPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of records in one output file&lt;/td&gt;
+  *   new sheet with default name is created&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;sheetNumber&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of sheet for writing data (starting from 0).
+  *   If it is not set new sheet with default name is created. If sheetName and sheetNumber 
+@@ -108,12 +116,22 @@
+ 	private static final String XML_FIRSTDATAROW_ATTRIBUTE = &quot;firstDataRow&quot;;
+ 	private static final String XML_FIRSTCOLUMN_ATTRIBUTE = &quot;firstColumn&quot;;
+ 	private static final String XML_NAMESROW_ATTRIBUTE = &quot;namesRow&quot;;
++	private static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	private static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
+ 
+ 	public final static String COMPONENT_TYPE = &quot;XLS_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+ 
++	private static Log logger = LogFactory.getLog(XLSWriter.class);
++
+ 	private String fileURL;
+ 	private XLSFormatter formatter;
++	private MultiFileWriter writer;
++    private int skip;
++	private int numRecords;
++	private WritableByteChannel writableByteChannel;
++	private int recordsPerFile;
+ 	
+ 	private boolean usePOI = true;
+ 
+@@ -148,19 +166,18 @@
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+ 		record.init();
+-		formatter.prepareSheet();
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+ 				record = inPort.readRecord(record);
+ 				if (record != null) {
+-					formatter.write(record);
++					writer.write(record);
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+ 		} catch (Exception e) {
+ 			throw e;
+ 		}finally{
+-			formatter.close();
++			writer.close();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+ 	}
+@@ -201,9 +218,21 @@
+ 	@Override
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+-		File out = new File(fileURL);
+-		formatter.init(getInputPort(READ_FROM_PORT).getMetadata());
+-		formatter.setDataTarget(out);
++		if (fileURL != null) {
++	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++		} else {
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
++			}
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
++		}
++        writer.setLogger(logger);
++        writer.setRecordsPerFile(recordsPerFile);
++        writer.setAppendData(false);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
++		//formatter.prepareSheet();
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 
+ 	public static Node fromXML(TransformationGraph graph, Element nodeXML) throws XMLConfigurationException {
+@@ -222,6 +251,15 @@
+ 			xlsWriter.setFirstColumn(xattribs.getString(XML_FIRSTCOLUMN_ATTRIBUTE,&quot;A&quot;));
+ 			xlsWriter.setFirstRow(xattribs.getInteger(XML_FIRSTDATAROW_ATTRIBUTE,1));
+ 			xlsWriter.setNamesRow(xattribs.getInteger(XML_NAMESROW_ATTRIBUTE,0));
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				xlsWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				xlsWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
++            if(xattribs.exists(XML_RECORDS_PER_FILE)) {
++            	xlsWriter.setRecordsPerFile(xattribs.getInteger(XML_RECORDS_PER_FILE));
++            }
+ 			return xlsWriter;
+ 		} catch (Exception ex) {
+ 		    throw new XMLConfigurationException(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(XML_ID_ATTRIBUTE,&quot; unknown ID &quot;) + &quot;:&quot; + ex.getMessage(),ex);
+@@ -244,6 +282,15 @@
+ 		if (formatter.getSheetName() != null) {
+ 			xmlElement.setAttribute(XML_SHEETNAME_ATTRIBUTE,formatter.getSheetName());
+ 		}
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
++		}
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
++		}
++		if (recordsPerFile &gt; 0) {
++			xmlElement.setAttribute(XML_RECORDS_PER_FILE, Integer.toString(recordsPerFile));
++		}
+ 	}
+ 
+ 	private void setSheetName(String sheetName) {
+@@ -265,4 +312,25 @@
+ 	private void setNamesRow(int namesRow){
+ 		formatter.setNamesRow(namesRow-1);
+ 	}
++	
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
++
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++
++    public void setRecordsPerFile(int recordsPerFile) {
++        this.recordsPerFile = recordsPerFile;
++    }
++
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -77,6 +77,8 @@
+ 	private ReadableByteChannel idxReader;
+ 	private boolean append;
+ 	private boolean isOpen = false;
++	private ByteBuffer footer; 
++	private ByteBuffer header; 
+ 	
+ 	private final static short LEN_SIZE_SPECIFIER = 4;
+ 	private final static int SHORT_SIZE_BYTES = 2;
+@@ -286,8 +288,30 @@
+ 		this.append = append;
+ 	}
+ 
+-	/**
+-	 * @param index
+-	 */
++	public int writeFooter() throws IOException {
++		if (footer != null) {
++			buffer.put(footer);
++			footer.rewind();
++			return footer.remaining();
++		} else
++			return 0;
++	}
+ 
++	public int writeHeader() throws IOException {
++		if (header != null) {
++			buffer.put(header);
++			header.rewind();
++			return header.remaining();
++		} else 
++			return 0;
++	}
++
++    public void setFooter(String footer) {
++		this.footer = ByteBuffer.wrap(footer.getBytes());
++    }
++
++    public void setHeader(String header) {
++    	this.header = ByteBuffer.wrap(header.getBytes());
++    }
++
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -55,7 +55,9 @@
+     private boolean isRecordDelimiter;
+     private byte[] recordDelimiter;
+ 	private ByteBuffer dataBuffer;
+-
++	private ByteBuffer footer; 
++	private ByteBuffer header; 
++	
+ 	// use space (' ') to fill/pad field
+ 	private final static char DEFAULT_FILLER_CHAR = ' ';
+ 
+@@ -227,5 +229,30 @@
+ 		}
+ 	}
+ 
+-	
++	public int writeFooter() throws IOException {
++		if (footer != null) {
++			dataBuffer.put(footer);
++			footer.rewind();
++			return footer.remaining();
++		} else
++			return 0;
++	}
++
++	public int writeHeader() throws IOException {
++		if (header != null) {
++			dataBuffer.put(header);
++			header.rewind();
++			return header.remaining();
++		} else 
++			return 0;
++	}
++
++    public void setFooter(String footer) {
++    	this.footer = ByteBuffer.wrap(footer.getBytes());
++    }
++
++    public void setHeader(String header) {
++    	this.header = ByteBuffer.wrap(header.getBytes());
++    }
++
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -58,6 +58,8 @@
+ 	private int numFields;
+ 	private boolean isRecordDelimiter;
+     private String recordDelimiter;
++	private ByteBuffer footer; 
++	private ByteBuffer header; 
+     
+ 	private static String NEW_LINE_STR;
+ 
+@@ -260,6 +262,32 @@
+ 	public String getCharsetName() {
+ 		return(this.charSet);
+ 	}
++
++	public int writeFooter() throws IOException {
++		if (footer != null) {
++			dataBuffer.put(footer);
++			footer.rewind();
++			return footer.remaining();
++		} else
++			return 0;
++	}
++
++	public int writeHeader() throws IOException {
++		if (header != null) {
++			dataBuffer.put(header);
++			header.rewind();
++			return header.remaining();
++		} else 
++			return 0;
++	}
++
++    public void setFooter(String footer) {
++    	this.footer = ByteBuffer.wrap(footer.getBytes());
++    }
++
++    public void setHeader(String header) {
++    	this.header = ByteBuffer.wrap(header.getBytes());
++    }
+ 	
+ }
+ /*
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -29,7 +29,6 @@
+ import java.nio.charset.CharsetEncoder;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+-import java.util.List;
+ import java.util.SortedMap;
+ import java.util.TreeMap;
+ 
+@@ -63,6 +62,8 @@
+ 	private String charSet = null;
+     private boolean isRecordDelimiter;
+     private byte[] recordDelimiter;
++	private ByteBuffer footer; 
++	private ByteBuffer header; 
+ 
+     private int fieldCnt;
+     private int[] fieldStart;
+@@ -352,6 +353,32 @@
+ 		return(this.charSet);
+ 	}
+ 	
++	public int writeFooter() throws IOException {
++		if (footer != null) {
++			dataBuffer.put(footer);
++			footer.rewind();
++			return footer.remaining();
++		} else
++			return 0;
++	}
++
++	public int writeHeader() throws IOException {
++		if (header != null) {
++			dataBuffer.put(header);
++			header.rewind();
++			return header.remaining();
++		} else 
++			return 0;
++	}
++
++    public void setFooter(String footer) {
++    	this.footer = ByteBuffer.wrap(footer.getBytes());
++    }
++
++    public void setHeader(String header) {
++    	this.header = ByteBuffer.wrap(header.getBytes());
++    }
++
+ }
+ /*
+  *  end class FixLenDataFormatter
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/Formatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/Formatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/Formatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -66,8 +66,22 @@
+ 	 */
+ 	public int write(DataRecord record) throws IOException;
+ 
++	
++	/**
++	 *  Formats header based on provided metadata
++	 * @throws IOException
++	 */
++	public int writeHeader() throws IOException;
+ 
++	
+ 	/**
++	 *  Formats footer based on provided metadata
++	 * @throws IOException
++	 */
++	public int writeFooter() throws IOException;
++
++
++	/**
+ 	 *  Flush any unwritten data into output stream
+ 	 * @throws IOException
+ 	 */
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/JExcelXLSDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/JExcelXLSDataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/JExcelXLSDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -22,6 +22,7 @@
+ 
+ import java.io.File;
+ import java.io.IOException;
++import java.nio.ByteBuffer;
+ import java.text.SimpleDateFormat;
+ import java.util.Date;
+ 
+@@ -221,10 +222,6 @@
+ 	 * @see org.jetel.data.formatter.Formatter#write(org.jetel.data.DataRecord)
+ 	 */
+ 	public int write(DataRecord record) throws IOException {
+-		if (!savedNames){
+-			saveNames();
+-			return 0;
+-		}
+ 		char metaType;//metadata field type
+ 		Object value;//field value
+ 		Object valueXls = null;//value to set
+@@ -302,6 +299,17 @@
+         
+         return 0;
+ 	}
++
++	public int writeFooter() throws IOException {
++		// TODO Auto-generated method stub
++		return 0;
++	}
++
++	public int writeHeader() throws IOException {
++		if (!savedNames){
++			saveNames();
++		}
++		return 0;
++	}
+ 	
+-
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -63,6 +63,8 @@
+ 	private ByteBuffer dataBuffer;
+ 	private CharsetEncoder encoder;
+ 	private String charSet = null;
++	private ByteBuffer footer; 
++	private ByteBuffer header; 
+ 	
+ 
+ 	/**
+@@ -241,5 +243,32 @@
+ 		}
+ 	}
+ 	
++	public int writeFooter() throws IOException {
++		if (footer != null) {
++			dataBuffer.put(footer);
++			footer.rewind();
++			return footer.remaining();
++		} else
++			return 0;
++	}
++
++	public int writeHeader() throws IOException {
++		if (header != null) {
++			dataBuffer.put(header);
++			header.rewind();
++			return header.remaining();
++		} else 
++			return 0;
++	}
++
++    public void setFooter(String footer) {
++    	this.footer = ByteBuffer.wrap(footer.getBytes());
++    }
++
++    public void setHeader(String header) {
++    	this.header = ByteBuffer.wrap(header.getBytes());
++    }
++
++	
+ }
+ 
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -22,6 +22,7 @@
+ package org.jetel.data.formatter;
+ 
+ import java.io.IOException;
++import java.io.UnsupportedEncodingException;
+ import java.nio.ByteBuffer;
+ import java.nio.CharBuffer;
+ import java.nio.channels.WritableByteChannel;
+@@ -54,9 +55,6 @@
+ 	
+ 	private DataRecordMetadata metadata;
+ 	private WritableByteChannel writer;
+-	private int[] maskIndex;
+-	private int lastIndex;
+-	private String fieldName;
+ 	private ByteBuffer fieldBuffer; 
+ 	private ByteBuffer dataBuffer;
+ 	private CharsetEncoder encoder;
+@@ -65,17 +63,27 @@
+ 	private List&lt;DataRecord&gt; dataRecords;
+ 	private CharBuffer blank;
+ 	private CharBuffer horizontal;
+-	private boolean header = true;
++	private boolean setOutputFieldNames = true;
+ 	private int rowSize = 0;
+ 	private int leftBytes = 0;
+ 	private DataFieldParams[] maskAnalize;
+ 	private String[] mask;
++	private boolean writeHeader = false;
++	private boolean showCounter;
++	private int counter;
++	private byte[] header;
++	private byte[] prefix;
++	private String sCounter;
++	private int counterLenght;
++	private int prefixOffset; 
++	private int headerOffset; 
+ 
+ 	private static final int MAX_COUNT_ANALYZED_COUNT = 20;
+ 	private static final int PADDING_SPACE = 3;
+ 
+ 	private static final byte[] TABLE_CORNER = new byte[] {('+')};
+-	private static final byte[] TABLE_HORIZONTAL = new byte[] {('-')};
++	private static final char TABLE_HORIZONTAL = '-';
++	private static final char TABLE_BLANK = ' ';
+ 	private static final byte[] TABLE_VERTICAL = new byte[] {('|')};
+ 	private static final byte[] NL = new byte[] {('\n')};
+ 	
+@@ -121,16 +129,12 @@
+ 			}
+ 			maskAnalize = new DataFieldParams[mask.length];
+ 			for (int i=0;i&lt;mask.length;i++){
++				if (map.get(mask[i]) == null)
++					throw new ComponentNotReadyException(&quot;Exception: Field '&quot; + mask[i] + &quot;' not found.&quot;);
+ 				maskAnalize[i] = new DataFieldParams(mask[i], map.get(mask[i]), 0);
+ 			}
+ 		}
+ 		dataRecords = new LinkedList&lt;DataRecord&gt;();
+-		/*try {
+-			maskBytes = mask.getBytes(charSet != null ? charSet
+-					: Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+-		} catch (UnsupportedEncodingException e) {
+-			throw new ComponentNotReadyException(e);
+-		}*/
+ 	}
+ 
+     /* (non-Javadoc)
+@@ -164,6 +168,31 @@
+         int mark;
+         
+         sentBytes += writeString(TABLE_VERTICAL);
++
++        if (showCounter) {
++            counter++;
++            sCounter = Integer.toString(counter);
++            
++			if (dataBuffer.remaining() &lt; fieldBuffer.limit()){
++				directFlush();
++			}
++			//change field value to bytes
++			fieldBuffer.clear();
++			fieldBuffer.put(prefix);
++			fieldBuffer.put(sCounter.getBytes());
++			fieldBuffer.flip();
++            
++			blank.clear();
++			blank.limit(prefixOffset - fieldBuffer.limit());
++            mark=dataBuffer.position();
++
++			//put field value to data buffer
++			dataBuffer.put(fieldBuffer);
++			dataBuffer.put(encoder.encode(blank));
++            
++            sentBytes+=dataBuffer.position()-mark;
++            sentBytes += writeString(TABLE_VERTICAL);
++        }
+         
+ 		//for each record field which is in mask change its name to value
+ 		for (int i=0;i&lt;maskAnalize.length;i++){
+@@ -176,7 +205,7 @@
+ 			fieldBuffer.flip();
+             
+ 			blank.clear();
+-			blank.limit(maskAnalize[i].length - (fieldBuffer.limit()));
++			blank.limit(maskAnalize[i].length - (new String(record.getField(maskAnalize[i].index).getValue().toString().getBytes(encoder.charset().displayName())).length())); // fieldBuffer.limit() is wrong - encoding
+             mark=dataBuffer.position();
+ 
+ 			//put field value to data buffer
+@@ -184,16 +213,23 @@
+ 			dataBuffer.put(encoder.encode(blank));
+             
+             sentBytes+=dataBuffer.position()-mark;
+-
+             sentBytes += writeString(TABLE_VERTICAL);
+ 		}
+         sentBytes += writeString(NL);
+         return sentBytes;
+ 	}
+ 
+-	private int writeHeader() throws IOException {
++	public int writeHeader() throws IOException {
++		if (!setOutputFieldNames || !writeHeader) return 0; // writeHeader depends on MAX_COUNT_ANALYZED_COUNT
++		if (!isMaskAnalized()) {
++			analyzeRows(dataRecords, setOutputFieldNames);
++		}
+         int sentBytes=0;
+         sentBytes += writeString(TABLE_CORNER);
++        if (showCounter) {
++        	sentBytes += writeString(horizontal, counterLenght);
++            sentBytes += writeString(TABLE_CORNER);
++        }
+         for (int i=0; i&lt;maskAnalize.length; i++) {
+         	sentBytes += writeString(horizontal, maskAnalize[i].length);
+             sentBytes += writeString(TABLE_CORNER);
+@@ -203,6 +239,11 @@
+ 		DataFieldMetadata[] fMetadata = metadata.getFields();
+ 		String fName;
+         sentBytes += writeString(TABLE_VERTICAL);
++        if (showCounter) {
++        	sentBytes += writeString(header);
++        	sentBytes += writeString(blank, headerOffset-header.length); // TODO ?
++            sentBytes += writeString(TABLE_VERTICAL);
++        }
+         for (int i=0; i&lt;maskAnalize.length; i++) {
+         	fName = fMetadata[maskAnalize[i].index].getName();
+         	sentBytes += writeString(fName.getBytes());
+@@ -212,18 +253,35 @@
+         sentBytes += writeString(NL);
+         
+         sentBytes += writeString(TABLE_CORNER);
++        if (showCounter) {
++        	sentBytes += writeString(horizontal, counterLenght);
++            sentBytes += writeString(TABLE_CORNER);
++        }
+         for (int i=0; i&lt;maskAnalize.length; i++) {
+         	sentBytes += writeString(horizontal, maskAnalize[i].length);
+             sentBytes += writeString(TABLE_CORNER);
+         }
+         sentBytes += writeString(NL);
+ 
+-		return sentBytes;
++        return sentBytes;
+ 	}
+ 	
+-	private int writeFooter() throws IOException {
++	public int writeFooter() throws IOException {
++		if (!setOutputFieldNames) return 0;
++		if (!writeHeader) {
++			writeHeader = true;
++			writeHeader();
++			writeHeader = false;
++		}
++		if (!isMaskAnalized()) {
++			flush();
++		}
+         int sentBytes=0;
+         sentBytes += writeString(TABLE_CORNER);
++        if (showCounter) {
++        	sentBytes += writeString(horizontal, counterLenght);
++            sentBytes += writeString(TABLE_CORNER);
++        }
+         for (int i=0; i&lt;maskAnalize.length; i++) {
+         	sentBytes += writeString(horizontal, maskAnalize[i].length);
+             sentBytes += writeString(TABLE_CORNER);
+@@ -234,16 +292,15 @@
+ 	}
+ 	
+ 	private int writeString(byte[] buffer) throws IOException {
+-        int sentBytes=0;
+-        int mark;
++        //int sentBytes=0;
++        //int mark;
+ 		if (dataBuffer.remaining() &lt; buffer.length){
+ 			directFlush();
+ 		}
+-        mark=dataBuffer.position();
++        //mark=dataBuffer.position();
+         dataBuffer.put(buffer);
+-        sentBytes+=dataBuffer.position()-mark;
+-		
+-		return sentBytes;
++        //sentBytes+=dataBuffer.position()-mark;
++		return new String(buffer).getBytes(encoder.charset().displayName()).length; // encoding
+ 	}
+ 	
+ 	private int writeString(CharBuffer buffer, int lenght) throws IOException {
+@@ -264,6 +321,7 @@
+ 	
+ 	/**
+ 	 * Writes record as 'write' function, but likewise can better format the rows.
++	 * For MAX_COUNT_ANALYZED_COUNT rows return 0. Then returns count of all written rows.
+ 	 * 
+ 	 * @param record
+ 	 * @throws IOException 
+@@ -272,11 +330,12 @@
+ 		int size;
+ 		if (dataRecords != null) {
+ 			dataRecords.add(record.duplicate());
++			writeHeader = true;
+ 			if (dataRecords.size() &lt; MAX_COUNT_ANALYZED_COUNT) {
+ 				return 0;
+ 			}
+-			analyzeRows(dataRecords, header);
+-			size = header ? writeHeader() : 0;
++			analyzeRows(dataRecords, setOutputFieldNames);
++			size = writeHeader();
+ 			for (DataRecord dataRecord : dataRecords) {
+ 				size += writeRecord(dataRecord);
+ 			}
+@@ -292,11 +351,15 @@
+ 	}
+ 	
+ 	private void analyzeRows(List&lt;DataRecord&gt; dataRecords, boolean header) {
+-		int lenght;
++		int lenght = 0;
+ 		int max = 0;
+ 		for (DataRecord dataRecord : dataRecords) {
+ 			for (int i=0; i&lt;maskAnalize.length; i++) {
+-				lenght = dataRecord.getField(maskAnalize[i].index).getValue().toString().length(); //getSizeSerialized()
++				try {
++					lenght = new String(dataRecord.getField(maskAnalize[i].index).getValue().toString().getBytes(encoder.charset().displayName())).length(); // encoding
++				} catch (UnsupportedEncodingException e) {
++					e.printStackTrace();
++				}
+ 				maskAnalize[i].length = maskAnalize[i].length &lt; lenght ? lenght : maskAnalize[i].length;
+ 			}
+ 		}
+@@ -319,8 +382,8 @@
+ 		StringBuilder sb = new StringBuilder();
+ 		StringBuilder sb2 = new StringBuilder();
+ 		for (int i = 0; i &lt; max; i++) {
+-			sb.append(' ');
+-			sb2.append('-');
++			sb.append(TABLE_BLANK);
++			sb2.append(TABLE_HORIZONTAL);
+ 		}
+ 		blank = CharBuffer.wrap(sb.toString());
+ 		horizontal = CharBuffer.wrap(sb2.toString());
+@@ -331,8 +394,9 @@
+ 	 */
+ 	public void flush() throws IOException {
+ 		if (dataRecords != null) {
+-			analyzeRows(dataRecords, header);
+-			leftBytes = header ? writeHeader() : 0;
++			analyzeRows(dataRecords, setOutputFieldNames);
++			ByteBufferUtils.flush(dataBuffer,writer);
++			leftBytes = writeHeader();
+ 			for (DataRecord dataRecord : dataRecords) {
+ 				leftBytes += writeRecord(dataRecord);
+ 			}
+@@ -341,12 +405,6 @@
+ 		ByteBufferUtils.flush(dataBuffer,writer);
+ 	}
+ 	
+-	public void eof() throws IOException {
+-		flush();
+-		leftBytes += writeFooter();
+-		directFlush();
+-	}
+-	
+ 	private void directFlush() throws IOException {
+ 		ByteBufferUtils.flush(dataBuffer,writer);
+ 	}
+@@ -367,10 +425,31 @@
+ 		return(this.charSet);
+ 	}
+ 
+-	public void setHeader(boolean header) {
+-		this.header = header;
++	public void setOutputFieldNames(boolean setOutputFieldNames) {
++		this.setOutputFieldNames = setOutputFieldNames;
+ 	}
+ 	
++	private boolean isMaskAnalized() {
++		for (DataFieldParams params: maskAnalize) {
++			if (params.length &gt; 0) {
++				return true;
++			}
++		}
++		return false;
++	}
++	
++	public void showCounter(String header, String prefix) {
++		this.showCounter = true;
++		this.header = header.getBytes();
++		this.prefix = prefix.getBytes();
++		//int iMax = Integer.toString(Integer.MAX_VALUE).length();
++		int iHeader = header.length();
++		int iPrefix = prefix.length();
++		counterLenght = iHeader &gt; iPrefix + 5 ? iHeader : iPrefix + 5;
++		prefixOffset = counterLenght + this.prefix.length - prefix.length();
++		headerOffset = counterLenght + this.header.length - header.length();
++	}
++	
+ 	/**
+ 	 * Private class for storing data field name, its andex and lenght in mask
+ 	 */
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/XLSDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/XLSDataFormatter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/XLSDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -82,6 +82,7 @@
+         }catch(IOException ex){
+             throw new RuntimeException(ex);
+         }
++        prepareSheet();
+     }
+     
+     /* (non-Javadoc)
+@@ -186,10 +187,6 @@
+ 	 * @see org.jetel.data.formatter.Formatter#write(org.jetel.data.DataRecord)
+ 	 */
+ 	public int write(DataRecord record) throws IOException {
+-		if (!savedNames){
+-			saveNames();
+-			return 0;
+-		}
+ 		row = sheet.createRow(recCounter);
+ 		char metaType;//metadata field type
+ 		Object value;//field value
+@@ -238,7 +235,18 @@
+ 	 */
+ 	public void flush() throws IOException {
+ 		// TODO Auto-generated method stub
++	}
+ 
++	public int writeFooter() throws IOException {
++		// TODO Auto-generated method stub
++		return 0;
+ 	}
+ 
++	public int writeHeader() throws IOException {
++		if (!savedNames){
++			saveNames();
++		}
++		return 0;
++	}
++
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -19,11 +19,10 @@
+ */
+ package org.jetel.util;
+ 
++import java.io.File;
+ import java.io.FileNotFoundException;
+ import java.io.IOException;
+-import java.io.UnsupportedEncodingException;
+ import java.net.URL;
+-import java.nio.ByteBuffer;
+ import java.nio.channels.WritableByteChannel;
+ import java.util.Iterator;
+ 
+@@ -58,14 +57,11 @@
+     private Formatter formatter;
+     private URL contextURL;
+     private String fileURL;
+-    private String charset;
+     private int recordsPerFile;
+     private int bytesPerFile;
+     private int records;
+     private int bytes;
+     private boolean appendData;
+-    private ByteBuffer header;
+-    private ByteBuffer footer;
+     private Iterator&lt;String&gt; fileNames;
+     private Iterator&lt;WritableByteChannel&gt; channels;
+     private WritableByteChannel byteChannel;
+@@ -118,32 +114,29 @@
+     	if (channels != null &amp;&amp; !channels.hasNext()) {
+             logger.warn(&quot;Unable to open new output stream. Size of last output stream will exceed specified limit.&quot;);
+             return;
+-        }      	
++        }
+ 
+         //write footer to the previous destination if it is not first call of this method
+         if(byteChannel != null) {
+-            writeFooter();
++        	formatter.writeFooter();
+         }
+-        byteChannel = fileNames != null ? FileUtils.getWritableChannel(contextURL, fileNames.next(), appendData) : channels.next();
++        if (fileNames != null) {
++            String fName = fileNames.next();
++        	byteChannel = FileUtils.getWritableChannel(contextURL, fName, appendData);
++        	// FIXME this is unreachable code
++        	try {
++                formatter.setDataTarget(byteChannel);
++        	} catch (Exception e) {
++                formatter.setDataTarget(new File(fName));
++        	}
++        } else {
++        	byteChannel = channels.next();
++            formatter.setDataTarget(byteChannel);
++        }
+         //write header
+-        writeHeader();
+-        formatter.setDataTarget(byteChannel);
++        formatter.writeHeader();
+     }
+ 
+-    private void writeHeader() throws IOException {
+-        if(header != null) {
+-            byteChannel.write(header);
+-            header.rewind();
+-        }
+-    }
+-    
+-    private void writeFooter() throws IOException {
+-        if(footer != null) {
+-            byteChannel.write(footer);
+-            footer.rewind();
+-        }
+-    }
+-    
+     /**
+      * Writes given record via formatter into destination file(s).
+      * @param record
+@@ -176,6 +169,11 @@
+      * Closes underlying formatter.
+      */
+     public void close() {
++    	try {
++			formatter.writeFooter();
++		} catch (IOException e) {
++			logger.error(e);
++		}
+         formatter.close();
+     }
+     
+@@ -203,36 +201,6 @@
+         this.appendData = appendData;
+     }
+ 
+-    public void setFooter(String footer) {
+-        if(charset != null) {
+-            try {
+-                this.footer = ByteBuffer.wrap(footer.getBytes(charset));
+-                return;
+-            } catch (UnsupportedEncodingException e) {
+-                logger.warn(e);
+-                charset = null;
+-            }
+-        }
+-        this.footer = ByteBuffer.wrap(footer.getBytes());
+-    }
+-
+-    public void setHeader(String header) {
+-        if(charset != null) {
+-            try {
+-                this.header = ByteBuffer.wrap(header.getBytes(charset));
+-                return;
+-            } catch (UnsupportedEncodingException e) {
+-                logger.warn(e);
+-                charset = null;
+-            }
+-        }
+-        this.header = ByteBuffer.wrap(header.getBytes());
+-    }
+-
+-    public void setCharset(String charset) {
+-        this.charset = charset;
+-    }
+-
+     /**
+      * Sets number of skipped records in next call of getNext() method.
+      * @param skip
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/WritableByteChannelIterator.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/WritableByteChannelIterator.java	2007-02-27 09:24:24 UTC (rev 2511)
++++ trunk/cloveretl.engine/src/org/jetel/util/WritableByteChannelIterator.java	2007-02-27 09:31:10 UTC (rev 2512)
+@@ -4,24 +4,30 @@
+ import java.util.Iterator;
+ 
+ /**
+- * Channel iterator class.
++ * Channel iterator class. Returns channel for first call, then null. 
+  * It is used in MultiFileWriter.
+  * 
+  * @author ausperger
+  */
+ public class WritableByteChannelIterator implements Iterator&lt;WritableByteChannel&gt; {
+ 	private WritableByteChannel writableByteChannel;
++	private boolean hasNext = true;
+ 	
+ 	public WritableByteChannelIterator(WritableByteChannel writableByteChannel) {
+ 		this.writableByteChannel = writableByteChannel;
+ 	}
+ 	
+ 	public boolean hasNext() {
+-		return true;
++		return hasNext;
+ 	}
+ 
+ 	public WritableByteChannel next() {
+-		return writableByteChannel;
++		if(hasNext) {
++			hasNext = false;
++			return writableByteChannel;
++		} else { 
++			return null;
++		}
+ 	}
+ 
+ 	public void remove() {}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000149.html">[Cloveretl-svn-commits] CloverETL repos r2511 - in	trunk/cloveretl.engine/src/org/jetel: data/parser util
+</A></li>
+	<LI>Next message: <A HREF="000151.html">[Cloveretl-svn-commits] CloverETL repos r2513 -	trunk/cloveretl.engine/src/org/jetel/data/formatter
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#150">[ date ]</a>
+              <a href="thread.html#150">[ thread ]</a>
+              <a href="subject.html#150">[ subject ]</a>
+              <a href="author.html#150">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

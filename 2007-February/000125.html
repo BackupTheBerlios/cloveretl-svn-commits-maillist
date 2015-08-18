@@ -1,0 +1,605 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2488 - in	branches/cloveretl.engine.rel-2-1-0: cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/lib cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/interpreter	cloveretl.engine/src/org/jetel/metadata	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2488%20-%20in%0A%09branches/cloveretl.engine.rel-2-1-0%3A%20cloveretl.component%0A%09cloveretl.component/src/org/jetel/component%20cloveretl.engine%0A%09cloveretl.engine/lib%20cloveretl.engine/plugins/org.jetel.component%0A%09cloveretl.engine/src/org/jetel/interpreter%0A%09cloveretl.engine/src/org/jetel/metadata%0A%09cloveretl.engine/src/org/jetel/util%0A%09cloveretl.sequence/src/org/jetel/sequence&In-Reply-To=%3C200702191542.l1JFgQBr018169%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000124.html">
+   <LINK REL="Next"  HREF="000126.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2488 - in	branches/cloveretl.engine.rel-2-1-0: cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/lib cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/interpreter	cloveretl.engine/src/org/jetel/metadata	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2488%20-%20in%0A%09branches/cloveretl.engine.rel-2-1-0%3A%20cloveretl.component%0A%09cloveretl.component/src/org/jetel/component%20cloveretl.engine%0A%09cloveretl.engine/lib%20cloveretl.engine/plugins/org.jetel.component%0A%09cloveretl.engine/src/org/jetel/interpreter%0A%09cloveretl.engine/src/org/jetel/metadata%0A%09cloveretl.engine/src/org/jetel/util%0A%09cloveretl.sequence/src/org/jetel/sequence&In-Reply-To=%3C200702191542.l1JFgQBr018169%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2488 - in	branches/cloveretl.engine.rel-2-1-0: cloveretl.component	cloveretl.component/src/org/jetel/component cloveretl.engine	cloveretl.engine/lib cloveretl.engine/plugins/org.jetel.component	cloveretl.engine/src/org/jetel/interpreter	cloveretl.engine/src/org/jetel/metadata	cloveretl.engine/src/org/jetel/util	cloveretl.sequence/src/org/jetel/sequence">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 19 16:42:26 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000124.html">[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+        <LI>Next message: <A HREF="000126.html">[Cloveretl-svn-commits] CloverETL repos r2489 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-02-19 16:42:18 +0100 (Mon, 19 Feb 2007)
+New Revision: 2488
+
+Added:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/lib/commons-cli-1.0.jar
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.component/plugin.xml
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.component/src/org/jetel/component/JmsWriter.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/build.xml
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/plugins/org.jetel.component/plugin.xml
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/util/FileUtils.java
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.sequence/src/org/jetel/sequence/SimpleSequence.java
+Log:
+UPDATE: changes dedicated to be merged with trunk!
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.component/plugin.xml
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.component/plugin.xml	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.component/plugin.xml	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -94,6 +94,11 @@
+ 
+ 	&lt;extension point-id=&quot;component&quot;&gt;
+ 	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.MergeJoin&quot;/&gt;
++	    &lt;parameter id=&quot;type&quot; value=&quot;EXT_MERGE_JOIN&quot;/&gt;
++	&lt;/extension&gt;
++
++	&lt;extension point-id=&quot;component&quot;&gt;
++	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.MergeJoin&quot;/&gt;
+ 	    &lt;parameter id=&quot;type&quot; value=&quot;SORTED_JOIN&quot;/&gt;
+ 	&lt;/extension&gt;
+ 
+@@ -113,6 +118,11 @@
+ 	&lt;/extension&gt;
+ 
+ 	&lt;extension point-id=&quot;component&quot;&gt;
++	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.HashJoin&quot;/&gt;
++	    &lt;parameter id=&quot;type&quot; value=&quot;EXT_HASH_JOIN&quot;/&gt;
++	&lt;/extension&gt;
++
++	&lt;extension point-id=&quot;component&quot;&gt;
+ 	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.CheckForeignKey&quot;/&gt;
+ 	    &lt;parameter id=&quot;type&quot; value=&quot;CHECK_FOREIGN_KEY&quot;/&gt;
+ 	&lt;/extension&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.component/src/org/jetel/component/JmsWriter.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.component/src/org/jetel/component/JmsWriter.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.component/src/org/jetel/component/JmsWriter.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -33,6 +33,7 @@
+ import org.jetel.data.DataRecord;
+ import org.jetel.database.IConnection;
+ import org.jetel.exception.ComponentNotReadyException;
++import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.exception.JetelException;
+ import org.jetel.exception.XMLConfigurationException;
+@@ -42,6 +43,7 @@
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.DynamicJavaCode;
++import org.jetel.util.StringUtils;
+ import org.w3c.dom.Element;
+ 
+ 
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/build.xml
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/build.xml	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/build.xml	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -117,6 +117,9 @@
+ 	&lt;target name=&quot;clean&quot; depends=&quot;checkproperties&quot; description=&quot;Delete old compiled files&quot;&gt;
+ 		&lt;delete dir=&quot;${dir.bin}&quot;/&gt;
+ 		&lt;delete dir=&quot;${dir.dist}&quot;/&gt;
++		&lt;delete dir=&quot;${distribution.dir}&quot;/&gt;
++		&lt;delete dir=&quot;${src.distribution.dir}&quot;/&gt;
++		&lt;delete dir=&quot;${dir.doc}&quot;/&gt;
+ 	&lt;/target&gt;
+ 
+ 	&lt;!-- Target sets directory-properties unless they have been defined (in parent ant build) --&gt;
+
+Added: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/lib/commons-cli-1.0.jar
+===================================================================
+(Binary files differ)
+
+
+Property changes on: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/lib/commons-cli-1.0.jar
+___________________________________________________________________
+Name: svn:mime-type
+   + application/octet-stream
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/plugins/org.jetel.component/plugin.xml
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/plugins/org.jetel.component/plugin.xml	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/plugins/org.jetel.component/plugin.xml	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -94,6 +94,11 @@
+ 
+ 	&lt;extension point-id=&quot;component&quot;&gt;
+ 	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.MergeJoin&quot;/&gt;
++	    &lt;parameter id=&quot;type&quot; value=&quot;EXT_MERGE_JOIN&quot;/&gt;
++	&lt;/extension&gt;
++
++	&lt;extension point-id=&quot;component&quot;&gt;
++	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.MergeJoin&quot;/&gt;
+ 	    &lt;parameter id=&quot;type&quot; value=&quot;SORTED_JOIN&quot;/&gt;
+ 	&lt;/extension&gt;
+ 
+@@ -113,6 +118,11 @@
+ 	&lt;/extension&gt;
+ 
+ 	&lt;extension point-id=&quot;component&quot;&gt;
++	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.HashJoin&quot;/&gt;
++	    &lt;parameter id=&quot;type&quot; value=&quot;EXT_HASH_JOIN&quot;/&gt;
++	&lt;/extension&gt;
++
++	&lt;extension point-id=&quot;component&quot;&gt;
+ 	    &lt;parameter id=&quot;className&quot; value=&quot;org.jetel.component.CheckForeignKey&quot;/&gt;
+ 	    &lt;parameter id=&quot;type&quot; value=&quot;CHECK_FOREIGN_KEY&quot;/&gt;
+ 	&lt;/extension&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -719,7 +719,11 @@
+         if (value == null) {
+             stack.push(Stack.TRUE_VAL);
+         } else {
+-            stack.push(Stack.FALSE_VAL);
++            if (value instanceof CharSequence) {
++                stack.push( ((CharSequence)value).length()==0 ? Stack.TRUE_VAL : Stack.FALSE_VAL);
++            }else {
++                stack.push(Stack.FALSE_VAL);
++            }
+         }
+ 
+         return data;
+@@ -733,7 +737,11 @@
+             node.jjtGetChild(1).jjtAccept(this, data);
+             // not necessary: stack.push(stack.pop());
+         } else {
+-            stack.push(value);
++            if ((value instanceof CharSequence) &amp;&amp; (((CharSequence)value).length()==0)) {
++                node.jjtGetChild(1).jjtAccept(this, data);
++            }else {
++                stack.push(value);
++            }
+         }
+ 
+         return data;
+@@ -1458,41 +1466,43 @@
+      */
+     public Object visit(CLVFVarDeclaration node, Object data) {
+         // test for duplicite declaration - should have been done before
+-        /*if (stack.symtab.containsKey(node.name)) {
+-            throw new TransformLangExecutorRuntimeException(node,
+-                    &quot;variable already declared - \&quot;&quot; + node.name + &quot;\&quot;&quot;);
+-        }*/
++        /*
++         * if (stack.symtab.containsKey(node.name)) { throw new
++         * TransformLangExecutorRuntimeException(node, &quot;variable already
++         * declared - \&quot;&quot; + node.name + &quot;\&quot;&quot;); }
++         */
+         Object value;
+         // create global/local variable
+         switch (node.type) {
+         case INT_VAR:
+-            value= new CloverInteger(0);
++            value = new CloverInteger(0);
+             break;
+         case LONG_VAR:
+-            value= new CloverLong(0);
++            value = new CloverLong(0);
+             break;
+         case DOUBLE_VAR:
+-            value= new CloverDouble(0);
++            value = new CloverDouble(0);
+             break;
+         case DECIMAL_VAR:
+-            if (node.length&gt;0){
+-                if (node.precision&gt;0){
+-                    value = DecimalFactory.getDecimal(node.length,node.precision);
+-                }else{
+-                    value = DecimalFactory.getDecimal(node.length,0);
++            if (node.length &gt; 0) {
++                if (node.precision &gt; 0) {
++                    value = DecimalFactory.getDecimal(node.length,
++                            node.precision);
++                } else {
++                    value = DecimalFactory.getDecimal(node.length, 0);
+                 }
+-            }else{
+-                value= DecimalFactory.getDecimal();
++            } else {
++                value = DecimalFactory.getDecimal();
+             }
+             break;
+         case STRING_VAR:
+-            value= new StringBuilder();
++            value = new StringBuilder();
+             break;
+         case DATE_VAR:
+-            value=new Date();
++            value = new Date();
+             break;
+         case BOOLEAN_VAR:
+-            value=  Stack.FALSE_VAL;
++            value = Stack.FALSE_VAL;
+             break;
+         default:
+             throw new TransformLangExecutorRuntimeException(node,
+@@ -1502,44 +1512,55 @@
+ 
+         }
+         stack.storeVar(node.localVar, node.varSlot, value);
+-        
+-        if (node.jjtGetNumChildren()&gt;0){
++
++        if (node.jjtHasChildren()) {
+             node.jjtGetChild(0).jjtAccept(this, data);
+-            Object initValue=stack.pop();
+-            
++            Object initValue = stack.pop();
+             try {
+-                if (value instanceof Numeric) {
+-                        ((Numeric) value).setValue((Numeric) initValue);
+-                } else if (value instanceof StringBuilder) {
+-                    StringBuilder var = (StringBuilder) value;
+-                    var.setLength(0);
+-                    StringUtils.strBuffAppend(var,(CharSequence) initValue);
+-                } else if (value instanceof Boolean) {
+-                    stack.storeVar(node.localVar,node.varSlot, (Boolean)initValue); // boolean is not updatable - we replace the reference
+-                    // stack.put(varName,((Boolean)value).booleanValue() ?
+-                    // Stack.TRUE_VAL : Stack.FALSE_VAL);
+-                } else if (value instanceof Date) {
++                switch (node.type) {
++                case INT_VAR:
++                case LONG_VAR:
++                case DOUBLE_VAR:
++                case DECIMAL_VAR:
++                    ((Numeric) value).setValue((Numeric) initValue);
++                    break;
++                case STRING_VAR:
++                    if (initValue != null)
++                        StringUtils.strBuffAppend((StringBuilder) value,
++                                (CharSequence) initValue);
++                    break;
++                case DATE_VAR:
+                     ((Date) value).setTime(((Date) initValue).getTime());
+-                } else {
+-                    throw new TransformLangExecutorRuntimeException(node,
+-                            &quot;unknown variable \&quot;&quot; + node.name + &quot;\&quot;&quot;);
++                    break;
++                case BOOLEAN_VAR:
++                    stack.storeVar(node.localVar, node.varSlot,
++                            (Boolean) initValue);
++                    // boolean is not updatable - we replace the reference
++                    break;
++
+                 }
++
+             } catch (ClassCastException ex) {
+                 throw new TransformLangExecutorRuntimeException(node,
+-                        &quot;invalid assignment of \&quot;&quot; + initValue + &quot;\&quot; to variable \&quot;&quot;
+-                                + node.name + &quot;\&quot; - incompatible data types&quot;);
+-            } catch (NumberFormatException ex){
++                        &quot;invalid assignment of \&quot;&quot; + initValue
++                                + &quot;\&quot; to variable \&quot;&quot; + node.name
++                                + &quot;\&quot; - incompatible data types&quot;);
++            } catch (NumberFormatException ex) {
+                 throw new TransformLangExecutorRuntimeException(node,
+-                        &quot;invalid assignment of number \&quot;&quot; + initValue + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;+ex.getMessage());    
+-            } catch (TransformLangExecutorRuntimeException ex){
++                        &quot;invalid assignment of number \&quot;&quot; + initValue
++                                + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;
++                                + ex.getMessage());
++            } catch (TransformLangExecutorRuntimeException ex) {
+                 throw ex;
+-            } catch (Exception ex){
++            } catch (Exception ex) {
+                 throw new TransformLangExecutorRuntimeException(node,
+-                        &quot;invalid assignment of \&quot;&quot; + value + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;+ex.getMessage());  
++                        &quot;invalid assignment of \&quot;&quot; + value
++                                + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;
++                                + ex.getMessage());
+             }
+-            
++
+         }
+-        
++
+         return data;
+     }
+ 
+@@ -1559,6 +1580,8 @@
+     }
+ 
+     public Object visit(CLVFAssignment node, Object data) {
++        //TODO: proper handling of NULL value assignment
++        
+         CLVFVariableLiteral childNode=(CLVFVariableLiteral) node.jjtGetChild(0);
+ 
+         Object variable = stack.getVar(childNode.localVar,childNode.varSlot);
+@@ -1570,7 +1593,7 @@
+             } else if (variable instanceof StringBuilder) {
+                 StringBuilder var = (StringBuilder) variable;
+                 var.setLength(0);
+-                StringUtils.strBuffAppend(var,(CharSequence) value);
++                if (value !=null) StringUtils.strBuffAppend(var,(CharSequence) value);
+             } else if (variable instanceof Boolean) {
+                 stack.storeVar(childNode.localVar,childNode.varSlot, (Boolean)value); // boolean is not updatable - we replace the reference
+                 // stack.put(varName,((Boolean)value).booleanValue() ?
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -140,6 +140,8 @@
+ 
+ 	//private static boolean setSchemaSupport = true;
+ 	//private static boolean setSchemaFullSupport = false;
++	private static final String METADATA_ELEMENT = &quot;Metadata&quot;;
++	private static final String ID = &quot;id&quot;;
+ 	private static final String RECORD_ELEMENT = &quot;Record&quot;;
+ 	private static final String FIELD_ELEMENT = &quot;Field&quot;;
+ 	private static final String CODE_ELEMENT = &quot;Code&quot;;
+@@ -203,6 +205,10 @@
+ 	 * @since May 6, 2002
+ 	 */
+ 	public DataRecordMetadata read(InputStream in) {
++		return read(in, null);
++	}
++	
++	public DataRecordMetadata read(InputStream in, String metadataId) {
+ 		Document document;
+ 
+ 		try {
+@@ -238,7 +244,7 @@
+ 		}
+ 
+ 		try {
+-			return parseRecordMetadata(document);
++			return parseRecordMetadata(document, metadataId);
+ 		} catch (DOMException ex) {
+ 			logger.fatal(ex.getMessage());
+ 			return null;
+@@ -380,16 +386,32 @@
+ 
+ 	public DataRecordMetadata parseRecordMetadata(Document document)
+ 			throws DOMException {
++		return parseRecordMetadata(document, null);
++	}
++
++	public DataRecordMetadata parseRecordMetadata(Document document, String metadataId) throws DOMException {
+ 		org.w3c.dom.NodeList nodes;
+-		nodes = document.getElementsByTagName(RECORD_ELEMENT);
+-		if (nodes.getLength() == 0) {
+-			throw new DOMException(DOMException.NOT_FOUND_ERR,
+-					&quot;No Record element has been found ! &quot;);
++		if (metadataId != null) {
++			nodes = document.getElementsByTagName(METADATA_ELEMENT);
++			int lenght = nodes.getLength();
++			org.w3c.dom.Node node = null;
++			for (int i=0; i&lt;lenght; i++) {
++				node = nodes.item(i);
++				if (node.getAttributes().getNamedItem(ID).getNodeValue().equals(metadataId)) {
++					return parseRecordMetadata(node.getChildNodes().item(1));
++				}
++			}
++			return null;
++		} else {
++			nodes = document.getElementsByTagName(RECORD_ELEMENT);
++			if (nodes.getLength() == 0) {
++				throw new DOMException(DOMException.NOT_FOUND_ERR,
++						&quot;No Record element has been found ! &quot;);
++			}
++			return parseRecordMetadata(nodes.item(0));
+ 		}
+-
+-		return parseRecordMetadata(nodes.item(0));
+ 	}
+-
++	
+ 	public DataRecordMetadata parseRecordMetadata(org.w3c.dom.Node topNode)
+ 			throws DOMException {
+ 
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/metadata/XsdMetadata.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -33,6 +33,12 @@
+ import javax.xml.parsers.DocumentBuilderFactory;
+ import javax.xml.parsers.ParserConfigurationException;
+ 
++import org.apache.commons.cli.CommandLine;
++import org.apache.commons.cli.Option;
++import org.apache.commons.cli.Options;
++import org.apache.commons.cli.ParseException;
++import org.apache.commons.cli.PosixParser;
++import org.jetel.data.Defaults;
+ import org.w3c.dom.Document;
+ import org.w3c.dom.Element;
+ import org.w3c.dom.NodeList;
+@@ -143,7 +149,7 @@
+ 	private static Document createXsdDocument() throws ParserConfigurationException {
+ 		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+ 		Element preamble = doc.createElement(&quot;xsd:schema&quot;);
+-		preamble.setAttribute(&quot;xmlns:xs&quot;, XMLSCHEMA);
++		preamble.setAttribute(&quot;xmlns:xsd&quot;, XMLSCHEMA);
+ 		if (NAMESPACE != null) {
+ 			preamble.setAttribute(&quot;targetNamespace&quot;, NAMESPACE);
+ 			preamble.setAttribute(&quot;xmlns&quot;, NAMESPACE);
+@@ -257,27 +263,60 @@
+ 
+ 	/**
+ 	 * Converts clover metadata read from XML file to XSD written to file.
++	 * XML file can be metadata file or graph file. If XML file is graph, 
++	 * then you define metadata_id.
+ 	 * 
+-	 * usage: XsdMetadata [infile] [outfile]
++	 * usage: XsdMetadata [--metadata_id id] [infile] [outfile]
+ 	 * @param argv {input_file, output_file}. &quot;-&quot; for std input/output
+ 	 */
+ 	public static void main(String argv[]) {
++		String metadataId = null;
++		
+         try {
+         	InputStream input;
+-        	if (argv.length &lt; 1 || argv[0].equals(&quot;-&quot;)) {
+-        		input = System.in;
+-        	} else {
+-        		input = new FileInputStream(argv[0]);
+-        	}
+         	OutputStream output;
+-        	if (argv.length &lt; 2 || argv[1].equals(&quot;-&quot;)) {
+-        		output = System.out;
+-        	} else {
+-        		output = new FileOutputStream(argv[1]);
+-        	}
++       	
++    		Options options = new Options();
++        	options.addOption(new Option(&quot;m&quot;, &quot;metadata_id&quot;, true, &quot;Methadata id in graph file&quot;));
++        	options.addOption(new Option(&quot;i&quot;, &quot;in_file&quot;, true, &quot;Input file&quot;));
++        	options.addOption(new Option(&quot;o&quot;, &quot;out_file&quot;, true, &quot;Output file&quot;));
+         	
++        	PosixParser optParser = new PosixParser();
++        	CommandLine cmdLine;
++    		try {
++    			cmdLine = optParser.parse(options, argv);
++    		} catch (ParseException e) {
++    			e.printStackTrace();
++    			return;
++    		}
++    		
++    		if (cmdLine.hasOption(&quot;m&quot;)) {
++    			metadataId = cmdLine.getOptionValue(&quot;m&quot;);
++    		}
++    		if (cmdLine.hasOption(&quot;i&quot;)) {
++        		input = new FileInputStream(cmdLine.getOptionValue(&quot;i&quot;));
++    		} else {
++    			input = System.in;
++    		}
++    		if (cmdLine.hasOption(&quot;o&quot;)) {
++        		output = new FileOutputStream(cmdLine.getOptionValue(&quot;o&quot;));
++    		} else {
++    			output = System.out;
++    		}
++
++			Defaults.init();
++    		
+             DataRecordMetadataXMLReaderWriter xmlReader = new DataRecordMetadataXMLReaderWriter();
+-			DataRecordMetadata metadata = xmlReader.read(new BufferedInputStream(input));
++            DataRecordMetadata metadata;
++            if (metadataId == null)
++            	metadata = xmlReader.read(new BufferedInputStream(input));
++            else 
++            	metadata = xmlReader.read(new BufferedInputStream(input), metadataId);
++            
++            if(metadata == null) {
++                System.err.println(&quot;Metadata doesn't exist.&quot; + (metadataId != null ? &quot; (&quot; + metadataId + &quot;)&quot; : &quot;&quot;));
++                return;
++            }
+ 			(new XsdMetadata(metadata)).write(output);
+ 		} catch (FileNotFoundException e) {
+ 			e.printStackTrace();
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/util/FileUtils.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/util/FileUtils.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/src/org/jetel/util/FileUtils.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -27,7 +27,6 @@
+ import java.io.InputStreamReader;
+ import java.io.OutputStream;
+ import java.net.MalformedURLException;
+-import java.net.URI;
+ import java.net.URL;
+ import java.nio.channels.Channels;
+ import java.nio.channels.ReadableByteChannel;
+@@ -272,13 +271,14 @@
+ 			fileName = fileURL;
+ 		}
+ 		MultiOutFile multiOut = new MultiOutFile(fileName);
+-		URI uri;
+ 		File file;
++        URL url;
+ 		boolean tmp;
+ 		//create file on given URL
+ 		try {
+-			uri = getFileURL(contextURL, multiOut.next()).toURI();
+-			file = new File(uri);
++			url = getFileURL(contextURL, multiOut.next());
++            if(!url.getProtocol().equalsIgnoreCase(&quot;file&quot;)) return true;
++			file = new File(url.getPath());
+ 		} catch (Exception e) {
+ 			throw new ComponentNotReadyException(e + &quot;: &quot; + fileURL);
+ 		}
+@@ -289,7 +289,7 @@
+ 			try {
+ 				tmp = file.createNewFile();
+ 			} catch (IOException e) {
+-				throw new ComponentNotReadyException(e + &quot;: &quot; + uri);
++				throw new ComponentNotReadyException(e + &quot;: &quot; + fileURL);
+ 			}
+ 			if (tmp) {
+ 				file.delete();
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.sequence/src/org/jetel/sequence/SimpleSequence.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.sequence/src/org/jetel/sequence/SimpleSequence.java	2007-02-19 14:47:01 UTC (rev 2487)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.sequence/src/org/jetel/sequence/SimpleSequence.java	2007-02-19 15:42:18 UTC (rev 2488)
+@@ -226,7 +226,7 @@
+             }
+         } catch (IOException ex) {
+             logger.error(&quot;I/O error when accessing sequence &quot; + getName() + &quot; - &quot; + ex.getMessage());
+-            throw new RuntimeException(&quot;I/O error when accessing sequence &quot; + getName() + &quot; - &quot; + ex.getMessage());
++            //throw new RuntimeException(&quot;I/O error when accessing sequence &quot; + getName() + &quot; - &quot; + ex.getMessage());
+         }
+     }
+     
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000124.html">[Cloveretl-svn-commits] CloverETL repos r2487 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+	<LI>Next message: <A HREF="000126.html">[Cloveretl-svn-commits] CloverETL repos r2489 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#125">[ date ]</a>
+              <a href="thread.html#125">[ thread ]</a>
+              <a href="subject.html#125">[ subject ]</a>
+              <a href="author.html#125">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

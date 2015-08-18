@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2611 -	trunk/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2611%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200703130839.l2D8d59a031559%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000246.html">
+   <LINK REL="Next"  HREF="000256.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2611 -	trunk/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2611%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200703130839.l2D8d59a031559%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2611 -	trunk/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Mar 13 09:39:06 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000246.html">[Cloveretl-svn-commits] CloverETL repos r2610 -	trunk/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000256.html">[Cloveretl-svn-commits] CloverETL repos r2608 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-13 09:39:05 +0100 (Tue, 13 Mar 2007)
+New Revision: 2611
+
+Added:
+   trunk/cloveretl.engine/examples/run.bat
+   trunk/cloveretl.engine/examples/run.sh
+Removed:
+   trunk/cloveretl.engine/examples/TransformForDBjoin.class
+   trunk/cloveretl.engine/examples/TransformForDBjoin.java
+   trunk/cloveretl.engine/examples/reformatJoinTest.class
+   trunk/cloveretl.engine/examples/reformatJoinTest.java
+   trunk/cloveretl.engine/examples/reformatOrders.class
+   trunk/cloveretl.engine/examples/reformatOrders.java
+Log:
+CHANGE:data was split and moved to data/delimited, data/fixlen or data/other
+
+Deleted: trunk/cloveretl.engine/examples/TransformForDBjoin.class
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/TransformForDBjoin.java
+===================================================================
+--- trunk/cloveretl.engine/examples/TransformForDBjoin.java	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/TransformForDBjoin.java	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -1,26 +0,0 @@
+-import org.jetel.component.DataRecordTransform;
+-import org.jetel.data.DataRecord;
+-
+-public class TransformForDBjoin extends DataRecordTransform{
+-
+-
+-	public boolean init(){
+-
+-		return true;
+-	}
+-
+-	public boolean transform(DataRecord[] source, DataRecord[] target){
+-	        
+-
+-	
+-		target[0].getField(&quot;customer_id&quot;).setValue(source[0].getField(&quot;customer_id&quot;).getValue());
+-  		target[0].getField(&quot;lname&quot;).setValue(source[0].getField(&quot;lname&quot;).getValue());
+-		target[0].getField(&quot;fname&quot;).setValue(source[0].getField(&quot;fname&quot;).getValue());
+-		target[0].getField(&quot;city&quot;).setValue(source[0].getField(&quot;city&quot;).getValue());
+-		target[0].getField(&quot;country&quot;).setValue(source[0].getField(&quot;country&quot;).getValue());
+-		target[0].getField(&quot;employee_id&quot;).setValue(source[1].getField(&quot;employee_id&quot;).getValue());
+-		target[0].getField(&quot;full_name&quot;).setValue(source[1].getField(&quot;full_name&quot;).getValue());
+-
+-		return true;
+-	}
+-}
+\ No newline at end of file
+
+Deleted: trunk/cloveretl.engine/examples/reformatJoinTest.class
+===================================================================
+--- trunk/cloveretl.engine/examples/reformatJoinTest.class	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/reformatJoinTest.class	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -1,13 +0,0 @@
+-&#202;&#254;&#186;&#190;
+-
+-
+-
+-
+-
+-
+-
+-SourceFile
+-
+-
+-
+-
+\ No newline at end of file
+
+Deleted: trunk/cloveretl.engine/examples/reformatJoinTest.java
+===================================================================
+--- trunk/cloveretl.engine/examples/reformatJoinTest.java	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/reformatJoinTest.java	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -1,49 +0,0 @@
+-/*
+-*    jETeL/Clover - Java based ETL application framework.
+-*    Copyright (C) 2002  David Pavlis
+-*
+-*    This program is free software; you can redistribute it and/or modify
+-*    it under the terms of the GNU General Public License as published by
+-*    the Free Software Foundation; either version 2 of the License, or
+-*    (at your option) any later version.
+-*    This program is distributed in the hope that it will be useful,
+-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-*    GNU General Public License for more details.
+-*
+-*    You should have received a copy of the GNU General Public License
+-*    along with this program; if not, write to the Free Software
+-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-*/
+-
+-
+-import org.jetel.component.DataRecordTransform;
+-import org.jetel.data.*;
+-
+-
+-public class reformatJoinTest extends DataRecordTransform{
+-
+-	public boolean transform(DataRecord[] source, DataRecord[] target){
+-
+-		
+-		System.out.print(source[0].getField(0).toString());
+-		target[0].getField(0).setValue(source[0].getField(0).getValue());
+-		System.out.print(&quot;|&quot;);
+-		System.out.print(source[0].getField(1).toString());
+-		target[0].getField(1).setValue(source[0].getField(1).getValue());
+-		System.out.print(&quot;|&quot;);
+-		System.out.print(source[0].getField(2).toString());
+-		target[0].getField(2).setValue(source[0].getField(2).getValue().toString());
+-		if (source[1]!=null){
+-			System.out.print(&quot;|&quot;);
+-			System.out.print(source[1].getField(0).toString());
+-			target[0].getField(3).setValue(source[1].getField(0).getValue().toString());
+-			System.out.print(&quot;|&quot;);
+-			System.out.print(source[1].getField(1).toString());
+-			target[0].getField(4).setValue(source[1].getField(1).getValue());
+-		}
+-		System.out.println();
+-		
+-		return true;
+-	}
+-}
+
+Deleted: trunk/cloveretl.engine/examples/reformatOrders.class
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/reformatOrders.java
+===================================================================
+--- trunk/cloveretl.engine/examples/reformatOrders.java	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/reformatOrders.java	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -1,58 +0,0 @@
+-/*
+-*    jETeL/Clover - Java based ETL application framework.
+-*    Copyright (C) 2002  David Pavlis
+-*
+-*    This program is free software; you can redistribute it and/or modify
+-*    it under the terms of the GNU General Public License as published by
+-*    the Free Software Foundation; either version 2 of the License, or
+-*    (at your option) any later version.
+-*    This program is distributed in the hope that it will be useful,
+-*    but WITHOUT ANY WARRANTY; without even the implied warranty of
+-*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-*    GNU General Public License for more details.
+-*
+-*    You should have received a copy of the GNU General Public License
+-*    along with this program; if not, write to the Free Software
+-*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+-*/
+-
+-
+-import org.jetel.component.DataRecordTransform;
+-import org.jetel.data.*;
+-
+-
+-public class reformatOrders extends DataRecordTransform{
+-
+-	int counter=0;
+-	int field=0;
+-
+-	public boolean transform(DataRecord[] source, DataRecord[] target){
+-		StringBuffer strBuf=new StringBuffer(80);
+-		if (source[0]==null){
+-		   System.err.println(&quot;NULL source[0]&quot;);
+-		}
+-		try{
+-			// let's concatenate shipping address into one long string
+-			strBuf.append(GetVal.getString(source[0],&quot;ShipName&quot;)).append(';');
+-			strBuf.append(GetVal.getString(source[0],&quot;ShipAddress&quot;)).append(';');
+-			strBuf.append(GetVal.getString(source[0],&quot;ShipCity&quot;)).append(';');
+-			strBuf.append(GetVal.getString(source[0],&quot;ShipCountry&quot;));
+-			// mapping among source &amp; target fields
+-			// some fields get assigned directly from source fields, some
+-			// are assigned from internall variables
+-			SetVal.setInt(target[0],&quot;OrderKey&quot;,counter);
+-			SetVal.setInt(target[0],&quot;OrderID&quot;,GetVal.getInt(source[0],&quot;OrderID&quot;));
+-			SetVal.setString(target[0],&quot;CustomerID&quot;,GetVal.getString(source[0],&quot;CustomerID&quot;));
+-			SetVal.setValue(target[0],&quot;OrderDate&quot;,GetVal.getDate(source[0],&quot;OrderDate&quot;));
+-			SetVal.setString(target[0],&quot;ShippedDate&quot;,&quot;02.02.1999&quot;);
+-			SetVal.setInt(target[0],&quot;ShipVia&quot;,GetVal.getInt(source[0],&quot;ShipVia&quot;));
+-			SetVal.setString(target[0],&quot;ShipTo&quot;,strBuf.toString());
+-		}catch(Exception ex){
+-		  ex.printStackTrace();
+-			errorMessage=ex.getMessage()+&quot; -&gt;occured with record :&quot;+counter;
+-			return false;
+-		}
+-		counter++;
+-			return true;
+-	}
+-}
+
+Added: trunk/cloveretl.engine/examples/run.bat
+===================================================================
+--- trunk/cloveretl.engine/examples/run.bat	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/run.bat	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -0,0 +1,20 @@
+<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">+ at echo</A> off
++
++rem ********************************
++rem usage - run.bat &lt;graph_name.grf&gt;
++rem ********************************
++
++rem ***** set this before using script *****
++set ENGINE_PATH=..
++set TRANSFORM_PATH=javaExamples
++rem ****************************************
++
++set ENGINE_JAR=%ENGINE_PATH%\cloveretl.engine.jar
++set COMMONS_LOGGING_JAR=%ENGINE_PATH%\lib\commons-logging.jar
++set JAVOLUTION_JAR=%ENGINE_PATH%\lib\javolution.jar
++set JMS_JAR=%ENGINE_PATH%\lib\jms.jar
++set JXL_JAR=%ENGINE_PATH%\lib\jxl.jar
++set LOG4J_JAR=%ENGINE_PATH%\lib\log4j-1.2.12.zip
++set POI_JAR=%ENGINE_PATH%\lib\poi-2.5.1.jar
++
++java -cp &quot;%TRANSFORM_PATH%;%ENGINE_JAR%;%COMMONS_LOGGING_JAR%;%JAVOLUTION_JAR%;%JMS_JAR%;%JXL_JAR%;%LOG4J_JAR%;%POI_JAR%;%JAVA_HOME%\lib\tools.jar&quot; org.jetel.main.runGraph -plugins %ENGINE_PATH%\plugins %1
+
+Added: trunk/cloveretl.engine/examples/run.sh
+===================================================================
+--- trunk/cloveretl.engine/examples/run.sh	2007-03-13 08:38:45 UTC (rev 2610)
++++ trunk/cloveretl.engine/examples/run.sh	2007-03-13 08:39:05 UTC (rev 2611)
+@@ -0,0 +1,16 @@
++#!/bin/bash
++
++# ************************************
++# usage - ./run.sh &lt;graph_name.grf&gt;
++# ***** set this before using script *****
++ENGINE_PATH=&quot;..&quot;
++TRANSFORM_PATH=&quot;javaExamples&quot;
++# ****************************************
++
++ENGINE_JAR=&quot;$ENGINE_PATH/cloveretl.engine.jar&quot;
++
++for i in $ENGINE_PATH/lib/*.jar $ENGINE_PATH/lib/*.zip; do
++JARS=&quot;$JARS:$i&quot;
++done;
++
++java -classpath &quot;$TRANSFORM_PATH:$ENGINE_JAR:$JARS:$JAVA_HOME/lib/tools.jar&quot; org.jetel.main.runGraph -plugins $ENGINE_PATH/plugins $1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000246.html">[Cloveretl-svn-commits] CloverETL repos r2610 -	trunk/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000256.html">[Cloveretl-svn-commits] CloverETL repos r2608 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#247">[ date ]</a>
+              <a href="thread.html#247">[ thread ]</a>
+              <a href="subject.html#247">[ subject ]</a>
+              <a href="author.html#247">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

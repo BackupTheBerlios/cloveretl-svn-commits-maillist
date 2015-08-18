@@ -1,0 +1,1501 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2414 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/main
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2414%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter%0A%09cloveretl.engine/src/org/jetel/main&In-Reply-To=%3C200701311316.l0VDGDsV016628%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000051.html">
+   <LINK REL="Next"  HREF="000053.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2414 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/main</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2414%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter%0A%09cloveretl.engine/src/org/jetel/main&In-Reply-To=%3C200701311316.l0VDGDsV016628%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2414 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/main">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Jan 31 14:16:13 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000051.html">[Cloveretl-svn-commits] CloverETL repos r2413 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+        <LI>Next message: <A HREF="000053.html">[Cloveretl-svn-commits] CloverETL repos r2415 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-01-31 14:16:10 +0100 (Wed, 31 Jan 2007)
+New Revision: 2414
+
+Added:
+   trunk/cloveretl.component/src/org/jetel/component/TextWriter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/main/DataComponentViewer.java
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+Log:
+INIT: component viewer, (fix: StructureWriter, DataWriter)
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-01-31 13:08:43 UTC (rev 2413)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-01-31 13:16:10 UTC (rev 2414)
+@@ -19,6 +19,9 @@
+ */
+ 
+ package org.jetel.component;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
++
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+@@ -32,6 +35,7 @@
+ import org.jetel.graph.Node;
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
++import org.jetel.metadata.DataRecordMetadata;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+@@ -95,6 +99,10 @@
+     private boolean outputFieldNames;
+ 	private int bytesPerFile;
+ 	private int recordsPerFile;
++	private WritableByteChannel channelWriter;
++	private String delimiter;
++	private long recordFrom = -1;
++	private long recordCount = -1;
+ 
+ 	static Log logger = LogFactory.getLog(DataWriter.class);
+ 
+@@ -121,19 +129,28 @@
+ 	public Result execute() throws Exception {
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
++		long iRec = 0;
++		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
+ 		record.init();
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
++				iRec++;
+ 				record = inPort.readRecord(record);
++				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+-					writer.write(record);
++					if (channelWriter != null) {
++						formatter.write(record);
++					} else {
++						writer.write(record);
++					}
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
++			if (channelWriter != null) formatter.flush();
+ 		} catch (Exception e) {
+ 			throw e;
+ 		}finally{		
+-			writer.close();
++			if (writer != null) writer.close();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+ 	}
+@@ -148,16 +165,29 @@
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+ 
+-        // initialize multifile writer based on prepared formatter
+-        writer = new MultiFileWriter(formatter, getGraph().getProjectURL(), fileURL);
+-        writer.setLogger(logger);
+-        writer.setBytesPerFile(bytesPerFile);
+-        writer.setRecordsPerFile(recordsPerFile);
+-        writer.setAppendData(appendData);
+-        if(outputFieldNames) {
+-            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+-        }
+-        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
++		if (fileURL != null) {
++	        // initialize multifile writer based on prepared formatter
++	        writer = new MultiFileWriter(formatter, getGraph().getProjectURL(), fileURL);
++	        writer.setLogger(logger);
++	        writer.setBytesPerFile(bytesPerFile);
++	        writer.setRecordsPerFile(recordsPerFile);
++	        writer.setAppendData(appendData);
++	        if(outputFieldNames) {
++	            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++	        }
++	        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
++		} else {
++			channelWriter = Channels.newChannel(System.out);
++			formatter.setDataTarget(channelWriter);
++			DataRecordMetadata metadata = getInputPort(READ_FROM_PORT).getMetadata();
++			if (delimiter != null) {
++				for(int i=0; i&lt;metadata.getNumFields()-1; i++) {
++					metadata.getField(i).setDelimiter(delimiter);
++				}
++				//metadata.getField(metadata.getNumFields()-1).setDelimiter(&quot;\n&quot;);
++			}
++			formatter.init(metadata);
++		}
+ 	}
+ 	
+ 	/**
+@@ -268,5 +298,17 @@
+     public void setOutputFieldNames(boolean outputFieldNames) {
+         this.outputFieldNames = outputFieldNames;
+     }
++    
++    public void setDataDelimiter(String delimiter) {
++    	this.delimiter = delimiter;
++    }
++    
++	public void setRecordFrom(long recordFrom) {
++		this.recordFrom = recordFrom;
++	}
+ 
++	public void setRecordCount(long recordCount) {
++		this.recordCount = recordCount;
++	}
++
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-01-31 13:08:43 UTC (rev 2413)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-01-31 13:16:10 UTC (rev 2414)
+@@ -23,6 +23,7 @@
+ 
+ import java.io.IOException;
+ import java.nio.ByteBuffer;
++import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+ import org.jetel.data.DataRecord;
+@@ -112,6 +113,8 @@
+ 	public static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
+ 	public static final String XML_HEADER_ATTRIBUTE = &quot;header&quot;;
+ 	public static final String XML_FOOTER_ATTRIBUTE = &quot;footer&quot;;
++	public static final String XML_RECORD_FROM_ATTRIBUTE = &quot;recordFrom&quot;;
++	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 
+ 	private String fileURL;
+ 	private boolean appendData;
+@@ -121,6 +124,8 @@
+ 	private WritableByteChannel writer;
+ 	private ByteBuffer buffer;
+ 	private String charset;
++	private long recordFrom = -1;
++	private long recordCount = -1;
+ 
+ 	public final static String COMPONENT_TYPE = &quot;STRUCTURE_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+@@ -162,11 +167,15 @@
+ 		}
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
++		long iRec = 0;
++		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
+ 		record.init();
+ 		//write records
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
++				iRec++;
+ 				record = inPort.readRecord(record);
++				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+ 					formatter.write(record);
+ 				}
+@@ -225,7 +234,7 @@
+ 		super.init();
+ 		// based on file mask, create/open output file
+ 		try {
+-			writer = FileUtils.getWritableChannel(getGraph().getProjectURL(), fileURL, appendData);
++			writer = fileURL == null ? Channels.newChannel(System.out) : FileUtils.getWritableChannel(getGraph().getProjectURL(), fileURL, appendData);
+ 			buffer = ByteBuffer.allocateDirect(StringUtils.getMaxLength(header,footer));
+ 			formatter.init(getInputPort(READ_FROM_PORT).getMetadata());
+             formatter.setDataTarget(writer);
+@@ -253,6 +262,12 @@
+ 			if (xattribs.exists(XML_FOOTER_ATTRIBUTE)){
+ 				aDataWriter.setFooter(xattribs.getString(XML_FOOTER_ATTRIBUTE));
+ 			}
++			if (xattribs.exists(XML_RECORD_FROM_ATTRIBUTE)){
++				aDataWriter.setRecordFrom(Long.parseLong(xattribs.getString(XML_RECORD_FROM_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aDataWriter.setRecordCount(Long.parseLong(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+ 			return null;
+@@ -278,6 +293,12 @@
+ 		if (footer != null){
+ 			xmlElement.setAttribute(XML_FOOTER_ATTRIBUTE,footer);
+ 		}
++		if (recordFrom != -1){
++			xmlElement.setAttribute(XML_RECORD_FROM_ATTRIBUTE, String.valueOf(recordFrom));
++		}
++		if (recordCount != -1){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(recordCount));
++		}
+ 	}
+ 	
+ 	public void setFooter(String footer) {
+@@ -287,5 +308,13 @@
+ 	public void setHeader(String header) {
+ 		this.header = header;
+ 	}
+-	
++
++	public void setRecordFrom(long recordFrom) {
++		this.recordFrom = recordFrom;
++	}
++
++	public void setRecordCount(long recordCount) {
++		this.recordCount = recordCount;
++	}
++
+ }
+
+Added: trunk/cloveretl.component/src/org/jetel/component/TextWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/TextWriter.java	2007-01-31 13:08:43 UTC (rev 2413)
++++ trunk/cloveretl.component/src/org/jetel/component/TextWriter.java	2007-01-31 13:16:10 UTC (rev 2414)
+@@ -0,0 +1,297 @@
++
++/*
++*    jETeL/Clover - Java based ETL application framework.
++*    Copyright (C) 2005-06  Javlin Consulting &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">info at javlinconsulting.cz</A>&gt;
++*    
++*    This library is free software; you can redistribute it and/or
++*    modify it under the terms of the GNU Lesser General Public
++*    License as published by the Free Software Foundation; either
++*    version 2.1 of the License, or (at your option) any later version.
++*    
++*    This library is distributed in the hope that it will be useful,
++*    but WITHOUT ANY WARRANTY; without even the implied warranty of
++*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    
++*    Lesser General Public License for more details.
++*    
++*    You should have received a copy of the GNU Lesser General Public
++*    License along with this library; if not, write to the Free Software
++*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++*
++*/
++
++package org.jetel.component;
++
++import java.io.IOException;
++import java.nio.ByteBuffer;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
++
++import org.jetel.data.DataRecord;
++import org.jetel.data.Defaults;
++import org.jetel.data.formatter.TextTableFormatter;
++import org.jetel.exception.ComponentNotReadyException;
++import org.jetel.exception.ConfigurationProblem;
++import org.jetel.exception.ConfigurationStatus;
++import org.jetel.graph.InputPort;
++import org.jetel.graph.Node;
++import org.jetel.graph.Result;
++import org.jetel.graph.TransformationGraph;
++import org.jetel.util.ByteBufferUtils;
++import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.FileUtils;
++import org.jetel.util.StringUtils;
++import org.jetel.util.SynchronizeUtils;
++import org.w3c.dom.Element;
++
++/**
++ *  &lt;h3&gt;StructureWriter Component&lt;/h3&gt;
++ *
++ * &lt;!-- All records from input port [0] are formatted due to given mask and written to specified file --&gt;
++ * 
++ * &lt;table border=&quot;1&quot;&gt;
++ *  &lt;th&gt;Component:&lt;/th&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Name:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;StructureWriter&lt;/td&gt;&lt;/tr&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Category:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Description:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;All records from input port [0] are formatted due to given mask and written to specified file.
++ * Records can be preceded by some text (header) or be trailed by a text (footer)&lt;/td&gt;&lt;/tr&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Inputs:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;[0]- input records&lt;/td&gt;&lt;/tr&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Outputs:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
++ * &lt;tr&gt;&lt;td&gt;&lt;h4&gt;&lt;i&gt;Comment:&lt;/i&gt;&lt;/h4&gt;&lt;/td&gt;
++ * &lt;td&gt;This component uses java.nio.* classes.&lt;/td&gt;&lt;/tr&gt;
++ * &lt;/table&gt;
++ *  &lt;br&gt;  
++ *  &lt;table border=&quot;1&quot;&gt;
++ *  &lt;th&gt;XML attributes:&lt;/th&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;type&lt;/b&gt;&lt;/td&gt;&lt;td&gt;&quot;STRUCTURE_WRITER&quot;&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;component identification&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;fileURL&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Output files mask.
++ *  Use wildcard '#' to specify where to insert sequential number of file. Number of consecutive wildcards specifies
++ *  minimal length of the number. Name without wildcard specifies only one file.&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;charset&lt;/b&gt;&lt;/td&gt;&lt;td&gt;character encoding of the output file (if not specified, then ISO-8859-1 is used)&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;append&lt;/b&gt;&lt;/td&gt;&lt;td&gt;whether to append data at the end if output file exists or replace it (values: true/false)&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;mask&lt;/b&gt;&lt;/td&gt;&lt;td&gt;template for formating records. Every occurrence 
++ *  of $fieldName will be replaced by value of the fieldName. The rest of text will
++ *  be unchanged. If not given there is used default mask:
++ *  &lt; recordName field1=$field1 field2=$field2 ... fieldn=$fieldn /&gt;
++ *  where field1 ,.., fieldn are record's fields from metadata&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;header&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write before records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;footer&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write after records&lt;/td&gt;
++ *  &lt;/tr&gt;
++ *  &lt;/table&gt;  
++ *
++ * &lt;h4&gt;Example:&lt;/h4&gt;
++ * &lt;pre&gt;&lt;Node append=&quot;true&quot; fileURL=&quot;${WORKSPACE}/output/structured_customers.txt&quot;
++ *  id=&quot;STRUCTURE_WRITER0&quot; type=&quot;STRUCTURE_WRITER&quot;&gt;
++ * &lt;attr name=&quot;header&quot;&gt;dir = ${WORKSPACE}&lt;/attr&gt;
++ * &lt;attr name=&quot;mask&quot;&gt;
++ * &lt;Customer id=$customer_id&gt;
++ * 	&lt;last name = $lname&gt;
++ *	&lt;first name = $fname&gt;
++ * &lt;/Customer&gt;
++ * &lt;/attr&gt;
++ * &lt;attr name=&quot;footer&quot;&gt;end of file&lt;/attr&gt;
++ * &lt;/Node&gt;
++ * 
++ * 
++ * @author avackova (<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">agata.vackova at javlinconsulting.cz</A>) ; 
++ * (c) JavlinConsulting s.r.o.
++ *  www.javlinconsulting.cz
++ *
++ * @since Oct 30, 2006
++ *
++ */
++public class TextWriter extends Node {
++
++	public static final String XML_APPEND_ATTRIBUTE = &quot;append&quot;;
++	public static final String XML_FILEURL_ATTRIBUTE = &quot;fileURL&quot;;
++	public static final String XML_CHARSET_ATTRIBUTE = &quot;charset&quot;;
++	public static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
++	public static final String XML_HEADER_ATTRIBUTE = &quot;header&quot;;
++	public static final String XML_RECORD_FROM_ATTRIBUTE = &quot;recordFrom&quot;;
++	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
++
++	private String fileURL;
++	private boolean appendData;
++	private TextTableFormatter formatter;
++	private boolean header = true;
++	private WritableByteChannel writer;
++	private String charset;
++	private long recordFrom = -1;
++	private long recordCount = -1;
++	
++	public final static String COMPONENT_TYPE = &quot;STRUCTURE_WRITER&quot;;
++	private final static int READ_FROM_PORT = 0;
++
++	/**
++	 * Constructor
++	 * 
++	 * @param id
++	 * @param fileURL
++	 * @param charset
++	 * @param appendData
++	 * @param mask
++	 */
++	public TextWriter(String id, String fileURL, String charset, 
++			boolean appendData, String[] fields) {
++		super(id);
++		this.fileURL = fileURL;
++		this.appendData = appendData;
++		this.charset = charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
++		formatter = charset == null ? new TextTableFormatter() : 
++			new TextTableFormatter(charset);
++		formatter.setMask(fields);
++	}
++
++	/* (non-Javadoc)
++	 * @see org.jetel.graph.Node#getType()
++	 */
++	@Override
++	public String getType() {
++		return COMPONENT_TYPE;
++	}
++
++	@Override
++	public Result execute() throws Exception {
++		//write header
++		InputPort inPort = getInputPort(READ_FROM_PORT);
++		DataRecord record = new DataRecord(inPort.getMetadata());
++		long iRec = 0;
++		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
++		record.init();
++		//write records
++		try {
++			while (record != null &amp;&amp; runIt) {
++				iRec++;
++				record = inPort.readRecord(record);
++				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
++				if (record != null) {
++					formatter.write(record);
++				}
++				SynchronizeUtils.cloverYield();
++			}
++			formatter.eof();
++		} catch (Exception e) {
++			throw e;
++		}finally{
++			//close output
++			writer.close();
++		}
++        return runIt ? Result.FINISHED_OK : Result.ABORTED;
++	}
++
++	@Override
++	public void free() {
++		super.free();
++		formatter.close();
++	}
++	/* (non-Javadoc)
++	 * @see org.jetel.graph.GraphElement#checkConfig()
++	 */
++    @Override
++    public ConfigurationStatus checkConfig(ConfigurationStatus status) {
++		super.checkConfig(status);
++		 
++		checkInputPorts(status, 1, 1);
++        checkOutputPorts(status, 0, 0);
++
++        try {
++            init();
++            free();
++        } catch (ComponentNotReadyException e) {
++            ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
++            if(!StringUtils.isEmpty(e.getAttributeName())) {
++                problem.setAttributeName(e.getAttributeName());
++            }
++            status.add(problem);
++        }
++        
++        return status;
++    }
++	
++	/* (non-Javadoc)
++	 * @see org.jetel.graph.GraphElement#init()
++	 */
++	@Override
++	public void init() throws ComponentNotReadyException {
++		super.init();
++		// based on file mask, create/open output file
++		try {
++			writer = fileURL == null ? Channels.newChannel(System.out) : FileUtils.getWritableChannel(getGraph().getProjectURL(), fileURL, appendData);
++			formatter.init(getInputPort(READ_FROM_PORT).getMetadata());
++            formatter.setDataTarget(writer);
++            formatter.setHeader(header);
++		} catch (IOException ex) {
++			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
++		}
++	}
++
++	/* (non-Javadoc)
++	 * @see org.jetel.graph.Node#fromXML(org.jetel.graph.TransformationGraph, org.w3c.dom.Element)
++	 */
++	public static Node fromXML(TransformationGraph graph, Element nodeXML) {
++		ComponentXMLAttributes xattribs=new ComponentXMLAttributes(nodeXML, graph);
++		TextWriter aDataWriter = null;
++		
++		try{
++			String fields = xattribs.getString(XML_MASK_ATTRIBUTE,null);
++			String[] aFields = fields == null ? null : fields.split(&quot;;&quot;);
++			aDataWriter = new TextWriter(xattribs.getString(Node.XML_ID_ATTRIBUTE),
++									xattribs.getString(XML_FILEURL_ATTRIBUTE),
++									xattribs.getString(XML_CHARSET_ATTRIBUTE,null),
++									xattribs.getBoolean(XML_APPEND_ATTRIBUTE, false),
++									aFields);
++			if (xattribs.exists(XML_HEADER_ATTRIBUTE)){
++				aDataWriter.setHeader(Boolean.parseBoolean(xattribs.getString(XML_HEADER_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_FROM_ATTRIBUTE)){
++				aDataWriter.setRecordFrom(Long.parseLong(xattribs.getString(XML_RECORD_FROM_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aDataWriter.setRecordCount(Long.parseLong(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
++		}catch(Exception ex){
++			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
++			return null;
++		}
++		
++		return aDataWriter;
++	}
++
++	/* (non-Javadoc)
++	 * @see org.jetel.graph.Node#toXML(org.w3c.dom.Element)
++	 */
++	public void toXML(org.w3c.dom.Element xmlElement) {
++		super.toXML(xmlElement);
++		xmlElement.setAttribute(XML_FILEURL_ATTRIBUTE,this.fileURL);
++		String charSet = this.formatter.getCharsetName();
++		if (charSet != null) {
++			xmlElement.setAttribute(XML_CHARSET_ATTRIBUTE, this.formatter.getCharsetName());
++		}
++		xmlElement.setAttribute(XML_APPEND_ATTRIBUTE, String.valueOf(this.appendData));
++		xmlElement.setAttribute(XML_HEADER_ATTRIBUTE,String.valueOf(header));
++		if (recordFrom != -1){
++			xmlElement.setAttribute(XML_RECORD_FROM_ATTRIBUTE, String.valueOf(recordFrom));
++		}
++		if (recordCount != -1){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(recordCount));
++		}
++	}
++	
++	public void setHeader(boolean header) {
++		this.header = header;
++	}
++
++	public void setRecordFrom(long recordFrom) {
++		this.recordFrom = recordFrom;
++	}
++
++	public void setRecordCount(long recordCount) {
++		this.recordCount = recordCount;
++	}
++
++}
+
+Added: trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-01-31 13:08:43 UTC (rev 2413)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-01-31 13:16:10 UTC (rev 2414)
+@@ -0,0 +1,391 @@
++
++/*
++*    jETeL/Clover - Java based ETL application framework.
++*    Copyright (C) 2005-06  Javlin Consulting &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">info at javlinconsulting.cz</A>&gt;
++*    
++*    This library is free software; you can redistribute it and/or
++*    modify it under the terms of the GNU Lesser General Public
++*    License as published by the Free Software Foundation; either
++*    version 2.1 of the License, or (at your option) any later version.
++*    
++*    This library is distributed in the hope that it will be useful,
++*    but WITHOUT ANY WARRANTY; without even the implied warranty of
++*    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    
++*    Lesser General Public License for more details.
++*    
++*    You should have received a copy of the GNU Lesser General Public
++*    License along with this library; if not, write to the Free Software
++*    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++*
++*/
++
++package org.jetel.data.formatter;
++
++import java.io.IOException;
++import java.nio.ByteBuffer;
++import java.nio.CharBuffer;
++import java.nio.channels.WritableByteChannel;
++import java.nio.charset.Charset;
++import java.nio.charset.CharsetEncoder;
++import java.util.HashMap;
++import java.util.LinkedList;
++import java.util.List;
++import java.util.Map;
++
++import org.jetel.data.DataRecord;
++import org.jetel.data.Defaults;
++import org.jetel.exception.ComponentNotReadyException;
++import org.jetel.metadata.DataFieldMetadata;
++import org.jetel.metadata.DataRecordMetadata;
++import org.jetel.util.ByteBufferUtils;
++
++/**
++ * Outputs data record in form coherent with given mask. 
++ * Handles encoding of characters. Uses WriteableChannel.
++ * 
++ * @author avackova (<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">agata.vackova at javlinconsulting.cz</A>) ; 
++ * (c) JavlinConsulting s.r.o.
++ *  www.javlinconsulting.cz
++ *
++ * @since Oct 27, 2006
++ *
++ */
++public class TextTableFormatter implements Formatter {
++	
++	private DataRecordMetadata metadata;
++	private WritableByteChannel writer;
++	private int[] maskIndex;
++	private int lastIndex;
++	private String fieldName;
++	private ByteBuffer fieldBuffer; 
++	private ByteBuffer dataBuffer;
++	private CharsetEncoder encoder;
++	private String charSet = null;
++	
++	private List&lt;DataRecord&gt; dataRecords;
++	private CharBuffer blank;
++	private CharBuffer horizontal;
++	private boolean header = true;
++	private int rowSize = 0;
++	private int leftBytes = 0;
++	private DataFieldParams[] maskAnalize;
++	private String[] mask;
++
++	private static final int MAX_COUNT_ANALYZED_COUNT = 20;
++	private static final int PADDING_SPACE = 3;
++
++	private static final byte[] TABLE_CORNER = new byte[] {('+')};
++	private static final byte[] TABLE_HORIZONTAL = new byte[] {('-')};
++	private static final byte[] TABLE_VERTICAL = new byte[] {('|')};
++	private static final byte[] NL = new byte[] {('\n')};
++	
++	/**
++	 * Constructor without parameters
++	 */
++	public TextTableFormatter(){
++		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER).newEncoder();
++		encoder.reset();
++	}
++	
++	/**
++	 * Constructor
++	 * 
++	 * @param charEncoder charset for coding characters
++	 */
++	public TextTableFormatter(String charEncoder){
++		charSet = charEncoder;
++		encoder = Charset.forName(charEncoder).newEncoder();
++		encoder.reset();
++	}
++
++	/* (non-Javadoc)
++	 * @see org.jetel.data.formatter.Formatter#init(org.jetel.metadata.DataRecordMetadata)
++	 */
++	public void init(DataRecordMetadata _metadata)
++			throws ComponentNotReadyException {
++		this.metadata = _metadata;
++
++		// create buffered output stream writer and buffers 
++		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
++		fieldBuffer = ByteBuffer.allocateDirect(Defaults.DataFormatter.FIELD_BUFFER_LENGTH);
++		//if mask is not given create default mask
++		if (mask == null) {
++			maskAnalize = new DataFieldParams[metadata.getNumFields()];
++			for (int i=0;i&lt;metadata.getNumFields();i++){
++				maskAnalize[i] = new DataFieldParams(metadata.getField(i).getName(), i, 0);
++			}
++		} else {
++			Map&lt;String, Integer&gt; map = new HashMap&lt;String, Integer&gt;();
++			for (int i=0;i&lt;metadata.getNumFields();i++){
++				map.put(metadata.getField(i).getName(), i);
++			}
++			maskAnalize = new DataFieldParams[mask.length];
++			for (int i=0;i&lt;mask.length;i++){
++				maskAnalize[i] = new DataFieldParams(mask[i], map.get(mask[i]), 0);
++			}
++		}
++		dataRecords = new LinkedList&lt;DataRecord&gt;();
++		/*try {
++			maskBytes = mask.getBytes(charSet != null ? charSet
++					: Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++		} catch (UnsupportedEncodingException e) {
++			throw new ComponentNotReadyException(e);
++		}*/
++	}
++
++    /* (non-Javadoc)
++     * @see org.jetel.data.formatter.Formatter#setDataTarget(java.lang.Object)
++     */
++    public void setDataTarget(Object out) {
++        close();
++        writer = (WritableByteChannel) out;
++    }
++    
++	/* (non-Javadoc)
++	 * @see org.jetel.data.formatter.Formatter#close()
++	 */
++	public void close() {
++        if (writer == null || !writer.isOpen()) {
++            return;
++        }
++		try{
++			flush();
++			writer.close();
++		}catch(IOException ex){
++			ex.printStackTrace();
++		}
++	}
++
++	/* (non-Javadoc)
++	 * @see org.jetel.data.formatter.Formatter#write(org.jetel.data.DataRecord)
++	 */
++	public int writeRecord(DataRecord record) throws IOException {
++        int sentBytes=0;
++        int mark;
++        
++        sentBytes += writeString(TABLE_VERTICAL);
++        
++		//for each record field which is in mask change its name to value
++		for (int i=0;i&lt;maskAnalize.length;i++){
++			if (dataBuffer.remaining() &lt; fieldBuffer.limit()){
++				directFlush();
++			}
++			//change field value to bytes
++			fieldBuffer.clear();
++			record.getField(maskAnalize[i].index).toByteBuffer(fieldBuffer, encoder);
++			fieldBuffer.flip();
++            
++			blank.clear();
++			blank.limit(maskAnalize[i].length - (fieldBuffer.limit()));
++            mark=dataBuffer.position();
++
++			//put field value to data buffer
++			dataBuffer.put(fieldBuffer);
++			dataBuffer.put(encoder.encode(blank));
++            
++            sentBytes+=dataBuffer.position()-mark;
++
++            sentBytes += writeString(TABLE_VERTICAL);
++		}
++        sentBytes += writeString(NL);
++        return sentBytes;
++	}
++
++	private int writeHeader() throws IOException {
++        int sentBytes=0;
++        sentBytes += writeString(TABLE_CORNER);
++        for (int i=0; i&lt;maskAnalize.length; i++) {
++        	sentBytes += writeString(horizontal, maskAnalize[i].length);
++            sentBytes += writeString(TABLE_CORNER);
++        }
++        sentBytes += writeString(NL);
++        
++		DataFieldMetadata[] fMetadata = metadata.getFields();
++		String fName;
++        sentBytes += writeString(TABLE_VERTICAL);
++        for (int i=0; i&lt;maskAnalize.length; i++) {
++        	fName = fMetadata[maskAnalize[i].index].getName();
++        	sentBytes += writeString(fName.getBytes());
++        	sentBytes += writeString(blank, maskAnalize[i].length-fName.length());
++            sentBytes += writeString(TABLE_VERTICAL);
++        }
++        sentBytes += writeString(NL);
++        
++        sentBytes += writeString(TABLE_CORNER);
++        for (int i=0; i&lt;maskAnalize.length; i++) {
++        	sentBytes += writeString(horizontal, maskAnalize[i].length);
++            sentBytes += writeString(TABLE_CORNER);
++        }
++        sentBytes += writeString(NL);
++
++		return sentBytes;
++	}
++	
++	private int writeFooter() throws IOException {
++        int sentBytes=0;
++        sentBytes += writeString(TABLE_CORNER);
++        for (int i=0; i&lt;maskAnalize.length; i++) {
++        	sentBytes += writeString(horizontal, maskAnalize[i].length);
++            sentBytes += writeString(TABLE_CORNER);
++        }
++        sentBytes += writeString(NL);
++
++		return sentBytes;
++	}
++	
++	private int writeString(byte[] buffer) throws IOException {
++        int sentBytes=0;
++        int mark;
++		if (dataBuffer.remaining() &lt; buffer.length){
++			directFlush();
++		}
++        mark=dataBuffer.position();
++        dataBuffer.put(buffer);
++        sentBytes+=dataBuffer.position()-mark;
++		
++		return sentBytes;
++	}
++	
++	private int writeString(CharBuffer buffer, int lenght) throws IOException {
++		if (lenght &lt;= 0) return 0;
++        int sentBytes=0;
++        int mark;
++        buffer.clear();
++        buffer.limit(lenght);
++		if (dataBuffer.remaining() &lt; buffer.limit()){
++			directFlush();
++		}
++        mark=dataBuffer.position();
++		dataBuffer.put(encoder.encode(buffer));
++        sentBytes+=dataBuffer.position()-mark;
++		
++		return sentBytes;
++	}
++	
++	/**
++	 * Writes record as 'write' function, but likewise can better format the rows.
++	 * 
++	 * @param record
++	 * @throws IOException 
++	 */
++	public int write(DataRecord record) throws IOException {
++		int size;
++		if (dataRecords != null) {
++			dataRecords.add(record.duplicate());
++			if (dataRecords.size() &lt; MAX_COUNT_ANALYZED_COUNT) {
++				return 0;
++			}
++			analyzeRows(dataRecords, header);
++			size = header ? writeHeader() : 0;
++			for (DataRecord dataRecord : dataRecords) {
++				size += writeRecord(dataRecord);
++			}
++			dataRecords = null;
++			return size;
++		}
++		size = writeRecord(record);
++		if (leftBytes &gt; 0) {
++			size += leftBytes;
++			leftBytes = 0;
++		}
++		return size;
++	}
++	
++	private void analyzeRows(List&lt;DataRecord&gt; dataRecords, boolean header) {
++		int lenght;
++		int max = 0;
++		for (DataRecord dataRecord : dataRecords) {
++			for (int i=0; i&lt;maskAnalize.length; i++) {
++				lenght = dataRecord.getField(maskAnalize[i].index).getValue().toString().length(); //getSizeSerialized()
++				maskAnalize[i].length = maskAnalize[i].length &lt; lenght ? lenght : maskAnalize[i].length;
++			}
++		}
++		if (header) {
++			DataFieldMetadata[] fMetadata = metadata.getFields();
++			for (int i=0; i&lt;maskAnalize.length; i++) {
++				lenght = fMetadata[maskAnalize[i].index].getName().length();
++				maskAnalize[i].length = maskAnalize[i].length &lt; lenght ? lenght : maskAnalize[i].length;
++			}
++		}
++		for (int i=0; i&lt;maskAnalize.length; i++) {
++			maskAnalize[i].length += PADDING_SPACE;
++			rowSize += maskAnalize[i].length;
++		}
++		rowSize++;
++		
++		for (DataFieldParams dataFieldParams : maskAnalize) {
++			max = max &gt; dataFieldParams.length ? max : dataFieldParams.length;
++		}
++		StringBuilder sb = new StringBuilder();
++		StringBuilder sb2 = new StringBuilder();
++		for (int i = 0; i &lt; max; i++) {
++			sb.append(' ');
++			sb2.append('-');
++		}
++		blank = CharBuffer.wrap(sb.toString());
++		horizontal = CharBuffer.wrap(sb2.toString());
++	}
++	
++	/* (non-Javadoc)
++	 * @see org.jetel.data.formatter.Formatter#flush()
++	 */
++	public void flush() throws IOException {
++		if (dataRecords != null) {
++			analyzeRows(dataRecords, header);
++			leftBytes = header ? writeHeader() : 0;
++			for (DataRecord dataRecord : dataRecords) {
++				leftBytes += writeRecord(dataRecord);
++			}
++			dataRecords = null;
++		}
++		ByteBufferUtils.flush(dataBuffer,writer);
++	}
++	
++	public void eof() throws IOException {
++		flush();
++		leftBytes += writeFooter();
++		directFlush();
++	}
++	
++	private void directFlush() throws IOException {
++		ByteBufferUtils.flush(dataBuffer,writer);
++	}
++
++	public int getLeftBytes() {
++		return leftBytes;
++	}
++	
++	public void setMask(String[] mask) {
++		this.mask = mask;
++	}
++	
++	/**
++	 * Returns name of charset which is used by this formatter
++	 * @return Name of charset or null if none was specified
++	 */
++	public String getCharsetName() {
++		return(this.charSet);
++	}
++
++	public void setHeader(boolean header) {
++		this.header = header;
++	}
++	
++	/**
++	 * Private class for storing data field name, its andex and lenght in mask
++	 */
++	class DataFieldParams {
++		
++		String name;
++		int index;
++		int length;
++		
++		DataFieldParams(String name,int index, int length){
++			this.name = name;
++			this.index = index;
++			this.length = length;
++		}
++	}
++
++}
++
+
+Added: trunk/cloveretl.engine/src/org/jetel/main/DataComponentViewer.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/main/DataComponentViewer.java	2007-01-31 13:08:43 UTC (rev 2413)
++++ trunk/cloveretl.engine/src/org/jetel/main/DataComponentViewer.java	2007-01-31 13:16:10 UTC (rev 2414)
+@@ -0,0 +1,500 @@
++/*
++ *  jETeL/Clover - Java based ETL application framework.
++ *  Copyright (C) 2002-03  David Pavlis
++ *
++ *    This library is free software; you can redistribute it and/or
++ *    modify it under the terms of the GNU Lesser General Public
++ *    License as published by the Free Software Foundation; either
++ *    version 2.1 of the License, or (at your option) any later version.
++ *    
++ *    This library is distributed in the hope that it will be useful,
++ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    
++ *    Lesser General Public License for more details.
++ *    
++ *    You should have received a copy of the GNU Lesser General Public
++ *    License along with this library; if not, write to the Free Software
++ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ *
++ */
++package org.jetel.main;
++
++import java.io.BufferedInputStream;
++import java.io.FileInputStream;
++import java.io.IOException;
++import java.io.InputStream;
++import java.net.MalformedURLException;
++import java.net.URL;
++import java.util.LinkedList;
++import java.util.List;
++import java.util.Map;
++import java.util.Properties;
++import java.util.StringTokenizer;
++
++import org.apache.commons.logging.Log;
++import org.apache.commons.logging.LogFactory;
++import org.jetel.component.DataWriter;
++import org.jetel.component.ExtFilter;
++import org.jetel.component.StructureWriter;
++import org.jetel.component.TextWriter;
++import org.jetel.data.Defaults;
++import org.jetel.exception.ConfigurationStatus;
++import org.jetel.exception.GraphConfigurationException;
++import org.jetel.exception.XMLConfigurationException;
++import org.jetel.graph.Edge;
++import org.jetel.graph.Node;
++import org.jetel.graph.Phase;
++import org.jetel.graph.Result;
++import org.jetel.graph.TransformationGraph;
++import org.jetel.graph.TransformationGraphXMLReaderWriter;
++import org.jetel.metadata.DataRecordMetadata;
++import org.jetel.plugin.Plugins;
++import org.jetel.util.FileUtils;
++import org.jetel.util.JetelVersion;
++import org.jetel.util.crypto.Enigma;
++
++/**
++ *  class for executing transformations described in XML layout file&lt;br&gt;&lt;br&gt;
++ *  The graph layout is read from specified XML file and the whole transformation is executed.&lt;br&gt;
++ *  &lt;tt&gt;&lt;pre&gt;
++ *  Program parameters:
++ *  &lt;table&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-v&lt;/td&gt;&lt;td&gt;be verbose - print even graph layout&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-P:&lt;i&gt;properyName&lt;/i&gt;=&lt;i&gt;propertyValue&lt;/i&gt;&lt;/td&gt;&lt;td&gt;add definition of property to global graph's property list&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-cfg &lt;i&gt;filename&lt;/i&gt;&lt;/td&gt;&lt;td&gt;load definitions of properties from specified file&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-tracking &lt;i&gt;seconds&lt;/i&gt;&lt;/td&gt;&lt;td&gt;how frequently output the processing status&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-info&lt;/td&gt;&lt;td&gt;print info about Clover library version&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-plugins &lt;i&gt;filename&lt;/i&gt;&lt;/td&gt;&lt;td&gt;directory where to look for plugins/components&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-pass &lt;i&gt;password&lt;/i&gt;&lt;/td&gt;&lt;td&gt;password for decrypting of hidden connections passwords&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;-stdin&lt;/td&gt;&lt;td&gt;load graph layout from STDIN&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;filename&lt;/b&gt;&lt;/td&gt;&lt;td&gt;filename or URL of the file (even remote) containing graph's layout in XML (this must be the last parameter passed)&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;/table&gt;
++ *  &lt;/pre&gt;&lt;/tt&gt;
++ * @author      dpavlis
++ * @since	2003/09/09
++ * @revision    $Revision: 2080 $
++ */
++public class DataComponentViewer {
++    private static Log logger = LogFactory.getLog(DataComponentViewer.class);
++
++    //TODO change run graph version
++	private final static String RUN_GRAPH_VERSION = &quot;2.0&quot;;
++	public final static String VERBOSE_SWITCH = &quot;-v&quot;;
++	public final static String PROPERTY_FILE_SWITCH = &quot;-cfg&quot;;
++	public final static String PROPERTY_DEFINITION_SWITCH = &quot;-P:&quot;;
++	public final static String INFO_SWITCH = &quot;-info&quot;;
++    public final static String PLUGINS_SWITCH = &quot;-plugins&quot;;
++    public final static String PASSWORD_SWITCH = &quot;-pass&quot;;
++    public final static String VIEW_MODE = &quot;-mode&quot;;
++    public final static String DELIMITER = &quot;-delimiter&quot;;
++    public final static String OUT_FILE = &quot;-file&quot;;
++	public final static String FILTER_EXPRESSION = &quot;-expFilter&quot;;
++	public final static String RECORD_FROM = &quot;-recFrom&quot;;
++	public final static String RECORD_COUNT = &quot;-recCount&quot;;
++	public final static String FIELDS = &quot;-fields&quot;;
++
++	
++    /**
++     * Clover.ETL engine initialization. Should be called only once.
++     * @param pluginsRootDirectory directory path, where plugins specification is located 
++     *        (can be null, then is used constant from Defaults.DEFAULT_PLUGINS_DIRECTORY)
++     * @param password password for encrypting some hidden part of graphs
++     *        &lt;br&gt;i.e. connections passwordss can be encrypted
++     */
++    public static void initEngine(String pluginsRootDirectory, String password) {
++        
++        //init password decryptor
++        if(password != null) {
++            Enigma.getInstance().init(password);
++        }
++        
++        //init framework constants
++        Defaults.init();
++
++        //init clover plugins system
++        Plugins.init(pluginsRootDirectory);
++      
++    }
++    
++    
++    /**
++     * Instantiates transformation graph from a given input stream and presets a given properties.
++     * @param inStream
++     * @param properties
++     * @return
++     * @throws XMLConfigurationException
++     * @throws GraphConfigurationException
++     */
++    public static TransformationGraph loadGraph(InputStream inStream, Properties properties) throws XMLConfigurationException, GraphConfigurationException {
++        TransformationGraph graph = new TransformationGraph();
++        TransformationGraphXMLReaderWriter graphReader = new TransformationGraphXMLReaderWriter(graph);
++        if(properties != null) {
++            graph.loadGraphProperties(properties);
++        }
++
++        graphReader.read(inStream);
++        
++        if(!graph.init()) {
++            throw new GraphConfigurationException(&quot;Graph initialization failed.&quot;);
++        }
++        
++        return graph;
++    }
++    
++	/**
++	 *  Description of the Method
++	 *
++	 * @param  args  Description of the Parameter
++	 */
++	public static void main(String args[]) {
++		boolean verbose = false;
++		Properties properties = new Properties();
++		String pluginsRootDirectory = null;
++        String password = null;
++        Mode viewMode = Mode.TEXT;
++        String delimiter = null;
++        String fileUrl = null;
++        String filterExpression = null;
++        long recordFrom = -1;
++        long recordCount = -1;
++        String fields = null;
++		
++		ExtFilter extFilter = null;
++        
++		System.out.println(&quot;***  CloverETL graph component tester ver &quot;+RUN_GRAPH_VERSION+&quot;, (c) 2002-06 D.Pavlis, released under GNU Lesser General Public License  ***&quot;);
++		System.out.println(&quot; Running with framework version: &quot;+JetelVersion.MAJOR_VERSION+&quot;.&quot;+JetelVersion.MINOR_VERSION+&quot; build#&quot;+JetelVersion.BUILD_NUMBER+&quot; compiled &quot;+JetelVersion.LIBRARY_BUILD_DATETIME);
++		System.out.println();
++        
++		if (args.length &lt; 1) {
++			printHelp();
++			System.exit(-1);
++		}
++        
++		// process command line arguments
++		for (int i = 0; i &lt; args.length; i++) {
++			if (args[i].startsWith(VERBOSE_SWITCH)) {
++				verbose = true;
++			}else if (args[i].startsWith(PROPERTY_FILE_SWITCH)){
++				i++;
++				try {
++					InputStream inStream = new BufferedInputStream(new FileInputStream(args[i]));
++					properties.load(inStream);
++				} catch (IOException ex) {
++					logger.error(ex.getMessage(), ex);
++					System.exit(-1);
++				}
++			}else if (args[i].startsWith(PROPERTY_DEFINITION_SWITCH)){
++			   	//String[] nameValue=args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,&quot;&quot;).split(&quot;=&quot;);
++				//properties.setProperty(nameValue[0],nameValue[1]);
++		    	String tmp =  args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,&quot;&quot;);
++        	    properties.setProperty(tmp.substring(0,tmp.indexOf(&quot;=&quot;)),tmp.substring(tmp.indexOf(&quot;=&quot;) +1)); 
++			}else if (args[i].startsWith(INFO_SWITCH)){
++			    printInfo();
++			    System.exit(0);
++            }else if (args[i].startsWith(PLUGINS_SWITCH)){
++                i++;
++                pluginsRootDirectory = args[i];
++            }else if (args[i].startsWith(PASSWORD_SWITCH)){
++                i++;
++                password = args[i]; 
++            }else if (args[i].startsWith(VIEW_MODE)){
++                i++;
++                viewMode = Mode.valueModeOf(args[i]);
++                if (viewMode == null) {
++    				System.err.println(&quot;Unknown mode option: &quot;+args[i]);
++    				System.exit(-1);
++                }
++            }else if (args[i].startsWith(DELIMITER)){
++            	delimiter = args[i].substring(args[i].indexOf(&quot;=&quot;) + 1);
++            }else if (args[i].startsWith(OUT_FILE)){
++            	fileUrl = args[i].substring(args[i].indexOf(&quot;=&quot;) + 1);
++            }else if (args[i].startsWith(FILTER_EXPRESSION)){
++            	filterExpression = args[i].substring(args[i].indexOf(&quot;=&quot;) + 1);
++            }else if (args[i].startsWith(RECORD_FROM)){
++            	recordFrom = Long.parseLong(args[i].substring(args[i].indexOf(&quot;=&quot;) + 1));
++            }else if (args[i].startsWith(RECORD_COUNT)){
++            	recordCount = Long.parseLong(args[i].substring(args[i].indexOf(&quot;=&quot;) + 1));
++            }else if (args[i].startsWith(FIELDS)){
++            	fields = args[i].substring(args[i].indexOf(&quot;=&quot;) + 1);
++            }else if (args[i].startsWith(&quot;-&quot;)) {
++				System.err.println(&quot;Unknown option: &quot;+args[i]);
++				System.exit(-1);
++			}
++		}
++		
++        //engine initialization - should be called only once
++        DataComponentViewer.initEngine(pluginsRootDirectory, password);
++        
++		//prapere input stream with XML graph definition
++        InputStream in = null;
++        System.out.println(&quot;Graph definition file: &quot; + args[args.length - 2]);
++        URL fileURL = null;
++		try {
++			fileURL = FileUtils.getFileURL(null, args[args.length - 2]);
++		} catch (MalformedURLException e1) {
++            System.err.println(&quot;Error - graph definition file can't be read.&quot;);
++            System.exit(-1);
++		}
++        if(fileURL == null) {
++            System.err.println(&quot;Error - graph definition file can't be read.&quot;);
++            System.exit(-1);
++        }
++        try{
++            in=fileURL.openStream();
++        } catch (IOException e) {
++            System.err.println(&quot;Error - graph definition file can't be read: &quot; + e.getMessage());
++            System.exit(-1);
++        }
++        
++        System.out.println(&quot;Component id: &quot; + args[args.length - 1]);
++        String componentID = args[args.length - 1];
++        int pos;
++        int port = 0;
++        if ((pos = componentID.indexOf(':')) != -1) {
++        	port = Integer.parseInt(componentID.substring(pos+1));
++        	componentID = componentID.substring(0, pos);
++        }
++        
++        //loading graph from the input stream
++        TransformationGraph graph = null;
++        try {
++            graph = DataComponentViewer.loadGraph(in, properties);
++
++            if (verbose) {
++                //this can be called only after graph.init()
++                graph.dumpGraphConfiguration();
++            }
++        }catch(XMLConfigurationException ex){
++            logger.error(&quot;Error in reading graph from XML !&quot;, ex);
++            if (verbose) {
++                ex.printStackTrace(System.err);
++            }
++            System.exit(-1);
++        }catch(GraphConfigurationException ex){
++            logger.error(&quot;Error - graph's configuration invalid !&quot;, ex);
++            if (verbose) {
++                ex.printStackTrace(System.err);
++            }
++            System.exit(-1);
++        } catch (RuntimeException ex) {
++            logger.error(&quot;Error during graph initialization !&quot;, ex);
++            if (verbose) {
++                ex.printStackTrace(System.err);
++            }
++            System.exit(-1);
++        }
++        
++        //check graph elements configuration
++        ConfigurationStatus status = graph.checkConfig(null);
++        status.log();
++        
++		Map map = graph.getNodes();
++		Node node = (Node) map.get(componentID);
++		if (node == null) {
++			//map = graph.getEdges();
++			//Edge edge = (Edge) map.get(componentID);
++			//if (edge == null) {
++				// error
++				System.err.println(&quot;Error&quot;);
++				return;
++			//}
++		}
++		if (!node.isRoot()) {
++			// not implemented
++			System.err.println(&quot;Execution is implemented for root node (has only output ports connected to id)!&quot;);
++			return;
++		}
++
++		// create new graph
++	    TransformationGraph viewGraph = new TransformationGraph();
++		Phase _PHASE_1 = new Phase(1);
++
++	    // add writer component
++		DataRecordMetadata dataRecordMetadata = (DataRecordMetadata) node.getOutMetadata().toArray()[port];
++		Edge edge0 = new Edge(&quot;EDGE0&quot;, dataRecordMetadata);
++		Edge edge1 = null;
++		if (filterExpression != null) {
++			edge1 = new Edge(&quot;EDGE1&quot;, dataRecordMetadata);
++		}
++		Node writer = getWriter(viewMode, dataRecordMetadata, fileUrl, delimiter, recordFrom, recordCount, fields);
++		
++		// add Edges &amp; Nodes &amp; Phases to graph
++		try {
++			viewGraph.addPhase(_PHASE_1);
++			viewGraph.addEdge(edge0);
++			_PHASE_1.addNode(node);
++			_PHASE_1.addNode(writer);
++			
++			if (filterExpression != null) {
++				viewGraph.addEdge(edge1);
++				extFilter = new ExtFilter(&quot;ExtFilter0&quot;);
++				extFilter.setFilterExpression(filterExpression);
++				_PHASE_1.addNode(extFilter);
++			}
++		} catch (GraphConfigurationException e) {
++			e.printStackTrace();
++		}
++
++		// assign ports (input &amp; output)
++		node.addOutputPort(0,edge0);
++		if (filterExpression != null) {
++			extFilter.addInputPort(0,edge0);
++			extFilter.addOutputPort(0,edge1);
++			writer.addInputPort(0,edge1); 
++		} else {
++			writer.addInputPort(0,edge0);
++		}
++
++		if(!viewGraph.init()){
++			System.err.println(&quot;Graph initialization failed !&quot;);
++			return;
++		}
++	    
++		//	start all Nodes (each node is one thread)
++		Result result=Result.N_A;
++		try {
++            result = viewGraph.run();
++		} catch (RuntimeException ex) {
++			System.err.println(&quot;Fatal error during graph run !&quot;);
++			System.err.println(ex.getCause().getMessage());
++			if (verbose) {
++				ex.printStackTrace();
++			}
++			System.exit(-1);
++		}
++		if (result==Result.FINISHED_OK) {
++			// everything O.K.
++			System.out.println(&quot;Execution of graph successful !&quot;);
++			System.exit(0);
++		} else {
++			// something FAILED !!
++			System.err.println(&quot;Execution of graph failed !&quot;);
++			System.exit(result.code());
++		}
++
++	}
++    
++	private static Node getWriter(Mode mode, DataRecordMetadata dataRecordMetadata, String fileUrl, String delimiter, long recordFrom, long recordCount, String fields) {
++		if (mode == null) return null;
++		Node writer = null;
++		String[] aFiealds = fields == null ? null : fields.split(&quot;;&quot;);
++		
++		if (mode.equals(Mode.HTML)) {
++			StringBuilder maskBuilder = new StringBuilder();
++			if (aFiealds == null) {
++				maskBuilder.append(&quot;&lt;tr&gt;&quot;);
++				for (int i=0;i&lt;dataRecordMetadata.getNumFields();i++){
++					maskBuilder.append(&quot;&lt;td&gt;$&quot;);
++					maskBuilder.append(dataRecordMetadata.getField(i).getName());
++					maskBuilder.append(&quot;&lt;/td&gt;&quot;);
++				}
++				maskBuilder.append(&quot;&lt;/tr&gt;\n&quot;);
++			} else if (aFiealds.length &gt; 0) {
++				maskBuilder.append(&quot;&lt;tr&gt;&quot;);
++				for (String sfield: aFiealds){
++					if (dataRecordMetadata.getField(sfield) == null) {
++						System.err.println(&quot;Field name '&quot;+ sfield + &quot;' not found.&quot;);
++						System.exit(-1);
++					}
++					maskBuilder.append(&quot;&lt;td&gt;$&quot;);
++					maskBuilder.append(sfield);
++					maskBuilder.append(&quot;&lt;/td&gt;&quot;);
++				}
++				maskBuilder.append(&quot;&lt;/tr&gt;\n&quot;);
++			} else {
++				System.err.println(&quot;No field found.&quot;);
++				System.exit(-1);
++			}
++			
++			StructureWriter structureWriter = new StructureWriter(&quot;STRUCTURE_WRITER0&quot;, fileUrl, null, false, maskBuilder.toString());
++			structureWriter.setRecordFrom(recordFrom);
++			structureWriter.setRecordCount(recordCount);
++			StringBuilder sb = new StringBuilder();
++			
++			sb.append(&quot;&lt;table name=\&quot;&quot; + dataRecordMetadata.getName() + &quot;\&quot; border=1&gt;\n&quot;);
++			sb.append(&quot;&lt;tr&gt;&quot;);
++			if (aFiealds == null ) {
++				for (int i=0;i&lt;dataRecordMetadata.getNumFields();i++){
++					sb.append(&quot;&lt;th&gt;&quot;);
++					sb.append(dataRecordMetadata.getField(i).getName());
++					sb.append(&quot;&lt;/th&gt;&quot;);
++				}
++			} else {
++				for (String sfield: aFiealds){
++					sb.append(&quot;&lt;th&gt;&quot;);
++					sb.append(dataRecordMetadata.getField(sfield).getName());
++					sb.append(&quot;&lt;/th&gt;&quot;);
++				}
++			}
++			sb.append(&quot;&lt;/tr&gt;\n&quot;);
++			structureWriter.setHeader(sb.toString());
++			
++			sb = new StringBuilder();
++			sb.append(&quot;&lt;/table&gt;\n&quot;);
++			structureWriter.setFooter(sb.toString());
++			
++			writer = structureWriter;
++			
++		} else if (mode.equals(Mode.TEXT)) {
++			DataWriter dataWriter = new DataWriter(&quot;DATA_WRITER0&quot;, fileUrl, dataRecordMetadata.getLocaleStr(), false);
++			//TODO agata dodelat selekci na fieldy
++			dataWriter.setRecordFrom(recordFrom);
++			dataWriter.setRecordCount(recordCount);
++			if (delimiter != null) dataWriter.setDataDelimiter(delimiter);
++			writer = dataWriter;
++			
++		} else if (mode.equals(Mode.DELIMITER_TEXT)) {
++			TextWriter dataWriter = new TextWriter(&quot;TEXT_TABLE_WRITER0&quot;, fileUrl, null, false, aFiealds);
++			dataWriter.setRecordFrom(recordFrom);
++			dataWriter.setRecordCount(recordCount);
++			dataWriter.setHeader(true);
++			
++			writer = dataWriter;
++			/*   +--+--+
++				 |  |  |
++			     +--+--+
++			*/
++		}
++		return writer;
++	}
++	
++	private static void printHelp() {
++		System.out.println(&quot;Usage: runGraph [-(v|cfg|P:|info|plugins|pass)] &lt;graph definition file&gt; &lt;component id&gt;&quot;);
++		System.out.println(&quot;Options:&quot;);
++		System.out.println(&quot;-v\t\t\tbe verbose - print even graph layout&quot;);
++		System.out.println(&quot;-P:&lt;key&gt;=&lt;value&gt;\tadd definition of property to global graph's property list&quot;);
++		System.out.println(&quot;-cfg &lt;filename&gt;\t\tload definitions of properties from specified file&quot;);
++		System.out.println(&quot;-info\t\t\tprint info about Clover library version&quot;);
++        System.out.println(&quot;-plugins\t\tdirectory where to look for plugins/components&quot;);
++        System.out.println(&quot;-pass\t\tpassword for decrypting of hidden connections passwords&quot;);
++        System.out.println();
++        System.out.println(&quot;Note: &lt;graph definition file&gt; can be either local filename or URL of local/remote file&quot;);
++	}
++
++	private static void printInfo(){
++	    System.out.println(&quot;CloverETL library version &quot;+JetelVersion.MAJOR_VERSION+&quot;.&quot;+JetelVersion.MINOR_VERSION+&quot; build#&quot;+JetelVersion.BUILD_NUMBER+&quot; compiled &quot;+JetelVersion.LIBRARY_BUILD_DATETIME);
++	}
++	
++	public enum Mode {
++	    
++	    TEXT,
++	    HTML,
++	    DELIMITER_TEXT;
++
++	    public static Mode valueModeOf(String value){
++	    	if (value.equalsIgnoreCase(TEXT.name())) {
++	    		return TEXT;
++	    	}
++	    	if (value.equalsIgnoreCase(HTML.name())) {
++	    		return HTML;
++	    	}
++	    	if (value.equalsIgnoreCase(DELIMITER_TEXT.name())) {
++	    		return DELIMITER_TEXT;
++	    	}
++	    	return null;
++	    }
++	    
++	}
++	
++}
++
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000051.html">[Cloveretl-svn-commits] CloverETL repos r2413 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+	<LI>Next message: <A HREF="000053.html">[Cloveretl-svn-commits] CloverETL repos r2415 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#52">[ date ]</a>
+              <a href="thread.html#52">[ thread ]</a>
+              <a href="subject.html#52">[ subject ]</a>
+              <a href="author.html#52">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

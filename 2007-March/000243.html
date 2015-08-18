@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2606 -	trunk/cloveretl.engine/examples/metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2606%20-%0A%09trunk/cloveretl.engine/examples/metadata&In-Reply-To=%3C200703130835.l2D8ZZiJ031183%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000242.html">
+   <LINK REL="Next"  HREF="000244.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2606 -	trunk/cloveretl.engine/examples/metadata</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2606%20-%0A%09trunk/cloveretl.engine/examples/metadata&In-Reply-To=%3C200703130835.l2D8ZZiJ031183%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2606 -	trunk/cloveretl.engine/examples/metadata">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Mar 13 09:35:35 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000242.html">[Cloveretl-svn-commits] CloverETL repos r2605 -	trunk/cloveretl.engine/examples/javaExamples
+</A></li>
+        <LI>Next message: <A HREF="000244.html">[Cloveretl-svn-commits] CloverETL repos r2607 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-13 09:35:34 +0100 (Tue, 13 Mar 2007)
+New Revision: 2606
+
+Removed:
+   trunk/cloveretl.engine/examples/metadata/categoriDBF.fmt
+   trunk/cloveretl.engine/examples/metadata/customers.fmt
+   trunk/cloveretl.engine/examples/metadata/employeeDB.fmt
+   trunk/cloveretl.engine/examples/metadata/employees.fmt
+   trunk/cloveretl.engine/examples/metadata/joinedOrders.fmt
+   trunk/cloveretl.engine/examples/metadata/joinedOrders3way.fmt
+   trunk/cloveretl.engine/examples/metadata/odetailsDBF.fmt
+   trunk/cloveretl.engine/examples/metadata/orders.fmt
+   trunk/cloveretl.engine/examples/metadata/orders2.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersAggregate.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersDBF.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersFix.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersInfo.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersRef.fmt
+   trunk/cloveretl.engine/examples/metadata/ordersXLS.fmt
+   trunk/cloveretl.engine/examples/metadata/supplierDBF.fmt
+Log:
+CHANGE:data was split and moved to data/delimited, data/fixlen or data/other
+
+Deleted: trunk/cloveretl.engine/examples/metadata/categoriDBF.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/customers.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/employeeDB.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/employees.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/employees.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/employees.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,20 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Record name=&quot;Employees&quot; recordDelimiter=&quot;&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;EmployeeID&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;#&quot; name=&quot;LastName&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;FirstName&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Title&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;TitleInCourtesy&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;dd/MM/yyyy&quot; name=&quot;BirthDate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; format=&quot;dd/MM/yyyy&quot; name=&quot;HireDate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Address&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;City&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Region&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;PostalCode&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Country&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Phone&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Extension&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Photo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Memo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;ReportsTo&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/joinedOrders.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/joinedOrders.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/joinedOrders.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,8 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Record name=&quot;joinOrders&quot; recordDelimiter=&quot;&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;OrderID&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;CustomerID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;EmployeeID&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;EmployeeID2&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;LastName&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/joinedOrders3way.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/joinedOrders3way.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/joinedOrders3way.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,9 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Record name=&quot;joinOrders&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;OrderID&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;CustomerID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;EmployeeID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;Customer&quot; nullable=&quot;true&quot; type=&quot;string&quot; default=&quot;unknown&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;Employee&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;Subordinate&quot; nullable=&quot;true&quot; type=&quot;string&quot; default=&quot;unknown&quot;/&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/odetailsDBF.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/orders.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/orders.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/orders.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,17 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+-&lt;Record name=&quot;Orders&quot; type=&quot;delimited&quot;&gt;
+-	&lt;Field name=&quot;OrderID&quot; type=&quot;numeric&quot; delimiter=&quot;|&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;CustomerID&quot; type=&quot;string&quot; delimiter=&quot;|&quot;/&gt;
+-	&lt;Field name=&quot;EmployeeID&quot; type=&quot;string&quot; delimiter=&quot;|&quot;  /&gt;
+-	&lt;Field name=&quot;OrderDate&quot; type=&quot;date&quot; delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;RequiredDate&quot; type=&quot;date&quot; delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;ShippedDate&quot; type=&quot;date&quot; delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;ShipVia&quot; type=&quot;integer&quot; delimiter=&quot;|&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;Freight&quot; type=&quot;numeric&quot; delimiter=&quot;|&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;ShipName&quot; type=&quot;string&quot; delimiter=&quot;|&quot; /&gt;
+-	&lt;Field name=&quot;ShipAddress&quot; type=&quot;string&quot; delimiter=&quot;|&quot;/&gt;
+-	&lt;Field name=&quot;ShipCity&quot; type=&quot;string&quot; delimiter=&quot;|&quot; /&gt;
+-	&lt;Field name=&quot;ShipRegion&quot; type=&quot;string&quot; delimiter=&quot;|&quot;/&gt;
+-	&lt;Field name=&quot;ShipPostalCode&quot; type=&quot;string&quot; delimiter=&quot;|&quot;/&gt;
+-	&lt;Field name=&quot;ShipCountry&quot; type=&quot;string&quot; delimiter=&quot;\n&quot; /&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/orders2.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/orders2.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/orders2.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,17 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Record name=&quot;Orders&quot; recordDelimiter=&quot;&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;OrderID&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;CustomerID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;EmployeeID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; name=&quot;OrderDate&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; name=&quot;RequiredDate&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;dd.MM.yyyy&quot; name=&quot;ShippedDate&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;ShipVia&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; format=&quot;#&quot; name=&quot;Freight&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;ShipName&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;ShipAddress&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;ShipCity&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;ShipRegion&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;|&quot; name=&quot;ShipPostalCode&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;ShipCountry&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersAggregate.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersDBF.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersFix.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersInfo.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersRef.fmt
+===================================================================
+(Binary files differ)
+
+Deleted: trunk/cloveretl.engine/examples/metadata/ordersXLS.fmt
+===================================================================
+--- trunk/cloveretl.engine/examples/metadata/ordersXLS.fmt	2007-03-13 08:34:55 UTC (rev 2605)
++++ trunk/cloveretl.engine/examples/metadata/ordersXLS.fmt	2007-03-13 08:35:34 UTC (rev 2606)
+@@ -1,18 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Record charset=&quot;US-ASCII&quot; dataOffset=&quot;481&quot; name=&quot;ORDERS_XLS&quot; recordSize=&quot;265&quot; type=&quot;fixed&quot;&gt;
+-&lt;Field name=&quot;ORDERID&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field name=&quot;CUSTOMERID&quot; nullable=&quot;true&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;EMPLOYEEID&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field format=&quot;yyyyMMdd&quot; name=&quot;ORDERDATE&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;date&quot;/&gt;
+-&lt;Field format=&quot;yyyyMMdd&quot; name=&quot;REQUIREDDA&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;date&quot;/&gt;
+-&lt;Field default=&quot;19000101&quot; format=&quot;yyyyMMdd&quot; name=&quot;SHIPPEDDAT&quot; nullable=&quot;true&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPVIA&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field name=&quot;FREIGHT&quot; nullable=&quot;true&quot; size=&quot;20&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field name=&quot;SHIPNAME&quot; nullable=&quot;true&quot; size=&quot;40&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPADDRES&quot; nullable=&quot;true&quot; size=&quot;60&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPCITY&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPREGION&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPPOSTAL&quot; nullable=&quot;true&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;Field name=&quot;SHIPCOUNTR&quot; nullable=&quot;true&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
+-&lt;Field default=&quot;unnecessary&quot; locale=&quot;en.US&quot; name=&quot;additional_field&quot; nullable=&quot;false&quot; size=&quot;10&quot; type=&quot;string&quot;/&gt;
+-&lt;/Record&gt;
+
+Deleted: trunk/cloveretl.engine/examples/metadata/supplierDBF.fmt
+===================================================================
+(Binary files differ)
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000242.html">[Cloveretl-svn-commits] CloverETL repos r2605 -	trunk/cloveretl.engine/examples/javaExamples
+</A></li>
+	<LI>Next message: <A HREF="000244.html">[Cloveretl-svn-commits] CloverETL repos r2607 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#243">[ date ]</a>
+              <a href="thread.html#243">[ thread ]</a>
+              <a href="subject.html#243">[ subject ]</a>
+              <a href="author.html#243">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

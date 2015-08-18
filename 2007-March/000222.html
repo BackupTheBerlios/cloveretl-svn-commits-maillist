@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2584 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2584%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703120915.l2C9FDLd016925%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000221.html">
+   <LINK REL="Next"  HREF="000223.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2584 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2584%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703120915.l2C9FDLd016925%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2584 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar 12 10:15:13 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000221.html">[Cloveretl-svn-commits] CloverETL repos r2583 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000223.html">[Cloveretl-svn-commits] CloverETL repos r2585 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#222">[ date ]</a>
+              <a href="thread.html#222">[ thread ]</a>
+              <a href="subject.html#222">[ subject ]</a>
+              <a href="author.html#222">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-12 10:15:12 +0100 (Mon, 12 Mar 2007)
+New Revision: 2584
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf
+Log:
+UPDATE:updated due to changes in engine
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf	2007-03-12 09:14:29 UTC (rev 2583)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf	2007-03-12 09:15:12 UTC (rev 2584)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph demonstrates functionality of SimpleCopy component. Everything brought to SimpleCopy on port 0 is&#10;duplicated onto all connected output ports.&#10;It also shows functionality of Trash Component. It discards everything which is sent into it. Its purpose&#10;is debugging - shows how many records ended in it and can print incoming records, if desired (option debugPrint)&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:14:11 CET 2007&quot; name=&quot;Testing Simple Copy&quot; revision=&quot;1.0&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph demonstrates functionality of SimpleCopy component. Everything brought to SimpleCopy on port 0 is&#10;duplicated onto all connected output ports.&#10;It also shows functionality of Trash Component. It discards everything which is sent into it. Its purpose&#10;is debugging - shows how many records ended in it and can print incoming records, if desired (option debugPrint)&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Mar 09 10:57:56 CET 2007&quot; name=&quot;Testing Simple Copy&quot; revision=&quot;1.1&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/delimited/employees.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+@@ -8,7 +8,7 @@
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;BROADCAST&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;BROADCAST&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;BROADCAST2&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;194&quot; id=&quot;BROADCAST2&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+ &lt;Node dataPolicy=&quot;Strict&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+-&lt;Node debugFilename=&quot;${WORKSPACE}/output/Trash1_output.txt&quot; enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH1&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;TRASH1&quot; type=&quot;TRASH&quot;/&gt;
++&lt;Node debugFilename=&quot;${WORKSPACE}/output/Trash1_output.txt&quot; debugPrint=&quot;true&quot; enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH1&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;TRASH1&quot; type=&quot;TRASH&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH2&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;107&quot; id=&quot;TRASH2&quot; type=&quot;TRASH&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH3&quot; guiWidth=&quot;50&quot; guiX=&quot;545&quot; guiY=&quot;194&quot; id=&quot;TRASH3&quot; type=&quot;TRASH&quot;/&gt;
+ &lt;Edge fromNode=&quot;BROADCAST:0&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE1&quot; inPort=&quot;0 (TRASH1)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (BROADCAST)&quot; toNode=&quot;TRASH1:0&quot;/&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000221.html">[Cloveretl-svn-commits] CloverETL repos r2583 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000223.html">[Cloveretl-svn-commits] CloverETL repos r2585 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#222">[ date ]</a>
+              <a href="thread.html#222">[ thread ]</a>
+              <a href="subject.html#222">[ subject ]</a>
+              <a href="author.html#222">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

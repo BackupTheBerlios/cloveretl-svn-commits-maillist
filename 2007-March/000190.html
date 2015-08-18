@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2552 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2552%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703051231.l25CV9qG018415%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000189.html">
+   <LINK REL="Next"  HREF="000191.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2552 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2552%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703051231.l25CV9qG018415%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2552 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 13:31:09 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000189.html">[Cloveretl-svn-commits] CloverETL repos r2551 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000191.html">[Cloveretl-svn-commits] CloverETL repos r2553 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#190">[ date ]</a>
+              <a href="thread.html#190">[ thread ]</a>
+              <a href="subject.html#190">[ subject ]</a>
+              <a href="author.html#190">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 13:31:08 +0100 (Mon, 05 Mar 2007)
+New Revision: 2552
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBLookup.grf
+Log:
+MINOR:removed redundant metadatas
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBLookup.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBLookup.grf	2007-03-05 11:04:50 UTC (rev 2551)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphDBLookup.grf	2007-03-05 12:31:08 UTC (rev 2552)
+@@ -1,35 +1,27 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Fri Jan 12 08:41:50 CET 2007&quot; guiVersion=&quot;1.5&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Fri Jan 12 15:02:12 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.1&quot;&gt;
++&lt;Graph created=&quot;Fri Jan 12 08:41:50 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Mon Mar 05 13:29:26 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.2&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata id=&quot;Metadata0&quot;&gt;
+-&lt;Record name=&quot;defaultRecordName&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Field1&quot; nullable=&quot;false&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Field2&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Field3&quot; nullable=&quot;false&quot; type=&quot;string&quot;/&gt;
+-&lt;/Record&gt;
+-&lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata1&quot;&gt;
+-&lt;Record name=&quot;employee&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; type=&quot;date&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;employee&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;employee_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;full_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;first_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;last_name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;position_title&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;store_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;department_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;birth_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;hire_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;end_date&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;date&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;salary&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;supervisor_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;education_level&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;marital_status&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;gender&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; name=&quot;management_role&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;Metadata2&quot;/&gt;
+ &lt;Connection dbConfig=&quot;koule_postgre.cfg&quot; id=&quot;DBConnection0&quot; type=&quot;JDBC&quot;/&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000189.html">[Cloveretl-svn-commits] CloverETL repos r2551 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000191.html">[Cloveretl-svn-commits] CloverETL repos r2553 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#190">[ date ]</a>
+              <a href="thread.html#190">[ thread ]</a>
+              <a href="subject.html#190">[ subject ]</a>
+              <a href="author.html#190">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

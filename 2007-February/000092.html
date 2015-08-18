@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2455 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2455%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702080826.l188QWec022890%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000091.html">
+   <LINK REL="Next"  HREF="000093.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2455 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2455%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702080826.l188QWec022890%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2455 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  8 09:26:32 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000091.html">[Cloveretl-svn-commits] CloverETL repos r2454 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000093.html">[Cloveretl-svn-commits] CloverETL repos r2456 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-08 09:26:31 +0100 (Thu, 08 Feb 2007)
+New Revision: 2455
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java
+Log:
+UPDATE:DBInputTable : method toXML updated (attribute &quot;dataPolicy&quot;)
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java	2007-02-07 14:28:16 UTC (rev 2454)
++++ trunk/cloveretl.component/src/org/jetel/component/DBInputTable.java	2007-02-08 08:26:31 UTC (rev 2455)
+@@ -28,7 +28,6 @@
+ import org.jetel.exception.ComponentNotReadyException;
+ import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+-import org.jetel.exception.IParserExceptionHandler;
+ import org.jetel.exception.ParserExceptionHandlerFactory;
+ import org.jetel.exception.PolicyType;
+ import org.jetel.exception.XMLConfigurationException;
+@@ -225,7 +224,9 @@
+ 		}
+ 		
+ 		xmlElement.setAttribute(XML_DBCONNECTION_ATTRIBUTE, this.dbConnectionName);
+-		
++		if (policyType != null){
++			xmlElement.setAttribute(XML_DATAPOLICY_ATTRIBUTE, policyType.toString());
++		}
+ 	}
+ 
+ 	/**
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000091.html">[Cloveretl-svn-commits] CloverETL repos r2454 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000093.html">[Cloveretl-svn-commits] CloverETL repos r2456 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#92">[ date ]</a>
+              <a href="thread.html#92">[ thread ]</a>
+              <a href="subject.html#92">[ subject ]</a>
+              <a href="author.html#92">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

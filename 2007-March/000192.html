@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2554 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2554%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703051249.l25CnTIK019817%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000191.html">
+   <LINK REL="Next"  HREF="000193.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2554 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2554%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703051249.l25CnTIK019817%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2554 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 13:49:29 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000191.html">[Cloveretl-svn-commits] CloverETL repos r2553 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000193.html">[Cloveretl-svn-commits] CloverETL repos r2555 -	trunk/cloveretl.engine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#192">[ date ]</a>
+              <a href="thread.html#192">[ thread ]</a>
+              <a href="subject.html#192">[ subject ]</a>
+              <a href="author.html#192">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 13:49:28 +0100 (Mon, 05 Mar 2007)
+New Revision: 2554
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphGenerateData.grf
+Log:
+MINOR:removed redundant metadata
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphGenerateData.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphGenerateData.grf	2007-03-05 12:34:57 UTC (rev 2553)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphGenerateData.grf	2007-03-05 12:49:28 UTC (rev 2554)
+@@ -1,7 +1,6 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Thu Jan 11 09:49:56 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:19:56 CET 2007&quot; name=&quot;graphGenerateData&quot; revision=&quot;1.14&quot;&gt;
++&lt;Graph created=&quot;Thu Jan 11 09:49:56 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Mon Mar 05 13:48:49 CET 2007&quot; name=&quot;graphGenerateData&quot; revision=&quot;1.16&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/ordersFix.fmt&quot; id=&quot;Metadata1&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;Property id=&quot;GraphParameter1&quot; name=&quot;ORDER_DATE&quot; value=&quot;01.01.2007&quot;/&gt;
+@@ -9,9 +8,9 @@
+ &lt;Sequence cached=&quot;20&quot; fileURL=&quot;seq.seq&quot; id=&quot;Sequence0&quot; name=&quot;ordersID&quot; start=&quot;1&quot; step=&quot;1&quot; type=&quot;SIMPLE_SEQUENCE&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Data Generator&quot; guiWidth=&quot;0&quot; guiX=&quot;68&quot; guiY=&quot;278&quot; id=&quot;DATA_GENERATOR1&quot; pattern=&quot;                 aga${ORDER_DATE}${REQUIRED_DATE}  1      10                name          adressPragu   EU   12000CZ&#10;&quot; randomFields=&quot;EmployeeID=random(1,1000);ShippedDate=random(${ORDER_DATE},${REQUIRED_DATE})&quot; recordsNumber=&quot;10000&quot; sequenceFields=&quot;OrderID&quot; type=&quot;DATA_GENERATOR&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Simple Copy&quot; guiWidth=&quot;0&quot; guiX=&quot;245&quot; guiY=&quot;278&quot; id=&quot;SIMPLE_COPY0&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;398&quot; guiY=&quot;278&quot; id=&quot;XLS_WRITER0&quot; namesRow=&quot;1&quot; type=&quot;XLS_WRITER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Data Generator&quot; guiWidth=&quot;0&quot; guiX=&quot;43&quot; guiY=&quot;46&quot; id=&quot;DATA_GENERATOR1&quot; pattern=&quot;                 aga${ORDER_DATE}${REQUIRED_DATE}  1      10                name          adressPragu   EU   12000CZ&#10;&quot; randomFields=&quot;EmployeeID=random(1,1000);ShippedDate=random(${ORDER_DATE},${REQUIRED_DATE})&quot; recordsNumber=&quot;10000&quot; sequenceFields=&quot;OrderID&quot; type=&quot;DATA_GENERATOR&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Simple Copy&quot; guiWidth=&quot;0&quot; guiX=&quot;220&quot; guiY=&quot;46&quot; id=&quot;SIMPLE_COPY0&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;373&quot; guiY=&quot;46&quot; id=&quot;XLS_WRITER0&quot; namesRow=&quot;1&quot; type=&quot;XLS_WRITER&quot;/&gt;
+ &lt;Edge fromNode=&quot;DATA_GENERATOR1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge3&quot; inPort=&quot;0 (Simple Copy)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (Data Generator)&quot; toNode=&quot;SIMPLE_COPY0:0&quot;/&gt;
+ &lt;Edge fromNode=&quot;SIMPLE_COPY0:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge1&quot; inPort=&quot;0 (XLS Data Writer)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (Simple Copy)&quot; toNode=&quot;XLS_WRITER0:0&quot;/&gt;
+ &lt;/Phase&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000191.html">[Cloveretl-svn-commits] CloverETL repos r2553 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000193.html">[Cloveretl-svn-commits] CloverETL repos r2555 -	trunk/cloveretl.engine
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#192">[ date ]</a>
+              <a href="thread.html#192">[ thread ]</a>
+              <a href="subject.html#192">[ subject ]</a>
+              <a href="author.html#192">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2528 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2528%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702271711.l1RHBsQY032008%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000165.html">
+   <LINK REL="Next"  HREF="000167.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2528 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2528%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702271711.l1RHBsQY032008%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2528 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 18:11:54 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000165.html">[Cloveretl-svn-commits] CloverETL repos r2527 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+        <LI>Next message: <A HREF="000167.html">[Cloveretl-svn-commits] CloverETL repos r2529 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-27 18:11:53 +0100 (Tue, 27 Feb 2007)
+New Revision: 2528
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/Trash.java
+Log:
+FIX: fix encoding exception in init phase
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 16:59:54 UTC (rev 2527)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 17:11:53 UTC (rev 2528)
+@@ -178,10 +178,10 @@
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+         if(outputFieldNames) {
+ 			formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+-        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 	
+ 	/**
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 16:59:54 UTC (rev 2527)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 17:11:53 UTC (rev 2528)
+@@ -197,10 +197,10 @@
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+         if(outputFieldNames) {
+ 			formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+-        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 	
+ 	public ConfigurationStatus checkConfig(ConfigurationStatus status) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 16:59:54 UTC (rev 2527)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 17:11:53 UTC (rev 2528)
+@@ -187,10 +187,10 @@
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+         if(outputFieldNames) {
+         	formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+-        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 	
+ 	/**
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 16:59:54 UTC (rev 2527)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 17:11:53 UTC (rev 2528)
+@@ -232,9 +232,9 @@
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+         formatter.setHeader(header);
+         formatter.setFooter(footer);
+-        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 
+ 	/* (non-Javadoc)
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/Trash.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 16:59:54 UTC (rev 2527)
++++ trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 17:11:53 UTC (rev 2528)
+@@ -179,8 +179,8 @@
+     			}
+             }
+             if (writer != null) {
+-            	formatter.showCounter(&quot;Record&quot;, &quot;### &quot;);
+                 writer.init(getInputPort(READ_FROM_PORT).getMetadata());
++            	formatter.showCounter(&quot;Record&quot;, &quot;# &quot;);
+             }
+ 		}
+ 	}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000165.html">[Cloveretl-svn-commits] CloverETL repos r2527 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+	<LI>Next message: <A HREF="000167.html">[Cloveretl-svn-commits] CloverETL repos r2529 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#166">[ date ]</a>
+              <a href="thread.html#166">[ thread ]</a>
+              <a href="subject.html#166">[ subject ]</a>
+              <a href="author.html#166">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

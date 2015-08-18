@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2524 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2524%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702271658.l1RGwcqO030520%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000161.html">
+   <LINK REL="Next"  HREF="000163.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2524 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2524%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702271658.l1RGwcqO030520%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2524 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 17:58:38 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000161.html">[Cloveretl-svn-commits] CloverETL repos r2523 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+        <LI>Next message: <A HREF="000163.html">[Cloveretl-svn-commits] CloverETL repos r2525 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#162">[ date ]</a>
+              <a href="thread.html#162">[ thread ]</a>
+              <a href="subject.html#162">[ subject ]</a>
+              <a href="author.html#162">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-02-27 17:58:37 +0100 (Tue, 27 Feb 2007)
+New Revision: 2524
+
+Added:
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java
+Log:
+INIT:initial check-in
+
+Added: trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java	2007-02-27 16:57:44 UTC (rev 2523)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/PhaseTrackingDetail.java	2007-02-27 16:58:37 UTC (rev 2524)
+@@ -0,0 +1,83 @@
++/*
++ *    jETeL/Clover - Java based ETL application framework.
++ *    Copyright (C) 2002-07  David Pavlis &lt;<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">david.pavlis at centrum.cz</A>&gt; and others.
++ *    
++ *    This library is free software; you can redistribute it and/or
++ *    modify it under the terms of the GNU Lesser General Public
++ *    License as published by the Free Software Foundation; either
++ *    version 2.1 of the License, or (at your option) any later version.
++ *    
++ *    This library is distributed in the hope that it will be useful,
++ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU    
++ *    Lesser General Public License for more details.
++ *    
++ *    You should have received a copy of the GNU Lesser General Public
++ *    License along with this library; if not, write to the Free Software
++ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
++ *
++ * Created on 26.2.2007
++ *
++ * TODO To change the template for this generated file go to
++ * Window - Preferences - Java - Code Style - Code Templates
++ */
++package org.jetel.graph.runtime;
++
++import java.io.Serializable;
++
++public class PhaseTrackingDetail implements Serializable {
++    
++    private static final long serialVersionUID = -6140687882226805507L;
++    
++    private int execTime;
++    private long memUtilization;
++
++    
++    public PhaseTrackingDetail(int execTime,long memUtilization) {
++        this.execTime=execTime;
++        this.memUtilization=memUtilization;
++    }
++
++    /**
++     * @return the phaseExecTime in milliseconds
++     * @since 27.2.2007
++     */
++    public int getExecTime() {
++        return execTime;
++    }
++    
++    /**
++     * @return the phaseExecTime in seconds
++     * @since 27.2.2007
++     */
++    public int getExecTimeSec() {
++        return execTime/1000;
++    }
++    
++    /**
++     * @param phaseExecTime the phaseExecTime to set
++     * @since 27.2.2007
++     */
++    public void setExecTime(int phaseExecTime) {
++        this.execTime = phaseExecTime;
++    }
++    /**
++     * @return the phaseMemUtilization in kilobytes (KB)
++     * @since 27.2.2007
++     */
++    public long getMemUtilization() {
++        return memUtilization;
++    }
++    
++    public int getMemUtilizationKB() {
++        return (int)memUtilization/1024;
++    }
++    
++    /**
++     * @param phaseMemUtilization the phaseMemUtilization to set
++     * @since 27.2.2007
++     */
++    public void setMemUtilization(long phaseMemUtilization) {
++        this.memUtilization = phaseMemUtilization;
++    }
++}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000161.html">[Cloveretl-svn-commits] CloverETL repos r2523 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+	<LI>Next message: <A HREF="000163.html">[Cloveretl-svn-commits] CloverETL repos r2525 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#162">[ date ]</a>
+              <a href="thread.html#162">[ thread ]</a>
+              <a href="subject.html#162">[ subject ]</a>
+              <a href="author.html#162">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

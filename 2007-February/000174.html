@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2536 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2536%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702281618.l1SGIeKq000625%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000173.html">
+   
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2536 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2536%20-%0A%09trunk/cloveretl.engine/src/org/jetel/graph/runtime&In-Reply-To=%3C200702281618.l1SGIeKq000625%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2536 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Feb 28 17:18:40 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000173.html">[Cloveretl-svn-commits] CloverETL repos r2535 -	trunk/cloveretl.engine
+</A></li>
+        
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#174">[ date ]</a>
+              <a href="thread.html#174">[ thread ]</a>
+              <a href="subject.html#174">[ subject ]</a>
+              <a href="author.html#174">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-02-28 17:18:39 +0100 (Wed, 28 Feb 2007)
+New Revision: 2536
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/TrackingDetail.java
+   trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+Log:
+UPDATE:added getPhase(),getNodeName()
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java	2007-02-28 10:26:58 UTC (rev 2535)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/NodeTrackingDetail.java	2007-02-28 16:18:39 UTC (rev 2536)
+@@ -35,6 +35,7 @@
+     private static final long serialVersionUID = 9164050461393378702L;
+     
+     private String nodeId;
++    private String nodeName;
+     private long timestamp;
+     private int timespan;
+     private Result result;
+@@ -54,9 +55,12 @@
+     private int avgWaitingTime;
+     private int waitingRows[];
+     private int avgWaitingRows[];
++    private int phase;
+     
+-    public NodeTrackingDetail(String id,int inputPorts,int outputPorts){
++    public NodeTrackingDetail(String id,String name,int phase,int inputPorts,int outputPorts){
+         this.nodeId=id;
++        this.nodeName=name;
++        this.phase=phase;
+         this.numInputPorts=inputPorts;
+         this.numOutputPorts=outputPorts;
+         final int ports=Math.max(inputPorts, outputPorts);
+@@ -182,6 +186,14 @@
+         return nodeId;
+     }
+ 
++    public String getNodeName() {
++        return nodeName;
++    }
++    
++    public int getPhase() {
++        return phase;
++    }
++    
+     /* (non-Javadoc)
+      * @see org.jetel.graph.runtime.GraphTrackingDetail#getTimestamp()
+      */
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/TrackingDetail.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/TrackingDetail.java	2007-02-28 10:26:58 UTC (rev 2535)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/TrackingDetail.java	2007-02-28 16:18:39 UTC (rev 2536)
+@@ -42,6 +42,8 @@
+     public long getTotalUserTime();
+     public int getTotalRows(int portType,int portNum);
+     public String getNodeId();
++    public String getNodeName();
++    public int getPhase();
+     public long getTimestamp();
+     public int getNumInputPorts();
+     public int getNumOutputPorts();
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-02-28 10:26:58 UTC (rev 2535)
++++ trunk/cloveretl.engine/src/org/jetel/graph/runtime/WatchDog.java	2007-02-28 16:18:39 UTC (rev 2536)
+@@ -361,7 +361,7 @@
+                     int inPortsNum=node.getInPorts().size();
+                     int outPortsNum=node.getOutPorts().size();
+                     if (trackingDetail==null){
+-                        trackingDetail=new NodeTrackingDetail(nodeId,inPortsNum,outPortsNum);
++                        trackingDetail=new NodeTrackingDetail(nodeId,node.getName(),phase.getPhaseNum(),inPortsNum,outPortsNum);
+                         tracking.put(nodeId, trackingDetail);
+                     }
+                     trackingDetail.timestamp();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000173.html">[Cloveretl-svn-commits] CloverETL repos r2535 -	trunk/cloveretl.engine
+</A></li>
+	
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#174">[ date ]</a>
+              <a href="thread.html#174">[ thread ]</a>
+              <a href="subject.html#174">[ subject ]</a>
+              <a href="author.html#174">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

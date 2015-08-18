@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2422 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2422%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702011021.l11AL0nP027276%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000060.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2422 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2422%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702011021.l11AL0nP027276%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2422 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  1 11:21:00 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000060.html">[Cloveretl-svn-commits] CloverETL repos r2423 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-01 11:20:59 +0100 (Thu, 01 Feb 2007)
+New Revision: 2422
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataReader.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataReader.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataReader.java
+Log:
+MINOR:comments updated
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataReader.java	2007-01-31 14:40:33 UTC (rev 2421)
++++ trunk/cloveretl.component/src/org/jetel/component/DataReader.java	2007-02-01 10:20:59 UTC (rev 2422)
+@@ -77,6 +77,8 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;dataPolicy&lt;/b&gt;&lt;/td&gt;&lt;td&gt;specifies how to handle misformatted or incorrect data.  'Strict' (default value) aborts processing, 'Controlled' logs the entire record while processing continues, and 'Lenient' attempts to set incorrect data to default values while processing continues.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipLeadingBlanks&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;specifies whether leading blanks at each fixlen field should be skipped. Default value is TRUE.&lt;br&gt;
+  *  &lt;i&gt;Note: if this option is ON (TRUE), then field composed of all blanks/spaces is transformed to NULL (zero length string).&lt;/i&gt;&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;trim&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;specifies whether to trim strings before setting them to data fields.
++ *  When not set, strings are trimmed depending on &quot;trim&quot; attribute of metadata.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipFirstLine&lt;/b&gt;&lt;/td&gt;&lt;td&gt;specifies whether first record/line should be skipped. Default value is FALSE. If record delimiter is specified than skip one record else first line of flat file.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipRows&lt;/b&gt;&lt;/td&gt;&lt;td&gt;specifies how many records/rows should be skipped from the source file; good for handling files where first rows is a header not a real data. Dafault is 0.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;numRecords&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of parsed records&lt;/td&gt;
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataReader.java	2007-01-31 14:40:33 UTC (rev 2421)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataReader.java	2007-02-01 10:20:59 UTC (rev 2422)
+@@ -70,6 +70,8 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipFirstLine&lt;/b&gt;&lt;/td&gt;&lt;td&gt;specifies whether first record/line should be skipped. Default value is FALSE. If record delimiter is specified than skip one record else first line of flat file.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipRows&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;specifies how many records/rows should be skipped from the source file. Good for handling files where first rows is a header not a real data. Dafault is 0.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;numRecords&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of parsed records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;trim&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;specifies whether to trim strings before setting them to data fields.
++ *  When not set, strings are trimmed depending on &quot;trim&quot; attribute of metadata.&lt;/td&gt;
+  *  &lt;/tr&gt;
+  *  &lt;/table&gt;
+  *
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataReader.java	2007-01-31 14:40:33 UTC (rev 2421)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataReader.java	2007-02-01 10:20:59 UTC (rev 2422)
+@@ -83,6 +83,8 @@
+  *  Default is true. It doesn't have any effect in byte mode.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipTrailingBlanks&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Values true/false. Sets on/off skipping of trailing blanks in fields.
+  *  Default is true. It doesn't have any effect in byte mode.&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;trim&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;specifies whether to trim strings before setting them to data fields.
++ *  When not set, strings are trimmed depending on &quot;trim&quot; attribute of metadata.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;enableIncomplete&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Values true/false. Sets on/off support for incomplete records. 
+  *  Default is true. It doesn't have any effect in byte mode.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;skipEmpty&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Values true/false. Specifies whether empty records are to be ignored. 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000060.html">[Cloveretl-svn-commits] CloverETL repos r2423 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#59">[ date ]</a>
+              <a href="thread.html#59">[ thread ]</a>
+              <a href="subject.html#59">[ subject ]</a>
+              <a href="author.html#59">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

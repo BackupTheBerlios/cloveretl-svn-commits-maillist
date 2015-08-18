@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2576 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2576%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen&In-Reply-To=%3C200703090811.l298BIuM003570%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000213.html">
+   <LINK REL="Next"  HREF="000215.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2576 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2576%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen&In-Reply-To=%3C200703090811.l298BIuM003570%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2576 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Mar  9 09:11:18 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000213.html">[Cloveretl-svn-commits] CloverETL repos r2575 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000215.html">[Cloveretl-svn-commits] CloverETL repos r2577 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#214">[ date ]</a>
+              <a href="thread.html#214">[ thread ]</a>
+              <a href="subject.html#214">[ subject ]</a>
+              <a href="author.html#214">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-09 09:11:17 +0100 (Fri, 09 Mar 2007)
+New Revision: 2576
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen/ordersFix.fmt
+Log:
+UPDATE:updated due to changes in engine
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen/ordersFix.fmt
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen/ordersFix.fmt	2007-03-09 08:10:10 UTC (rev 2575)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/metadata/fixlen/ordersFix.fmt	2007-03-09 08:11:17 UTC (rev 2576)
+@@ -1,17 +1,17 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;ISO-8859-1&quot;?&gt;
+-&lt;Record name=&quot;Orders&quot; type=&quot;fixed&quot;&gt;
+-	&lt;Field name=&quot;OrderID&quot; type=&quot;numeric&quot; size=&quot;5&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;CustomerID&quot; type=&quot;string&quot; size=&quot;20&quot;/&gt;
+-	&lt;Field name=&quot;EmployeeID&quot; type=&quot;numeric&quot; size=&quot;5&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;OrderDate&quot; type=&quot;date&quot; size=&quot;10&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;RequiredDate&quot; type=&quot;date&quot; size=&quot;10&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;ShippedDate&quot; type=&quot;date&quot; size=&quot;10&quot; format=&quot;dd.MM.yyyy&quot; /&gt;
+-	&lt;Field name=&quot;ShipVia&quot; type=&quot;integer&quot; size=&quot;3&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;Freight&quot; type=&quot;numeric&quot; size=&quot;8&quot; format=&quot;#&quot; /&gt;
+-	&lt;Field name=&quot;ShipName&quot; type=&quot;string&quot; size=&quot;20&quot; /&gt;
+-	&lt;Field name=&quot;ShipAddress&quot; type=&quot;string&quot; size=&quot;15&quot;/&gt;
+-	&lt;Field name=&quot;ShipCity&quot; type=&quot;string&quot; size=&quot;5&quot; /&gt;
+-	&lt;Field name=&quot;ShipRegion&quot; type=&quot;string&quot; size=&quot;5&quot;/&gt;
+-	&lt;Field name=&quot;ShipPostalCode&quot; type=&quot;string&quot; size=&quot;8&quot;/&gt;
+-	&lt;Field name=&quot;ShipCountry&quot; type=&quot;string&quot; size=&quot;25&quot; /&gt;
++&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
++&lt;Record name=&quot;Orders&quot; recordDelimiter=&quot;\n&quot; recordSize=&quot;149&quot; type=&quot;fixed&quot;&gt;
++&lt;Field format=&quot;#&quot; name=&quot;OrderID&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field name=&quot;CustomerID&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
++&lt;Field format=&quot;#&quot; name=&quot;EmployeeID&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field format=&quot;dd.MM.yyyy&quot; name=&quot;OrderDate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;date&quot;/&gt;
++&lt;Field format=&quot;dd.MM.yyyy&quot; name=&quot;RequiredDate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;date&quot;/&gt;
++&lt;Field format=&quot;dd.MM.yyyy&quot; name=&quot;ShippedDate&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;10&quot; type=&quot;date&quot;/&gt;
++&lt;Field format=&quot;#&quot; name=&quot;ShipVia&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;3&quot; type=&quot;integer&quot;/&gt;
++&lt;Field format=&quot;#&quot; name=&quot;Freight&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;8&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field name=&quot;ShipName&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;20&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;ShipAddress&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;15&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;ShipCity&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;ShipRegion&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;5&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;ShipPostalCode&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;8&quot; type=&quot;string&quot;/&gt;
++&lt;Field name=&quot;ShipCountry&quot; nullable=&quot;true&quot; shift=&quot;0&quot; size=&quot;25&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000213.html">[Cloveretl-svn-commits] CloverETL repos r2575 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000215.html">[Cloveretl-svn-commits] CloverETL repos r2577 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#214">[ date ]</a>
+              <a href="thread.html#214">[ thread ]</a>
+              <a href="subject.html#214">[ subject ]</a>
+              <a href="author.html#214">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

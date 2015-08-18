@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2468 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2468%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702141429.l1EETltA028647%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000104.html">
+   <LINK REL="Next"  HREF="000106.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2468 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2468%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702141429.l1EETltA028647%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2468 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Feb 14 15:29:47 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000104.html">[Cloveretl-svn-commits] CloverETL repos r2467 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+        <LI>Next message: <A HREF="000106.html">[Cloveretl-svn-commits] CloverETL repos r2469 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-14 15:29:44 +0100 (Wed, 14 Feb 2007)
+New Revision: 2468
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DBJoin.java
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/JmsWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/Trash.java
+Log:
+BUGFIX:new implementation of checkConfig method - files are not deleted during checkconfig method
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/CloverDataWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -45,6 +45,7 @@
+ import org.jetel.metadata.DataRecordMetadataXMLReaderWriter;
+ import org.jetel.util.ByteBufferUtils;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.FileUtils;
+ import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
+ import org.w3c.dom.Element;
+@@ -212,8 +213,14 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (!FileUtils.canWrite(
++        			getGraph() != null ? getGraph().getProjectURL() : null, fileURL)){
++        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++        		throw ex;
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DBJoin.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DBJoin.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/DBJoin.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -252,6 +252,7 @@
+     		DataRecordMetadata inMetadata[]={ getInputPort(READ_FROM_PORT).getMetadata(),dbMetadata};
+     		DataRecordMetadata outMetadata[]={getOutputPort(WRITE_TO_PORT).getMetadata()};
+             lookupTable = new DBLookupTable(&quot;LOOKUP_TABLE_FROM_&quot;+this.getId(),(DBConnection) conn,dbMetadata,query,maxCached);
++            lookupTable.checkConfig(status);
+     		lookupTable.init();
+     		try {
+     			recordKey = new RecordKey(joinKey, inMetadata[0]);
+@@ -295,6 +296,7 @@
+ 		DataRecordMetadata inMetadata[]={ getInputPort(READ_FROM_PORT).getMetadata(),dbMetadata};
+ 		DataRecordMetadata outMetadata[]={getOutputPort(WRITE_TO_PORT).getMetadata()};
+         lookupTable = new DBLookupTable(&quot;LOOKUP_TABLE_FROM_&quot;+this.getId(),(DBConnection) conn,dbMetadata,query,maxCached);
++        lookupTable.checkConfig(null);
+ 		lookupTable.init();
+ 		try {
+ 			recordKey = new RecordKey(joinKey, inMetadata[0]);
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -37,6 +37,7 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.FileUtils;
+ import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
+@@ -266,8 +267,16 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (fileURL != null) {
++        		if (!FileUtils.canWrite(getGraph() != null ? getGraph().getProjectURL() 
++        				: null, fileURL)){
++	        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++	        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++	        		throw ex;
++        		}
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -33,6 +33,7 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.FileUtils;
+ import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
+@@ -183,8 +184,14 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (!FileUtils.canWrite(
++        			getGraph() != null ? getGraph().getProjectURL() : null, fileURL)){
++        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++        		throw ex;
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -32,6 +32,7 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.FileUtils;
+ import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+ import org.w3c.dom.Element;
+@@ -264,8 +265,14 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (!FileUtils.canWrite(
++        			getGraph() != null ? getGraph().getProjectURL() : null, fileURL)){
++        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++        		throw ex;
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/JmsWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/JmsWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/JmsWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -33,7 +33,6 @@
+ import org.jetel.data.DataRecord;
+ import org.jetel.database.IConnection;
+ import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.ConfigurationProblem;
+ import org.jetel.exception.ConfigurationStatus;
+ import org.jetel.exception.JetelException;
+ import org.jetel.exception.XMLConfigurationException;
+@@ -43,7 +42,6 @@
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.DynamicJavaCode;
+-import org.jetel.util.StringUtils;
+ import org.w3c.dom.Element;
+ 
+ 
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -215,8 +215,14 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (!FileUtils.canWrite(
++        			getGraph() != null ? getGraph().getProjectURL() : null, fileURL)){
++        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++        		throw ex;
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -181,8 +181,14 @@
+         checkOutputPorts(status, 0, 0);
+ 
+         try {
+-            init();
+-            free();
++        	if (fileURL != null &amp;&amp; !FileUtils.canWrite(
++        			getGraph() != null ? getGraph().getProjectURL() : null, fileURL)){
++        		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + fileURL);
++        		ex.setAttributeName(XML_FILEURL_ATTRIBUTE);
++        		throw ex;
++        	}
++//            init();
++//            free();
+         } catch (ComponentNotReadyException e) {
+             ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+             if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/Trash.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-14 09:46:57 UTC (rev 2467)
++++ trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-14 14:29:44 UTC (rev 2468)
+@@ -19,9 +19,6 @@
+ */
+ package org.jetel.component;
+ 
+-import java.io.BufferedOutputStream;
+-import java.io.FileNotFoundException;
+-import java.io.FileOutputStream;
+ import java.io.IOException;
+ import java.io.PrintWriter;
+ import java.nio.ByteBuffer;
+@@ -257,8 +254,23 @@
+             checkOutputPorts(status, 0, 0);
+ 
+             try {
+-                init();
+-                free();
++        		recordBuffer = ByteBuffer.allocateDirect(Defaults.Record.MAX_RECORD_SIZE);
++        		if (recordBuffer == null) {
++        			throw new ComponentNotReadyException(&quot;Can NOT allocate internal record buffer ! Required size:&quot; +
++        					Defaults.Record.MAX_RECORD_SIZE);
++        		}
++        		recordBuffer = null;
++        		if (debugPrint) {
++                    if(debugFilename != null &amp;&amp; !FileUtils.canWrite(
++                    		getGraph() != null ? getGraph().getProjectURL() : null, 
++                    				debugFilename)) {
++                		ComponentNotReadyException ex = new ComponentNotReadyException(this,&quot;Can't write to file: &quot; + debugFilename);
++                		ex.setAttributeName(XML_DEBUGFILENAME_ATTRIBUTE);
++                		throw ex;
++                    }
++                 }
++//                init();
++//                free();
+             } catch (ComponentNotReadyException e) {
+                 ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
+                 if(!StringUtils.isEmpty(e.getAttributeName())) {
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000104.html">[Cloveretl-svn-commits] CloverETL repos r2467 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+	<LI>Next message: <A HREF="000106.html">[Cloveretl-svn-commits] CloverETL repos r2469 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#105">[ date ]</a>
+              <a href="thread.html#105">[ thread ]</a>
+              <a href="subject.html#105">[ subject ]</a>
+              <a href="author.html#105">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

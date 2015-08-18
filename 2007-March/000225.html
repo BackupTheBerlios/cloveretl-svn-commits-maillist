@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2587 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2587%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121441.l2CEfuD3028007%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000224.html">
+   <LINK REL="Next"  HREF="000226.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2587 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2587%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121441.l2CEfuD3028007%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2587 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar 12 15:41:56 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000224.html">[Cloveretl-svn-commits] CloverETL repos r2586 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000226.html">[Cloveretl-svn-commits] CloverETL repos r2588 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#225">[ date ]</a>
+              <a href="thread.html#225">[ thread ]</a>
+              <a href="subject.html#225">[ subject ]</a>
+              <a href="author.html#225">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-12 15:41:56 +0100 (Mon, 12 Mar 2007)
+New Revision: 2587
+
+Removed:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphCompressedByteTest.grf
+Log:
+DELETE:not good example
+
+Deleted: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphCompressedByteTest.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphCompressedByteTest.grf	2007-03-12 09:38:30 UTC (rev 2586)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphCompressedByteTest.grf	2007-03-12 14:41:56 UTC (rev 2587)
+@@ -1,35 +0,0 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Mon Mar 05 11:32:38 CET 2007&quot; description=&quot;This graph demonstrates how to use HASH_JOIN component for 3way join. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Mon Mar 05 14:38:07 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.0&quot;&gt;
+-&lt;Global&gt;
+-&lt;Metadata id=&quot;Metadata1&quot;&gt;
+-&lt;Record name=&quot;rec&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;blob&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;cbyte&quot;/&gt;
+-&lt;/Record&gt;
+-&lt;/Metadata&gt;
+-&lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+-&lt;/Global&gt;
+-&lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY1&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;COPY1&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY2&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;COPY2&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY3&quot; guiWidth=&quot;50&quot; guiX=&quot;545&quot; guiY=&quot;20&quot; id=&quot;COPY3&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY4&quot; guiWidth=&quot;50&quot; guiX=&quot;720&quot; guiY=&quot;20&quot; id=&quot;COPY4&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY5&quot; guiWidth=&quot;50&quot; guiX=&quot;895&quot; guiY=&quot;20&quot; id=&quot;COPY5&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY6&quot; guiWidth=&quot;50&quot; guiX=&quot;1070&quot; guiY=&quot;20&quot; id=&quot;COPY6&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY7&quot; guiWidth=&quot;50&quot; guiX=&quot;1245&quot; guiY=&quot;20&quot; id=&quot;COPY7&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;COPY8&quot; guiWidth=&quot;50&quot; guiX=&quot;1420&quot; guiY=&quot;20&quot; id=&quot;COPY8&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DATA_READER&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;1595&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;TRASH&quot;&gt;
+-&lt;attr name=&quot;append&quot;&gt;false&lt;/attr&gt;
+-&lt;attr name=&quot;fileURL&quot;&gt;${WORKSPACE}/output/employees.out&lt;/attr&gt;
+-&lt;/Node&gt;
+-&lt;Edge fromNode=&quot;COPY1:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE2&quot; inPort=&quot;0 (COPY2)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY1)&quot; toNode=&quot;COPY2:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY2:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE3&quot; inPort=&quot;0 (COPY3)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY2)&quot; toNode=&quot;COPY3:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY3:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE4&quot; inPort=&quot;0 (COPY4)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY3)&quot; toNode=&quot;COPY4:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY4:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE5&quot; inPort=&quot;0 (COPY5)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY4)&quot; toNode=&quot;COPY5:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY5:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE6&quot; inPort=&quot;0 (COPY6)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY5)&quot; toNode=&quot;COPY6:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY6:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE7&quot; inPort=&quot;0 (COPY7)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY6)&quot; toNode=&quot;COPY7:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY7:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE8&quot; inPort=&quot;0 (COPY8)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY7)&quot; toNode=&quot;COPY8:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;COPY8:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE9&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (COPY8)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;EDGE1&quot; inPort=&quot;0 (COPY1)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;COPY1:0&quot;/&gt;
+-&lt;/Phase&gt;
+-&lt;/Graph&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000224.html">[Cloveretl-svn-commits] CloverETL repos r2586 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000226.html">[Cloveretl-svn-commits] CloverETL repos r2588 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#225">[ date ]</a>
+              <a href="thread.html#225">[ thread ]</a>
+              <a href="subject.html#225">[ subject ]</a>
+              <a href="author.html#225">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

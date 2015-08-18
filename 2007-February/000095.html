@@ -1,0 +1,812 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2458 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/main	cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2458%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/main%0A%09cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702080900.l1890P0s026769%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000094.html">
+   <LINK REL="Next"  HREF="000096.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2458 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/main	cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2458%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/main%0A%09cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200702080900.l1890P0s026769%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2458 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/main	cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  8 10:00:25 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000094.html">[Cloveretl-svn-commits] CloverETL repos r2457 -	trunk/cloveretl.connection/test
+</A></li>
+        <LI>Next message: <A HREF="000096.html">[Cloveretl-svn-commits] CloverETL repos r2459 -	trunk/cloveretl.engine/src/org/jetel/data/tape
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#95">[ date ]</a>
+              <a href="thread.html#95">[ thread ]</a>
+              <a href="subject.html#95">[ subject ]</a>
+              <a href="author.html#95">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: ausperger
+Date: 2007-02-08 10:00:23 +0100 (Thu, 08 Feb 2007)
+New Revision: 2458
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+   trunk/cloveretl.engine/src/org/jetel/main/showData.java
+   trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java
+Log:
+FIX: MultiFileWriter has new constructor with channelwriter and restriction on skip and count of records;
+     optimize next classes
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-08 08:28:24 UTC (rev 2457)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-08 09:00:23 UTC (rev 2458)
+@@ -21,6 +21,7 @@
+ package org.jetel.component;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
++import java.util.Iterator;
+ 
+ import org.apache.commons.logging.Log;
+ import org.apache.commons.logging.LogFactory;
+@@ -35,7 +36,6 @@
+ import org.jetel.graph.Node;
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+-import org.jetel.metadata.DataRecordMetadata;
+ import org.jetel.util.ComponentXMLAttributes;
+ import org.jetel.util.MultiFileWriter;
+ import org.jetel.util.StringUtils;
+@@ -76,6 +76,8 @@
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;outputFieldNames&lt;/b&gt;&lt;br&gt;&lt;i&gt;optional&lt;/i&gt;&lt;/td&gt;&lt;td&gt;print names of individual fields into output file - as a first row (values: true/false, default:false)&lt;/td&gt; 
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordsPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;max number of records in one output file&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;bytesPerFile&lt;/b&gt;&lt;/td&gt;&lt;td&gt;Max size of output files. To avoid splitting a record to two files, max size could be slightly overreached.&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/tr&gt;
+  *  &lt;/table&gt;  
+  *
+@@ -92,6 +94,8 @@
+     private static final String XML_OUTPUT_FIELD_NAMES = &quot;outputFieldNames&quot;;
+ 	private static final String XML_RECORDS_PER_FILE = &quot;recordsPerFile&quot;;
+ 	private static final String XML_BYTES_PER_FILE = &quot;bytesPerFile&quot;;
++	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
++	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 	private String fileURL;
+ 	private boolean appendData;
+ 	private DataFormatter formatter;
+@@ -99,17 +103,15 @@
+     private boolean outputFieldNames;
+ 	private int bytesPerFile;
+ 	private int recordsPerFile;
+-	private WritableByteChannel channelWriter;
+-	private String delimiter;
+-	private long recordFrom = -1;
+-	private long recordCount = -1;
++	private WritableByteChannel writableByteChannel;
++    private int skip;
++	private int numRecords;
+ 
+ 	static Log logger = LogFactory.getLog(DataWriter.class);
+ 
+ 	public final static String COMPONENT_TYPE = &quot;DATA_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+ 
+-
+ 	/**
+ 	 *Constructor for the DataWriter object
+ 	 *
+@@ -124,33 +126,31 @@
+ 		this.appendData = appendData;
+ 		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
+ 	}
++	
++	public DataWriter(String id, WritableByteChannel writableByteChannel, String charset, boolean appendData) {
++		super(id);
++		this.writableByteChannel = writableByteChannel;
++		this.appendData = appendData;
++		formatter = new DataFormatter(charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER);
++	}
+ 
+ 	@Override
+ 	public Result execute() throws Exception {
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+-		long iRec = 0;
+-		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
+ 		record.init();
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+-				iRec++;
+ 				record = inPort.readRecord(record);
+-				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+-					if (channelWriter != null) {
+-						formatter.write(record);
+-					} else {
+-						writer.write(record);
+-					}
++					writer.write(record);
+ 				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+-			if (channelWriter != null) formatter.flush();
+ 		} catch (Exception e) {
+ 			throw e;
+ 		}finally{		
+-			if (writer != null) writer.close();
++			writer.close();
+ 		}
+         return runIt ? Result.FINISHED_OK : Result.ABORTED;
+ 	}
+@@ -165,29 +165,25 @@
+ 	public void init() throws ComponentNotReadyException {
+ 		super.init();
+ 
++		// initialize multifile writer based on prepared formatter
+ 		if (fileURL != null) {
+-	        // initialize multifile writer based on prepared formatter
+ 	        writer = new MultiFileWriter(formatter, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
+-	        writer.setLogger(logger);
+-	        writer.setBytesPerFile(bytesPerFile);
+-	        writer.setRecordsPerFile(recordsPerFile);
+-	        writer.setAppendData(appendData);
+-	        if(outputFieldNames) {
+-	            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+-	        }
+-	        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 		} else {
+-			channelWriter = Channels.newChannel(System.out);
+-			formatter.setDataTarget(channelWriter);
+-			DataRecordMetadata metadata = getInputPort(READ_FROM_PORT).getMetadata();
+-			if (delimiter != null) {
+-				for(int i=0; i&lt;metadata.getNumFields()-1; i++) {
+-					metadata.getField(i).setDelimiter(delimiter);
+-				}
+-				//metadata.getField(metadata.getNumFields()-1).setDelimiter(&quot;\n&quot;);
++			if (writableByteChannel == null) {
++		        writableByteChannel = Channels.newChannel(System.out);
+ 			}
+-			formatter.init(metadata);
++	        writer = new MultiFileWriter(formatter, new WritableByteChannelIterator(writableByteChannel));
+ 		}
++        writer.setLogger(logger);
++        writer.setBytesPerFile(bytesPerFile);
++        writer.setRecordsPerFile(recordsPerFile);
++        writer.setAppendData(appendData);
++        writer.setSkip(skip);
++        writer.setNumRecords(numRecords);
++        if(outputFieldNames) {
++            writer.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
++        }
++        writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 	
+ 	/**
+@@ -212,6 +208,12 @@
+         if (bytesPerFile &gt; 0) {
+             xmlElement.setAttribute(XML_BYTES_PER_FILE, Integer.toString(bytesPerFile));
+         }
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
++		}
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
++		}
+ 		xmlElement.setAttribute(XML_APPEND_ATTRIBUTE, String.valueOf(this.appendData));
+ 	}
+ 
+@@ -242,6 +244,12 @@
+             if(xattribs.exists(XML_BYTES_PER_FILE)) {
+                 aDataWriter.setBytesPerFile(xattribs.getInteger(XML_BYTES_PER_FILE));
+             }
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aDataWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
++			}
++			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
++				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++			}
+         } catch (Exception ex) {
+             throw new XMLConfigurationException(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(XML_ID_ATTRIBUTE,&quot; unknown ID &quot;) + &quot;:&quot; + ex.getMessage(),ex);
+         }
+@@ -285,12 +293,10 @@
+         this.bytesPerFile = bytesPerFile;
+     }
+ 
+-
+     public int getRecordsPerFile() {
+         return recordsPerFile;
+     }
+ 
+-
+     public void setRecordsPerFile(int recordsPerFile) {
+         this.recordsPerFile = recordsPerFile;
+     }
+@@ -299,16 +305,38 @@
+         this.outputFieldNames = outputFieldNames;
+     }
+     
+-    public void setDataDelimiter(String delimiter) {
+-    	this.delimiter = delimiter;
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
+     }
+-    
+-	public void setRecordFrom(long recordFrom) {
+-		this.recordFrom = recordFrom;
+-	}
+ 
+-	public void setRecordCount(long recordCount) {
+-		this.recordCount = recordCount;
+-	}
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++	
++    private class WritableByteChannelIterator implements Iterator&lt;WritableByteChannel&gt; {
++    	WritableByteChannel writableByteChannel;
++    	
++    	public WritableByteChannelIterator(WritableByteChannel writableByteChannel) {
++    		this.writableByteChannel = writableByteChannel;
++    	}
++    	
++		public boolean hasNext() {
++			return true;
++		}
+ 
++		public WritableByteChannel next() {
++			return writableByteChannel;
++		}
++
++		public void remove() {}
++    }
++    
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-08 08:28:24 UTC (rev 2457)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-08 09:00:23 UTC (rev 2458)
+@@ -81,6 +81,8 @@
+  *  where field1 ,.., fieldn are record's fields from metadata&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;header&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write before records&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;footer&lt;/b&gt;&lt;/td&gt;&lt;td&gt;text to write after records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/tr&gt;
+  *  &lt;/table&gt;  
+  *
+@@ -113,7 +115,7 @@
+ 	public static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
+ 	public static final String XML_HEADER_ATTRIBUTE = &quot;header&quot;;
+ 	public static final String XML_FOOTER_ATTRIBUTE = &quot;footer&quot;;
+-	public static final String XML_RECORD_FROM_ATTRIBUTE = &quot;recordFrom&quot;;
++	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
+ 	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 
+ 	private String fileURL;
+@@ -124,8 +126,8 @@
+ 	private WritableByteChannel writer;
+ 	private ByteBuffer buffer;
+ 	private String charset;
+-	private long recordFrom = -1;
+-	private long recordCount = -1;
++    private int skip;
++	private int numRecords;
+ 
+ 	public final static String COMPONENT_TYPE = &quot;STRUCTURE_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+@@ -167,15 +169,15 @@
+ 		}
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+-		long iRec = 0;
+-		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
++		int iRec = 0;
++		int recordTo = numRecords &lt; 0 ? Integer.MAX_VALUE : (skip &lt;= 0 ? numRecords+1 : skip+1 + numRecords);
+ 		record.init();
+ 		//write records
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+ 				iRec++;
+ 				record = inPort.readRecord(record);
+-				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
++				if (skip &gt;= iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+ 					formatter.write(record);
+ 				}
+@@ -262,11 +264,11 @@
+ 			if (xattribs.exists(XML_FOOTER_ATTRIBUTE)){
+ 				aDataWriter.setFooter(xattribs.getString(XML_FOOTER_ATTRIBUTE));
+ 			}
+-			if (xattribs.exists(XML_RECORD_FROM_ATTRIBUTE)){
+-				aDataWriter.setRecordFrom(Long.parseLong(xattribs.getString(XML_RECORD_FROM_ATTRIBUTE)));
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aDataWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
+ 			}
+ 			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
+-				aDataWriter.setRecordCount(Long.parseLong(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
+ 			}
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+@@ -293,11 +295,11 @@
+ 		if (footer != null){
+ 			xmlElement.setAttribute(XML_FOOTER_ATTRIBUTE,footer);
+ 		}
+-		if (recordFrom != -1){
+-			xmlElement.setAttribute(XML_RECORD_FROM_ATTRIBUTE, String.valueOf(recordFrom));
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
+ 		}
+-		if (recordCount != -1){
+-			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(recordCount));
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
+ 		}
+ 	}
+ 	
+@@ -309,12 +311,20 @@
+ 		this.header = header;
+ 	}
+ 
+-	public void setRecordFrom(long recordFrom) {
+-		this.recordFrom = recordFrom;
+-	}
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
+ 
+-	public void setRecordCount(long recordCount) {
+-		this.recordCount = recordCount;
+-	}
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
+ 
+ }
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-08 08:28:24 UTC (rev 2457)
++++ trunk/cloveretl.component/src/org/jetel/component/TextTableWriter.java	2007-02-08 09:00:23 UTC (rev 2458)
+@@ -71,6 +71,8 @@
+  *  minimal length of the number. Name without wildcard specifies only one file.&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;charset&lt;/b&gt;&lt;/td&gt;&lt;td&gt;character encoding of the output file (if not specified, then ISO-8859-1 is used)&lt;/td&gt;
+  *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;append&lt;/b&gt;&lt;/td&gt;&lt;td&gt;whether to append data at the end if output file exists or replace it (values: true/false)&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordSkip&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of skipped records&lt;/td&gt;
++ *  &lt;tr&gt;&lt;td&gt;&lt;b&gt;recordCount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;number of written records&lt;/td&gt;
+  *  &lt;/tr&gt;
+  *  &lt;/table&gt;  
+  *
+@@ -94,7 +96,7 @@
+ 	public static final String XML_CHARSET_ATTRIBUTE = &quot;charset&quot;;
+ 	public static final String XML_MASK_ATTRIBUTE = &quot;mask&quot;;
+ 	public static final String XML_HEADER_ATTRIBUTE = &quot;header&quot;;
+-	public static final String XML_RECORD_FROM_ATTRIBUTE = &quot;recordFrom&quot;;
++	public static final String XML_RECORD_SKIP_ATTRIBUTE = &quot;recordSkip&quot;;
+ 	public static final String XML_RECORD_COUNT_ATTRIBUTE = &quot;recordCount&quot;;
+ 
+ 	private String fileURL;
+@@ -102,9 +104,8 @@
+ 	private TextTableFormatter formatter;
+ 	private boolean header = true;
+ 	private WritableByteChannel writer;
+-	private String charset;
+-	private long recordFrom = -1;
+-	private long recordCount = -1;
++    private int skip;
++	private int numRecords;
+ 	
+ 	public final static String COMPONENT_TYPE = &quot;TEXT_TABLE_WRITER&quot;;
+ 	private final static int READ_FROM_PORT = 0;
+@@ -123,9 +124,7 @@
+ 		super(id);
+ 		this.fileURL = fileURL;
+ 		this.appendData = appendData;
+-		this.charset = charset != null ? charset : Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+-		formatter = charset == null ? new TextTableFormatter() : 
+-			new TextTableFormatter(charset);
++		formatter = charset == null ? new TextTableFormatter(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER) : new TextTableFormatter(charset);
+ 		formatter.setMask(fields);
+ 	}
+ 
+@@ -143,14 +142,14 @@
+ 		InputPort inPort = getInputPort(READ_FROM_PORT);
+ 		DataRecord record = new DataRecord(inPort.getMetadata());
+ 		long iRec = 0;
+-		long recordTo = recordCount &lt; 0 ? Long.MAX_VALUE : (recordFrom &lt; 0 ? recordCount+1 : recordFrom + recordCount);
++		int recordTo = numRecords &lt; 0 ? Integer.MAX_VALUE : (skip &lt;= 0 ? numRecords+1 : skip+1 + numRecords);
+ 		record.init();
+ 		//write records
+ 		try {
+ 			while (record != null &amp;&amp; runIt) {
+ 				iRec++;
+ 				record = inPort.readRecord(record);
+-				if (recordFrom &gt; iRec || recordTo &lt;= iRec) continue;
++				if (skip &gt;= iRec || recordTo &lt;= iRec) continue;
+ 				if (record != null) {
+ 					formatter.write(record);
+ 				}
+@@ -230,11 +229,11 @@
+ 			if (xattribs.exists(XML_HEADER_ATTRIBUTE)){
+ 				aDataWriter.setHeader(Boolean.parseBoolean(xattribs.getString(XML_HEADER_ATTRIBUTE)));
+ 			}
+-			if (xattribs.exists(XML_RECORD_FROM_ATTRIBUTE)){
+-				aDataWriter.setRecordFrom(Long.parseLong(xattribs.getString(XML_RECORD_FROM_ATTRIBUTE)));
++			if (xattribs.exists(XML_RECORD_SKIP_ATTRIBUTE)){
++				aDataWriter.setSkip(Integer.parseInt(xattribs.getString(XML_RECORD_SKIP_ATTRIBUTE)));
+ 			}
+ 			if (xattribs.exists(XML_RECORD_COUNT_ATTRIBUTE)){
+-				aDataWriter.setRecordCount(Long.parseLong(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
++				aDataWriter.setNumRecords(Integer.parseInt(xattribs.getString(XML_RECORD_COUNT_ATTRIBUTE)));
+ 			}
+ 		}catch(Exception ex){
+ 			System.err.println(COMPONENT_TYPE + &quot;:&quot; + xattribs.getString(Node.XML_ID_ATTRIBUTE,&quot;unknown ID&quot;) + &quot;:&quot; + ex.getMessage());
+@@ -256,11 +255,11 @@
+ 		}
+ 		xmlElement.setAttribute(XML_APPEND_ATTRIBUTE, String.valueOf(this.appendData));
+ 		xmlElement.setAttribute(XML_HEADER_ATTRIBUTE,String.valueOf(header));
+-		if (recordFrom != -1){
+-			xmlElement.setAttribute(XML_RECORD_FROM_ATTRIBUTE, String.valueOf(recordFrom));
++		if (skip != 0){
++			xmlElement.setAttribute(XML_RECORD_SKIP_ATTRIBUTE, String.valueOf(skip));
+ 		}
+-		if (recordCount != -1){
+-			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(recordCount));
++		if (numRecords != 0){
++			xmlElement.setAttribute(XML_RECORD_COUNT_ATTRIBUTE,String.valueOf(numRecords));
+ 		}
+ 	}
+ 	
+@@ -268,12 +267,20 @@
+ 		this.header = header;
+ 	}
+ 
+-	public void setRecordFrom(long recordFrom) {
+-		this.recordFrom = recordFrom;
+-	}
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
+ 
+-	public void setRecordCount(long recordCount) {
+-		this.recordCount = recordCount;
+-	}
++    /**
++     * Sets number of written records.
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
+ 
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/main/showData.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/main/showData.java	2007-02-08 08:28:24 UTC (rev 2457)
++++ trunk/cloveretl.engine/src/org/jetel/main/showData.java	2007-02-08 09:00:23 UTC (rev 2458)
+@@ -25,6 +25,8 @@
+ import java.io.InputStream;
+ import java.lang.reflect.Method;
+ import java.net.URL;
++import java.nio.channels.Channels;
++import java.nio.channels.WritableByteChannel;
+ import java.util.Map;
+ import java.util.Properties;
+ 
+@@ -73,7 +75,7 @@
+  *  &lt;tr&gt;&lt;td nowrap&gt;--fields&lt;/td&gt;&lt;td&gt;Show only defined fields. If no fields defined, show all fields&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;tr&gt;&lt;td nowrap&gt;--logLevel&lt;/td&gt;&lt;td&gt;Log level for logger {all, info, debug, ..}, default is error log level&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;filename&lt;/b&gt;&lt;/td&gt;&lt;td&gt;filename or URL of the file (even remote) containing graph's layout in XML (this must be the last parameter passed)&lt;/td&gt;&lt;/tr&gt;
+- *  &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;component id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;over this component will be showed data&lt;/td&gt;&lt;/tr&gt;
++ *  &lt;tr&gt;&lt;td nowrap&gt;&lt;b&gt;component id&lt;/b&gt;&lt;/td&gt;&lt;td&gt;data will be shown over this component&lt;/td&gt;&lt;/tr&gt;
+  *  &lt;/table&gt;
+  *
+  *  &lt;h4&gt;Example:&lt;/h4&gt;
+@@ -104,8 +106,8 @@
+         String delimiter = null;
+         String fileUrl = null;
+         String filterExpression = null;
+-        long recordFrom = -1;
+-        long recordCount = -1;
++        int recordFrom = -1;
++        int recordCount = -1;
+         String fields = null;
+         String logHost = null;
+ 		
+@@ -223,10 +225,10 @@
+ 			filterExpression = cmdLine.getOptionValue(&quot;e&quot;);
+ 		}
+ 		if (cmdLine.hasOption(&quot;f&quot;)) {
+-	    	recordFrom = Long.parseLong(cmdLine.getOptionValue(&quot;f&quot;));
++	    	recordFrom = Integer.parseInt(cmdLine.getOptionValue(&quot;f&quot;));
+ 		}
+ 		if (cmdLine.hasOption(&quot;c&quot;)) {
+-	    	recordCount = Long.parseLong(cmdLine.getOptionValue(&quot;c&quot;));
++	    	recordCount = Integer.parseInt(cmdLine.getOptionValue(&quot;c&quot;));
+ 		}
+ 		if (cmdLine.hasOption(&quot;l&quot;)) {
+         	fields = cmdLine.getOptionValue(&quot;l&quot;);
+@@ -355,7 +357,7 @@
+ 		}
+ 		Node writer = null;
+ 		try {
+-			writer = getWriter(viewGraph, viewMode, dataRecordMetadata, fileUrl, delimiter, recordFrom, recordCount, fields);
++			writer = getWriter(viewGraph, viewMode, dataRecordMetadata, fileUrl, recordFrom, recordCount, fields);
+ 		} catch (Exception e1) {
+ 			e1.printStackTrace();
+ 		}
+@@ -382,6 +384,13 @@
+ 			return;
+ 		}
+ 
++		if (viewMode.equals(Mode.TEXT) &amp;&amp; delimiter != null) {
++			for(int i=0; i&lt;edge0.getMetadata().getNumFields()-1; i++) {
++				edge0.getMetadata().getField(i).setDelimiter(delimiter);
++			}
++			//metadata.getField(metadata.getNumFields()-1).setDelimiter(&quot;\n&quot;);
++		}
++
+ 		// assign ports (input &amp; output)
+ 		node.addOutputPort(0,edge0);
+ 		if (filterExpression != null) {
+@@ -442,7 +451,7 @@
+ 	 * @return
+ 	 * @throws Exception 
+ 	 */
+-	private static Node getWriter(TransformationGraph graph, Mode mode, DataRecordMetadata dataRecordMetadata, String fileUrl, String delimiter, long recordFrom, long recordCount, String fields) throws Exception {
++	private static Node getWriter(TransformationGraph graph, Mode mode, DataRecordMetadata dataRecordMetadata, String fileUrl, int recordFrom, int recordCount, String fields) throws Exception {
+ 		if (mode == null) return null;
+ 		Node writer = null;
+ 		String[] aFiealds = fields == null ? null : fields.split(&quot;;&quot;);
+@@ -477,9 +486,9 @@
+ 			
+ 			Node structureWriter = ComponentFactory.createComponent(graph, &quot;STRUCTURE_WRITER&quot;, new Object[] {&quot;STRUCTURE_WRITER0&quot;, fileUrl, null, false, maskBuilder.toString()}, new Class[] {String.class, String.class, String.class, boolean.class, String.class});
+ 			Class cStructureWriter = ComponentFactory.getComponentClass(&quot;STRUCTURE_WRITER&quot;);
+-			Method method = cStructureWriter.getMethod(&quot;setRecordFrom&quot;, new Class[] {long.class});
+-			method.invoke(structureWriter, recordFrom);
+-			method = cStructureWriter.getMethod(&quot;setRecordCount&quot;, new Class[] {long.class});
++			Method method = cStructureWriter.getMethod(&quot;setSkip&quot;, new Class[] {int.class});
++			method.invoke(structureWriter, recordFrom-1);
++			method = cStructureWriter.getMethod(&quot;setNumRecords&quot;, new Class[] {int.class});
+ 			method.invoke(structureWriter, recordCount);
+ 			StringBuilder sb = new StringBuilder();
+ 			
+@@ -510,17 +519,18 @@
+ 			
+ 		// text formating - delimited or fix lenght
+ 		} else if (mode.equals(Mode.TEXT)) {
+-			Node dataWriter = ComponentFactory.createComponent(graph, &quot;DATA_WRITER&quot;, new Object[] {&quot;DATA_WRITER0&quot;, fileUrl, dataRecordMetadata.getLocaleStr(), false}, new Class[] {String.class, String.class, String.class, boolean.class});
++			Node dataWriter;
++			if (fileUrl == null) {
++				dataWriter = ComponentFactory.createComponent(graph, &quot;DATA_WRITER&quot;, new Object[] {&quot;DATA_WRITER0&quot;, Channels.newChannel(System.out), dataRecordMetadata.getLocaleStr(), false}, new Class[] {String.class, WritableByteChannel.class, String.class, boolean.class});
++			} else {
++				dataWriter = ComponentFactory.createComponent(graph, &quot;DATA_WRITER&quot;, new Object[] {&quot;DATA_WRITER0&quot;, fileUrl, dataRecordMetadata.getLocaleStr(), false}, new Class[] {String.class, String.class, String.class, boolean.class});
++			}
+ 			//TODO agata dodelat selekci na fieldy
+ 			Class cDataWriter = ComponentFactory.getComponentClass(&quot;DATA_WRITER&quot;);
+-			Method method = cDataWriter.getMethod(&quot;setRecordFrom&quot;, new Class[] {long.class});
+-			method.invoke(dataWriter, recordFrom);
+-			method = cDataWriter.getMethod(&quot;setRecordCount&quot;, new Class[] {long.class});
++			Method method = cDataWriter.getMethod(&quot;setSkip&quot;, new Class[] {int.class});
++			method.invoke(dataWriter, (int)(recordFrom-1));
++			method = cDataWriter.getMethod(&quot;setNumRecords&quot;, new Class[] {int.class});
+ 			method.invoke(dataWriter, recordCount);
+-			if (delimiter != null) {
+-				method = cDataWriter.getMethod(&quot;setDataDelimiter&quot;, new Class[] {String.class});
+-				method.invoke(dataWriter, delimiter);
+-			}
+ 			writer = dataWriter;
+ 			
+ 		// table formating
+@@ -528,9 +538,9 @@
+ 			//TextWriter dataWriter = new TextWriter(&quot;TEXT_TABLE_WRITER0&quot;, fileUrl, null, false, aFiealds);
+ 			Node textWriter = ComponentFactory.createComponent(graph, &quot;TEXT_TABLE_WRITER&quot;, new Object[] {&quot;TEXT_TABLE_WRITER0&quot;, fileUrl, null, false, aFiealds}, new Class[] {String.class, String.class, String.class, boolean.class, String[].class});
+ 			Class cDataWriter = ComponentFactory.getComponentClass(&quot;TEXT_TABLE_WRITER&quot;);
+-			Method method = cDataWriter.getMethod(&quot;setRecordFrom&quot;, new Class[] {long.class});
+-			method.invoke(textWriter, recordFrom);
+-			method = cDataWriter.getMethod(&quot;setRecordCount&quot;, new Class[] {long.class});
++			Method method = cDataWriter.getMethod(&quot;setSkip&quot;, new Class[] {int.class});
++			method.invoke(textWriter, recordFrom-1);
++			method = cDataWriter.getMethod(&quot;setNumRecords&quot;, new Class[] {int.class});
+ 			method.invoke(textWriter, recordCount);
+ 			method = cDataWriter.getMethod(&quot;setHeader&quot;, new Class[] {boolean.class});
+ 			method.invoke(textWriter, true);
+@@ -560,7 +570,7 @@
+         System.out.println(&quot;--logLevel\t\tLog level for logger {all, info, debug, ..}, default is error log level&quot;);
+         System.out.println();
+         System.out.println(&quot;Note: &lt;graph definition file&gt; can be either local filename or URL of local/remote file&quot;);
+-        System.out.println(&quot;Note: &lt;component id&gt; over this component will be showed data&quot;);
++        System.out.println(&quot;Note: &lt;component id&gt; data will be shown over this component&quot;);
+ 	}
+ 
+ 	private static void printInfo(){
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java	2007-02-08 08:28:24 UTC (rev 2457)
++++ trunk/cloveretl.engine/src/org/jetel/util/MultiFileWriter.java	2007-02-08 09:00:23 UTC (rev 2458)
+@@ -35,9 +35,9 @@
+ import org.jetel.metadata.DataRecordMetadata;
+ 
+ /**
+- * Class for transparent writing into multifile. Underlying formatter is used for formatting
+- * incoming data records and destination is a list of files defined in fileURL attribute 
+- * by org.jetel.util.MultiOutFile.
++ * Class for transparent writing into multifile or multistream. Underlying formatter is used for formatting
++ * incoming data records and destination is a list of files defined in fileURL attribute
++ * by org.jetel.util.MultiOutFile or iterator of writable channels.
+  * Usage: 
+  * - first instantiate some suitable formatter, set all its parameters (don't call init method)
+  * - optionally set appropriate logger
+@@ -67,7 +67,11 @@
+     private ByteBuffer header;
+     private ByteBuffer footer;
+     private Iterator&lt;String&gt; fileNames;
++    private Iterator&lt;WritableByteChannel&gt; channels;
+     private WritableByteChannel byteChannel;
++    private int skip;
++	private int numRecords;
++	private int counter;
+     
+     /**
+      * Constructor.
+@@ -79,14 +83,19 @@
+         this.contextURL = contextURL;
+         this.fileURL = fileURL;
+     }
+-    
++
++    public MultiFileWriter(Formatter formatter, Iterator&lt;WritableByteChannel&gt; channels) {
++        this.formatter = formatter;
++        this.channels = channels;
++    }
++
+     /**
+      * Initializes underlying formatter with a given metadata.
+      * @param metadata
+      * @throws ComponentNotReadyException 
+      */
+     public void init(DataRecordMetadata metadata) throws ComponentNotReadyException {
+-        fileNames = new MultiOutFile(fileURL);
++    	if (fileURL != null) fileNames = new MultiOutFile(fileURL);
+         formatter.init(metadata);
+         try {
+             setNextOutput();
+@@ -101,16 +110,23 @@
+      * @throws FileNotFoundException
+      */
+     private void setNextOutput() throws IOException {
+-        if (!fileNames.hasNext()) {
+-            logger.warn(&quot;Unable to open new output file. This may be caused by missing wildcard in filename specification. &quot;
+-                    + &quot;Size of output file will exceed specified limit&quot;);
++    	if (fileNames != null) {
++            if (!fileNames.hasNext()) {
++                logger.warn(&quot;Unable to open new output file. This may be caused by missing wildcard in filename specification. &quot;
++                        + &quot;Size of output file will exceed specified limit&quot;);
++                return;
++            }    		
++    	}
++    	else if (!channels.hasNext()) {
++            logger.warn(&quot;Unable to open new output file. Size of output file will exceed specified limit&quot;);
+             return;
+-        }
++        }      	
++
+         //write footer to the previous destination if it is not first call of this method
+         if(byteChannel != null) {
+             writeFooter();
+         }
+-        byteChannel = FileUtils.getWritableChannel(contextURL, fileNames.next(), appendData);
++        byteChannel = fileNames != null ? FileUtils.getWritableChannel(contextURL, fileNames.next(), appendData) : channels.next();
+         //write header
+         writeHeader();
+         formatter.setDataTarget(byteChannel);
+@@ -136,7 +152,18 @@
+      * @throws IOException
+      */
+     public void write(DataRecord record) throws IOException {
+-        if ((recordsPerFile &gt; 0 &amp;&amp; records &gt;= recordsPerFile)
++        //check for index of last returned record
++        if(numRecords &gt; 0 &amp;&amp; numRecords == counter) {
++            return;
++        }
++        
++        //shall i skip some records?
++        if(skip &gt; 0) {
++            skip--;
++            return;
++        }
++    	
++    	if ((recordsPerFile &gt; 0 &amp;&amp; records &gt;= recordsPerFile)
+                 || (bytesPerFile &gt; 0 &amp;&amp; bytes &gt;= bytesPerFile)) {
+             setNextOutput();
+             records = 0;
+@@ -144,6 +171,7 @@
+         }
+         bytes += formatter.write(record);
+         records++;
++        counter++;
+     }
+ 
+     /**
+@@ -207,4 +235,20 @@
+         this.charset = charset;
+     }
+ 
++    /**
++     * Sets number of skipped records in next call of getNext() method.
++     * @param skip
++     */
++    public void setSkip(int skip) {
++        this.skip = skip;
++    }
++
++    /**
++     * Sets number of read reacords
++     * @param numRecords
++     */
++    public void setNumRecords(int numRecords) {
++        this.numRecords = numRecords;
++    }
++
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000094.html">[Cloveretl-svn-commits] CloverETL repos r2457 -	trunk/cloveretl.connection/test
+</A></li>
+	<LI>Next message: <A HREF="000096.html">[Cloveretl-svn-commits] CloverETL repos r2459 -	trunk/cloveretl.engine/src/org/jetel/data/tape
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#95">[ date ]</a>
+              <a href="thread.html#95">[ thread ]</a>
+              <a href="subject.html#95">[ subject ]</a>
+              <a href="author.html#95">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

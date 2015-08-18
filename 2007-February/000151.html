@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2513 -	trunk/cloveretl.engine/src/org/jetel/data/formatter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2513%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200702271102.l1RB2QKG002065%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000150.html">
+   <LINK REL="Next"  HREF="000152.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2513 -	trunk/cloveretl.engine/src/org/jetel/data/formatter</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2513%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200702271102.l1RB2QKG002065%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2513 -	trunk/cloveretl.engine/src/org/jetel/data/formatter">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 12:02:26 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000150.html">[Cloveretl-svn-commits] CloverETL repos r2512 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000152.html">[Cloveretl-svn-commits] CloverETL repos r2514 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#151">[ date ]</a>
+              <a href="thread.html#151">[ thread ]</a>
+              <a href="subject.html#151">[ subject ]</a>
+              <a href="author.html#151">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-27 12:02:25 +0100 (Tue, 27 Feb 2007)
+New Revision: 2513
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+Log:
+UPDATE: setHeader/Footer is empty now
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-02-27 09:31:10 UTC (rev 2512)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-02-27 11:02:25 UTC (rev 2513)
+@@ -77,8 +77,6 @@
+ 	private ReadableByteChannel idxReader;
+ 	private boolean append;
+ 	private boolean isOpen = false;
+-	private ByteBuffer footer; 
+-	private ByteBuffer header; 
+ 	
+ 	private final static short LEN_SIZE_SPECIFIER = 4;
+ 	private final static int SHORT_SIZE_BYTES = 2;
+@@ -289,29 +287,11 @@
+ 	}
+ 
+ 	public int writeFooter() throws IOException {
+-		if (footer != null) {
+-			buffer.put(footer);
+-			footer.rewind();
+-			return footer.remaining();
+-		} else
+-			return 0;
++		return 0;
+ 	}
+ 
+ 	public int writeHeader() throws IOException {
+-		if (header != null) {
+-			buffer.put(header);
+-			header.rewind();
+-			return header.remaining();
+-		} else 
+-			return 0;
++		return 0;
+ 	}
+ 
+-    public void setFooter(String footer) {
+-		this.footer = ByteBuffer.wrap(footer.getBytes());
+-    }
+-
+-    public void setHeader(String header) {
+-    	this.header = ByteBuffer.wrap(header.getBytes());
+-    }
+-
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000150.html">[Cloveretl-svn-commits] CloverETL repos r2512 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter	cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000152.html">[Cloveretl-svn-commits] CloverETL repos r2514 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#151">[ date ]</a>
+              <a href="thread.html#151">[ thread ]</a>
+              <a href="subject.html#151">[ subject ]</a>
+              <a href="author.html#151">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

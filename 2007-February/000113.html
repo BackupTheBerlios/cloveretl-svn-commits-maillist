@@ -1,0 +1,96 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2476 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2476%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200702161319.l1GDJ2PA031577%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000112.html">
+   <LINK REL="Next"  HREF="000114.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2476 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2476%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200702161319.l1GDJ2PA031577%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2476 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Feb 16 14:19:02 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000112.html">[Cloveretl-svn-commits] CloverETL repos r2475 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000114.html">[Cloveretl-svn-commits] CloverETL repos r2477 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-16 14:19:01 +0100 (Fri, 16 Feb 2007)
+New Revision: 2476
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransform.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf
+Log:
+UPDATE:graph updated to work with actual engine version
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransform.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf	2007-02-16 13:18:35 UTC (rev 2475)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashUsingTransformLanguage.grf	2007-02-16 13:19:01 UTC (rev 2476)
+@@ -1,5 +1,5 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates functionality of HASH_JOIN components. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; name=&quot;Testing Hash Joiner&quot;&gt;
++&lt;Graph created=&quot;Fri Feb 16 10:01:53 CET 2007&quot; description=&quot;This graph demonstrates functionality of HASH_JOIN components. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:50:49 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
+@@ -15,7 +15,7 @@
+ $OrderID := $OrderID;
+ $CustomerID := $CustomerID;
+ $EmployeeID := $EmployeeID;
+-$EmployeeID2 := $1.EmployeeID;
++$EmployeeID2 := num2str($1.EmployeeID);
+ $LastName := concat($1.LastName,&quot;:&quot;,$1.FirstName);
+ }
+ &lt;/attr&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000112.html">[Cloveretl-svn-commits] CloverETL repos r2475 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000114.html">[Cloveretl-svn-commits] CloverETL repos r2477 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#113">[ date ]</a>
+              <a href="thread.html#113">[ thread ]</a>
+              <a href="subject.html#113">[ subject ]</a>
+              <a href="author.html#113">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

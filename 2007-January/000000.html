@@ -1,0 +1,150 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2362 -	trunk/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2362%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701240902.l0O92NLr022646%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   
+   <LINK REL="Next"  HREF="000001.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2362 -	trunk/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2362%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200701240902.l0O92NLr022646%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2362 -	trunk/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Jan 24 10:02:23 CET 2007</I>
+    <P><UL>
+        
+        <LI>Next message: <A HREF="000001.html">[Cloveretl-svn-commits] CloverETL repos r2363 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#0">[ date ]</a>
+              <a href="thread.html#0">[ thread ]</a>
+              <a href="subject.html#0">[ subject ]</a>
+              <a href="author.html#0">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-24 10:02:22 +0100 (Wed, 24 Jan 2007)
+New Revision: 2362
+
+Modified:
+   trunk/cloveretl.engine/examples/graphJoinMergeInline.grf
+Log:
+UPDATE: graphJoinMergeInline uses GUI
+
+Modified: trunk/cloveretl.engine/examples/graphJoinMergeInline.grf
+===================================================================
+--- trunk/cloveretl.engine/examples/graphJoinMergeInline.grf	2007-01-23 15:15:52 UTC (rev 2361)
++++ trunk/cloveretl.engine/examples/graphJoinMergeInline.grf	2007-01-24 09:02:22 UTC (rev 2362)
+@@ -1,41 +1,20 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates how to use MERGE_JOIN component for 3way join.&quot; name=&quot;Testing Hash Joiner&quot;&gt;
++&lt;Graph created=&quot;Tue Jan 16 09:47:22 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Jan 24 09:27:14 CET 2007&quot; name=&quot;test&quot; revision=&quot;1.60&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/joinedOrders3way.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;Metadata0&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/joinedOrders3way.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/ordersFix.fmt&quot; id=&quot;Metadata2&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/orders.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT2&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/employees.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT3&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/employees.dat&quot;
+-/&gt;
+-
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;SORT1&quot; type=&quot;SORT&quot;
+-sortKey=&quot;EmployeeID&quot; 
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;SORT2&quot; type=&quot;SORT&quot;
+-sortKey=&quot;EmployeeID&quot; 
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;SORT3&quot; type=&quot;SORT&quot;
+-sortKey=&quot;ReportsTo&quot; 
+-/&gt;
+-
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; id=&quot;INEDGE1s&quot; metadata=&quot;InMetadata1&quot;  toNode=&quot;SORT1:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT2:0&quot; id=&quot;INEDGE2s&quot; metadata=&quot;InMetadata2&quot;  toNode=&quot;SORT2:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT3:0&quot; id=&quot;INEDGE3s&quot; metadata=&quot;InMetadata2&quot;  toNode=&quot;SORT3:0&quot;/&gt;
+-
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;JOIN&quot; type=&quot;MERGE_JOIN&quot;
+-joinKey=&quot;EmployeeID=EmployeeID#EmployeeID=ReportsTo&quot;
+-joinType=&quot;leftOuter&quot;
+-slaveDuplicates=&quot;true&quot;
+-&gt;&lt;attr name=&quot;transform&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/employees.dat&quot; guiHeight=&quot;0&quot; guiName=&quot;Universal Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;47&quot; guiY=&quot;276&quot; id=&quot;DATA_READER0&quot; type=&quot;DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/employees.dat&quot; guiHeight=&quot;0&quot; guiName=&quot;Delimited Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;47&quot; guiY=&quot;190&quot; id=&quot;DELIMITED_DATA_READER0&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;0&quot; guiName=&quot;Delimited Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;656&quot; guiY=&quot;190&quot; id=&quot;DELIMITED_DATA_WRITER0&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;83&quot; id=&quot;EXT_SORT0&quot; sortKey=&quot;EmployeeID&quot; type=&quot;EXT_SORT&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;190&quot; id=&quot;EXT_SORT1&quot; sortKey=&quot;EmployeeID&quot; type=&quot;EXT_SORT&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;275&quot; guiY=&quot;276&quot; id=&quot;EXT_SORT2&quot; sortKey=&quot;ReportsTo&quot; type=&quot;EXT_SORT&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Merge Join&quot; guiWidth=&quot;0&quot; guiX=&quot;480&quot; guiY=&quot;190&quot; id=&quot;MERGE_JOIN1&quot; joinKey=&quot;EmployeeID=EmployeeID#EmployeeID=ReportsTo&quot; type=&quot;MERGE_JOIN&quot;&gt;
++&lt;attr name=&quot;transform&quot;&gt;
+ import org.jetel.component.DataRecordTransform;
+ import org.jetel.data.*;
+ 
+@@ -67,14 +46,13 @@
+ 
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-
+-&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-
+-&lt;Edge fromNode=&quot;SORT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;InMetadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;JOIN:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;SORT2:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE2&quot; inPort=&quot;1 (JOIN)&quot; metadata=&quot;InMetadata2&quot; outPort=&quot;0 (INPUT2)&quot; toNode=&quot;JOIN:1&quot;/&gt;
+-&lt;Edge fromNode=&quot;SORT3:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE3&quot; inPort=&quot;2 (JOIN)&quot; metadata=&quot;InMetadata2&quot; outPort=&quot;0 (INPUT3)&quot; toNode=&quot;JOIN:2&quot;/&gt;
+-
+-&lt;Edge fromNode=&quot;JOIN:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+-
++&lt;Node enabled=&quot;enabled&quot; fieldMap=&quot;OrderID=$A;CustomerID=$B;EmployeeID=$C;OrderDate=$D;RequiredDate=$E;ShippedDate=$F;ShipVia=$G;Freight=$H;ShipName=$I;ShipAddress=$J;ShipCity=$K;ShipRegion=$L;ShipPostalCode=$M;ShipCountry=$N&quot; fileURL=&quot;${WORKSPACE}/data/orders2.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;48&quot; guiY=&quot;83&quot; id=&quot;XLS_READER0&quot; metadataRow=&quot;1&quot; startRow=&quot;2&quot; type=&quot;XLS_READER&quot;/&gt;
++&lt;Edge fromNode=&quot;DATA_READER0:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge2&quot; inPort=&quot;0 (Ext Sort)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Universal Data Reader)&quot; toNode=&quot;EXT_SORT2:0&quot;/&gt;
++&lt;Edge fromNode=&quot;DELIMITED_DATA_READER0:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge1&quot; inPort=&quot;0 (Ext Sort)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Delimited Data Reader)&quot; toNode=&quot;EXT_SORT1:0&quot;/&gt;
++&lt;Edge debugMode=&quot;false&quot; fromNode=&quot;EXT_SORT0:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge3&quot; inPort=&quot;0 (Ext Merge Join)&quot; metadata=&quot;Metadata2&quot; outPort=&quot;0 (Ext Sort)&quot; toNode=&quot;MERGE_JOIN1:0&quot;/&gt;
++&lt;Edge debugMode=&quot;false&quot; fromNode=&quot;EXT_SORT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge4&quot; inPort=&quot;1 (Ext Merge Join)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Ext Sort)&quot; toNode=&quot;MERGE_JOIN1:1&quot;/&gt;
++&lt;Edge debugMode=&quot;false&quot; fromNode=&quot;EXT_SORT2:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge5&quot; inPort=&quot;2 (Ext Merge Join)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Ext Sort)&quot; toNode=&quot;MERGE_JOIN1:2&quot;/&gt;
++&lt;Edge debugMode=&quot;false&quot; fromNode=&quot;MERGE_JOIN1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge6&quot; inPort=&quot;0 (Delimited Data Writer)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (Ext Merge Join)&quot; toNode=&quot;DELIMITED_DATA_WRITER0:0&quot;/&gt;
++&lt;Edge fromNode=&quot;XLS_READER0:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge0&quot; inPort=&quot;0 (Ext Sort)&quot; metadata=&quot;Metadata2&quot; outPort=&quot;0 (XLS Data Reader)&quot; toNode=&quot;EXT_SORT0:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	
+	<LI>Next message: <A HREF="000001.html">[Cloveretl-svn-commits] CloverETL repos r2363 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#0">[ date ]</a>
+              <a href="thread.html#0">[ thread ]</a>
+              <a href="subject.html#0">[ subject ]</a>
+              <a href="author.html#0">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

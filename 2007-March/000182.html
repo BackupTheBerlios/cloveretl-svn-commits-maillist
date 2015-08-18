@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2544 -	trunk/cloveretl.lookup/src/org/jetel/lookup
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2544%20-%0A%09trunk/cloveretl.lookup/src/org/jetel/lookup&In-Reply-To=%3C200703030853.l238r98n011350%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000181.html">
+   <LINK REL="Next"  HREF="000183.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2544 -	trunk/cloveretl.lookup/src/org/jetel/lookup</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2544%20-%0A%09trunk/cloveretl.lookup/src/org/jetel/lookup&In-Reply-To=%3C200703030853.l238r98n011350%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2544 -	trunk/cloveretl.lookup/src/org/jetel/lookup">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Sat Mar  3 09:53:09 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000181.html">[Cloveretl-svn-commits] CloverETL repos r2543 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000183.html">[Cloveretl-svn-commits] CloverETL repos r2545 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#182">[ date ]</a>
+              <a href="thread.html#182">[ thread ]</a>
+              <a href="subject.html#182">[ subject ]</a>
+              <a href="author.html#182">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-03 09:53:07 +0100 (Sat, 03 Mar 2007)
+New Revision: 2544
+
+Modified:
+   trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java
+Log:
+BUGFIX:RangeLookupTable - in getNext() method have to go through whole tail set
+
+Modified: trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java
+===================================================================
+--- trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java	2007-03-02 15:23:52 UTC (rev 2543)
++++ trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java	2007-03-03 08:53:07 UTC (rev 2544)
+@@ -138,14 +138,8 @@
+ 		}else{
+ 			return null;
+ 		}
+-		//check if requested value is still in first key interval:
+-		//Must be: keyRecord.value &gt;= currentInterval.start
+-		if (tmpRecord.getField(1).compareTo(tmp.getField(1)) == -1) {
+-			subTableIterator = null;
+-			return null;
+-		}
+-		//first key interval OK, check rest
+-		for (int i=3;i&lt;tmp.getNumFields();i+=2){
++		//if value is not in interval try next
++		for (int i=1;i&lt;tmp.getNumFields();i+=2){
+ 			if (!(tmpRecord.getField(i).compareTo(tmp.getField(i)) &gt; -1 &amp;&amp; 
+ 					tmpRecord.getField(i+1).compareTo(tmp.getField(i+1)) &lt; 1)) {
+ 				return getNext();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000181.html">[Cloveretl-svn-commits] CloverETL repos r2543 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000183.html">[Cloveretl-svn-commits] CloverETL repos r2545 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#182">[ date ]</a>
+              <a href="thread.html#182">[ thread ]</a>
+              <a href="subject.html#182">[ subject ]</a>
+              <a href="author.html#182">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

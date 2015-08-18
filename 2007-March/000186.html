@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2548%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200703051017.l25AHgBP026205%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000185.html">
+   <LINK REL="Next"  HREF="000187.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2548%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200703051017.l25AHgBP026205%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2548 -	trunk/cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 11:17:42 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000185.html">[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+        <LI>Next message: <A HREF="000187.html">[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 11:17:41 +0100 (Mon, 05 Mar 2007)
+New Revision: 2548
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java
+Log:
+BUGFIX:NumberIterator didn't work for pattern &quot;*&quot;
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java	2007-03-05 10:16:46 UTC (rev 2547)
++++ trunk/cloveretl.engine/src/org/jetel/util/NumberIterator.java	2007-03-05 10:17:41 UTC (rev 2548)
+@@ -45,6 +45,7 @@
+ 		if (pattern.equals(&quot;*&quot;)) {
+ 			subPattern = pattern;
+ 		}
++		next = first - 1;
+ 		next = getNext();
+ 	}
+ 	
+@@ -54,7 +55,8 @@
+ 	
+ 	private Integer getNext(){
+ 		if (pattern.equals(&quot;*&quot;)) {
+-			return next &lt; last ? next++ : null;
++			next++;
++			return next &lt;= last ? next : null;
+ 		}		
+ 		//check if in current interval there is more numbers
+ 		if (intervalIterator != null &amp;&amp; intervalIterator.hasNext() ) {
+@@ -156,10 +158,18 @@
+ 			firstPattern = pattern.substring(0,dashIndex).trim();
+ 			lastPattern = pattern.substring(dashIndex + 1).trim();
+ 			if (!firstPattern.equals(&quot;*&quot;)) {
+-				next = Integer.parseInt(firstPattern);
++				try {
++					next = Integer.parseInt(firstPattern);
++				} catch (NumberFormatException e) {
++					throw new IllegalArgumentException(&quot;Not integer interval: &quot; + pattern);
++				}
+ 			}
+ 			if (!lastPattern.equals(&quot;*&quot;)){
+-				this.last = Integer.parseInt(lastPattern);
++				try {
++					this.last = Integer.parseInt(lastPattern);
++				} catch (NumberFormatException e) {
++					throw new IllegalArgumentException(&quot;Not integer interval: &quot; + pattern);
++				}
+ 			}
+ 		}
+ 		
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000185.html">[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+	<LI>Next message: <A HREF="000187.html">[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#186">[ date ]</a>
+              <a href="thread.html#186">[ thread ]</a>
+              <a href="subject.html#186">[ subject ]</a>
+              <a href="author.html#186">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

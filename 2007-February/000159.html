@@ -1,0 +1,574 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2521 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2521%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200702271641.l1RGfOs9027459%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000158.html">
+   <LINK REL="Next"  HREF="000160.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2521 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2521%20-%20in%20trunk%3A%0A%09cloveretl.component/src/org/jetel/component%0A%09cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200702271641.l1RGfOs9027459%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2521 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Feb 27 17:41:24 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000158.html">[Cloveretl-svn-commits] CloverETL repos r2520 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter
+</A></li>
+        <LI>Next message: <A HREF="000160.html">[Cloveretl-svn-commits] CloverETL repos r2522 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#159">[ date ]</a>
+              <a href="thread.html#159">[ thread ]</a>
+              <a href="subject.html#159">[ subject ]</a>
+              <a href="author.html#159">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: jausperger
+Date: 2007-02-27 17:41:20 +0100 (Tue, 27 Feb 2007)
+New Revision: 2521
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+   trunk/cloveretl.component/src/org/jetel/component/Trash.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java
+   trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+Log:
+FIX: encoding exception and move encoder from constructor to init
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.component/src/org/jetel/component/DataWriter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -19,7 +19,6 @@
+ */
+ 
+ package org.jetel.component;
+-import java.io.UnsupportedEncodingException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+@@ -180,11 +179,7 @@
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-        	try {
+-				formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+-			} catch (UnsupportedEncodingException e) {
+-				logger.error(e);
+-			}
++			formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.component/src/org/jetel/component/DelimitedDataWriter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -19,7 +19,6 @@
+ */
+ 
+ package org.jetel.component;
+-import java.io.UnsupportedEncodingException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+@@ -199,11 +198,7 @@
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-        	try {
+-				formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+-			} catch (UnsupportedEncodingException e) {
+-				logger.error(e);
+-			}
++			formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.component/src/org/jetel/component/FixLenDataWriter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -18,7 +18,6 @@
+ *
+ */
+ package org.jetel.component;
+-import java.io.UnsupportedEncodingException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+@@ -189,11 +188,7 @@
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+         if(outputFieldNames) {
+-        	try {
+-				formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+-			} catch (UnsupportedEncodingException e) {
+-				logger.error(e);
+-			}
++        	formatter.setHeader(getInputPort(READ_FROM_PORT).getMetadata().getFieldNamesHeader());
+         }
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.component/src/org/jetel/component/StructureWriter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -21,7 +21,6 @@
+ 
+ package org.jetel.component;
+ 
+-import java.io.UnsupportedEncodingException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+@@ -233,12 +232,8 @@
+         writer.setAppendData(appendData);
+         writer.setSkip(skip);
+         writer.setNumRecords(numRecords);
+-        try {
+-			formatter.setHeader(header);
+-	        formatter.setFooter(footer);
+-		} catch (UnsupportedEncodingException e) {
+-			logger.error(e);
+-		}
++        formatter.setHeader(header);
++        formatter.setFooter(footer);
+         writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+ 	}
+ 
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/Trash.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.component/src/org/jetel/component/Trash.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -20,12 +20,9 @@
+ package org.jetel.component;
+ 
+ import java.io.IOException;
+-import java.io.UnsupportedEncodingException;
+ import java.nio.channels.Channels;
+ import java.nio.channels.WritableByteChannel;
+ 
+-import org.apache.commons.logging.Log;
+-import org.apache.commons.logging.LogFactory;
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.data.formatter.TextTableFormatter;
+@@ -97,8 +94,6 @@
+ 	private MultiFileWriter writer;
+ 	private WritableByteChannel writableByteChannel;
+ 
+-	private static Log logger = LogFactory.getLog(Trash.class);
+-
+ 	/**
+ 	 *Constructor for the Trash object
+ 	 *
+@@ -184,11 +179,7 @@
+     			}
+             }
+             if (writer != null) {
+-            	try {
+-					formatter.showCounter(&quot;Record&quot;, &quot;### &quot;);
+-				} catch (UnsupportedEncodingException e) {
+-					logger.error(e);
+-				}
++            	formatter.showCounter(&quot;Record&quot;, &quot;### &quot;);
+                 writer.init(getInputPort(READ_FROM_PORT).getMetadata());
+             }
+ 		}
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/DataFormatter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -30,14 +30,13 @@
+ import java.nio.channels.WritableByteChannel;
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;
++import java.nio.charset.UnsupportedCharsetException;
+ import java.util.Arrays;
+ 
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+ import org.jetel.metadata.DataRecordMetadata;
+ 
+-import sun.util.logging.resources.logging;
+-
+ /**
+  * Outputs common data record. Handles encoding of characters. Uses WriteableChannel.
+  *
+@@ -71,9 +70,7 @@
+ 	public DataFormatter(){
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+ 		fieldBuffer = ByteBuffer.allocateDirect(Defaults.DataFormatter.FIELD_BUFFER_LENGTH);
+-		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER).newEncoder();
+-		initFieldFiller();
+-		encoder.reset();
++		charSet = Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+ 		metadata = null;
+ 	}
+ 	
+@@ -81,9 +78,6 @@
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+ 		fieldBuffer = ByteBuffer.allocateDirect(Defaults.DataFormatter.FIELD_BUFFER_LENGTH);
+ 		charSet = charEncoder;
+-		encoder = Charset.forName(charEncoder).newEncoder();
+-		initFieldFiller();
+-		encoder.reset();
+ 		metadata = null;
+ 	}
+ 	
+@@ -94,6 +88,9 @@
+ 		// create array of delimiters &amp; initialize them
+ 		// create array of field sizes &amp; initialize them
+ 		metadata = _metadata;
++		encoder = Charset.forName(charSet).newEncoder();
++		initFieldFiller();
++		encoder.reset();
+ 		delimiters = new byte[metadata.getNumFields()][];
+         delimiterLength = new int[metadata.getNumFields()];
+ 		fieldLengths = new int[metadata.getNumFields()];
+@@ -250,12 +247,20 @@
+ 			return 0;
+ 	}
+ 
+-    public void setFooter(String footer) throws UnsupportedEncodingException {
+-		this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++    public void setFooter(String footer) {
++		try {
++			this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+-    public void setHeader(String header) throws UnsupportedEncodingException {
+-    	this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++    public void setHeader(String header) {
++    	try {
++			this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/DelimitedDataFormatter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -31,6 +31,7 @@
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;
+ import java.nio.charset.CoderResult;
++import java.nio.charset.UnsupportedCharsetException;
+ 
+ import org.jetel.data.DataRecord;
+ import org.jetel.data.Defaults;
+@@ -72,8 +73,7 @@
+ 		writer = null;
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+ 		charBuffer = CharBuffer.allocate(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+-		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER).newEncoder();
+-		encoder.reset();
++		charSet = Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+ 		NEW_LINE_STR=System.getProperty(DELIMITER_SYSTEM_PROPERTY_NAME,&quot;\n&quot;);
+ 		metadata = null;
+ 	}
+@@ -83,8 +83,6 @@
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+ 		charBuffer = CharBuffer.allocate(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+ 		charSet = charEncoder;
+-		encoder = Charset.forName(charEncoder).newEncoder();
+-		encoder.reset();
+ 		NEW_LINE_STR=System.getProperty(DELIMITER_SYSTEM_PROPERTY_NAME,&quot;\n&quot;);
+ 		metadata = null;
+ 	}
+@@ -94,6 +92,8 @@
+ 	 */
+ 	public void init(DataRecordMetadata metadata) {
+ 		this.metadata = metadata;
++		encoder = Charset.forName(charSet).newEncoder();
++		encoder.reset();
+ 
+ 		// create array of delimiters &amp; initialize them
+ 		delimiters = new String[metadata.getNumFields()];
+@@ -282,12 +282,20 @@
+ 			return 0;
+ 	}
+ 
+-    public void setFooter(String footer) throws UnsupportedEncodingException {
+-    	this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++    public void setFooter(String footer) {
++    	try {
++			this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+-    public void setHeader(String header) throws UnsupportedEncodingException {
+-		this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++    public void setHeader(String header) {
++		try {
++			this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 	
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/FixLenDataFormatter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -27,6 +27,7 @@
+ import java.nio.channels.WritableByteChannel;
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;
++import java.nio.charset.UnsupportedCharsetException;
+ import java.util.ArrayList;
+ import java.util.Arrays;
+ import java.util.SortedMap;
+@@ -85,10 +86,7 @@
+ 	public FixLenDataFormatter() {
+ 		writer = null;
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+-		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER ).newEncoder();
+-		initFieldFiller(DEFAULT_FIELDFILLER_CHAR);
+-		initRecordFiller(DEFAULT_RECORDFILLER_CHAR);
+-		encoder.reset();
++		charSet = Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+ 		metadata = null;
+ 		recordCounter = 0;
+ 	}
+@@ -104,10 +102,6 @@
+ 		writer = null;
+ 		charSet = charEncoder;
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+-		encoder = Charset.forName(charEncoder).newEncoder();
+-		initFieldFiller(DEFAULT_FIELDFILLER_CHAR);
+-		initRecordFiller(DEFAULT_RECORDFILLER_CHAR);
+-		encoder.reset();
+ 		metadata = null;
+ 		recordCounter = 0;
+ 	}
+@@ -176,6 +170,10 @@
+ 		// create array of field sizes &amp; initialize them
+ 		this.metadata = metadata;
+         
++		encoder = Charset.forName(charSet).newEncoder();
++		initFieldFiller(DEFAULT_FIELDFILLER_CHAR);
++		initRecordFiller(DEFAULT_RECORDFILLER_CHAR);
++		encoder.reset();
+         isRecordDelimiter = metadata.isSpecifiedRecordDelimiter();
+         if(isRecordDelimiter) {
+             try {
+@@ -371,12 +369,20 @@
+ 			return 0;
+ 	}
+ 
+-    public void setFooter(String footer) throws UnsupportedEncodingException {
+-    	this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++    public void setFooter(String footer) {
++    	try {
++			this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+-    public void setHeader(String header) throws UnsupportedEncodingException {
+-    	this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++    public void setHeader(String header) {
++    	try {
++			this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+ }
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/StructureFormatter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -27,6 +27,7 @@
+ import java.nio.channels.WritableByteChannel;
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;
++import java.nio.charset.UnsupportedCharsetException;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Map;
+@@ -71,8 +72,7 @@
+ 	 * Constructor without parameters
+ 	 */
+ 	public StructureFormatter(){
+-		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER).newEncoder();
+-		encoder.reset();
++		charSet = Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+ 	}
+ 	
+ 	/**
+@@ -82,8 +82,6 @@
+ 	 */
+ 	public StructureFormatter(String charEncoder){
+ 		charSet = charEncoder;
+-		encoder = Charset.forName(charEncoder).newEncoder();
+-		encoder.reset();
+ 	}
+ 
+ 	/* (non-Javadoc)
+@@ -92,6 +90,8 @@
+ 	public void init(DataRecordMetadata _metadata)
+ 			throws ComponentNotReadyException {
+ 		this.metadata = _metadata;
++		encoder = Charset.forName(charSet).newEncoder();
++		encoder.reset();
+ 
+ 		// create buffered output stream writer and buffers 
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+@@ -261,12 +261,20 @@
+ 			return 0;
+ 	}
+ 
+-    public void setFooter(String footer) throws UnsupportedEncodingException {
+-    	this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++    public void setFooter(String footer) {
++    	try {
++			this.footer = ByteBuffer.wrap(footer.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+-    public void setHeader(String header) throws UnsupportedEncodingException {
+-    	this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++    public void setHeader(String header) {
++    	try {
++			this.header = ByteBuffer.wrap(header.getBytes(encoder.charset().name()));
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+     }
+ 
+ 	
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-02-27 15:38:42 UTC (rev 2520)
++++ trunk/cloveretl.engine/src/org/jetel/data/formatter/TextTableFormatter.java	2007-02-27 16:41:20 UTC (rev 2521)
+@@ -28,6 +28,7 @@
+ import java.nio.channels.WritableByteChannel;
+ import java.nio.charset.Charset;
+ import java.nio.charset.CharsetEncoder;
++import java.nio.charset.UnsupportedCharsetException;
+ import java.util.HashMap;
+ import java.util.LinkedList;
+ import java.util.List;
+@@ -91,8 +92,7 @@
+ 	 * Constructor without parameters
+ 	 */
+ 	public TextTableFormatter(){
+-		encoder = Charset.forName(Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER).newEncoder();
+-		encoder.reset();
++		charSet = Defaults.DataFormatter.DEFAULT_CHARSET_ENCODER;
+ 	}
+ 	
+ 	/**
+@@ -102,8 +102,6 @@
+ 	 */
+ 	public TextTableFormatter(String charEncoder){
+ 		charSet = charEncoder;
+-		encoder = Charset.forName(charEncoder).newEncoder();
+-		encoder.reset();
+ 	}
+ 
+ 	/* (non-Javadoc)
+@@ -112,6 +110,8 @@
+ 	public void init(DataRecordMetadata _metadata)
+ 			throws ComponentNotReadyException {
+ 		this.metadata = _metadata;
++		encoder = Charset.forName(charSet).newEncoder();
++		encoder.reset();
+ 
+ 		// create buffered output stream writer and buffers 
+ 		dataBuffer = ByteBuffer.allocateDirect(Defaults.DEFAULT_INTERNAL_IO_BUFFER_SIZE);
+@@ -241,7 +241,7 @@
+         sentBytes += writeString(TABLE_VERTICAL);
+         if (showCounter) {
+         	sentBytes += writeString(header);
+-        	sentBytes += writeString(blank, headerOffset-header.length); // TODO ?
++        	sentBytes += writeString(blank, headerOffset-header.length);
+             sentBytes += writeString(TABLE_VERTICAL);
+         }
+         for (int i=0; i&lt;maskAnalize.length; i++) {
+@@ -438,10 +438,14 @@
+ 		return false;
+ 	}
+ 	
+-	public void showCounter(String header, String prefix) throws UnsupportedEncodingException {
++	public void showCounter(String header, String prefix) {
+ 		this.showCounter = true;
+-		this.header = header.getBytes(encoder.charset().name());
+-		this.prefix = prefix.getBytes(encoder.charset().name());
++		try {
++			this.header = header.getBytes(encoder.charset().name());
++			this.prefix = prefix.getBytes(encoder.charset().name());
++		} catch (UnsupportedEncodingException e) {
++			throw new UnsupportedCharsetException(encoder.charset().name());
++		}
+ 		//int iMax = Integer.toString(Integer.MAX_VALUE).length();
+ 		int iHeader = header.length();
+ 		int iPrefix = prefix.length();
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000158.html">[Cloveretl-svn-commits] CloverETL repos r2520 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/data/formatter
+</A></li>
+	<LI>Next message: <A HREF="000160.html">[Cloveretl-svn-commits] CloverETL repos r2522 -	trunk/cloveretl.engine/src/org/jetel/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#159">[ date ]</a>
+              <a href="thread.html#159">[ thread ]</a>
+              <a href="subject.html#159">[ subject ]</a>
+              <a href="author.html#159">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

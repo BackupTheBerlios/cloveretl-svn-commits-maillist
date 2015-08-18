@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2550 -	trunk/cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2550%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200703051026.l25AQ0Ot027733%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000187.html">
+   <LINK REL="Next"  HREF="000189.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2550 -	trunk/cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2550%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200703051026.l25AQ0Ot027733%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2550 -	trunk/cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 11:26:00 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000187.html">[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000189.html">[Cloveretl-svn-commits] CloverETL repos r2551 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#188">[ date ]</a>
+              <a href="thread.html#188">[ thread ]</a>
+              <a href="subject.html#188">[ subject ]</a>
+              <a href="author.html#188">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 11:26:00 +0100 (Mon, 05 Mar 2007)
+New Revision: 2550
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/util/StringUtils.java
+Log:
+UPDATE:StringUtils - removed method isNumber
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/StringUtils.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/StringUtils.java	2007-03-05 10:18:20 UTC (rev 2549)
++++ trunk/cloveretl.engine/src/org/jetel/util/StringUtils.java	2007-03-05 10:26:00 UTC (rev 2550)
+@@ -568,26 +568,6 @@
+     }
+ 
+     /**
+-     * This method checks if given string can be parse to number
+-     * 
+-     * @param str string to check
+-     * @return true if input represents number, false in another case
+-     */
+-    public static boolean isNumber(CharSequence str){
+-    	boolean point = false;
+-    	for (int i=0;i&lt;str.length();i++) {
+-    		if (!Character.isDigit(str.charAt(i))) {
+-    			if (str.charAt(i) == '.' &amp;&amp; !point){
+-    				point = true;
+-    			}else {
+-    				return false;
+-    			}
+-    		}
+-    	}
+-    	return true;
+-    }
+-    
+-    /**
+      * This method checks if given string can be parse to integer number
+      * 
+      * @param str string to check
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000187.html">[Cloveretl-svn-commits] CloverETL repos r2549 -	trunk/cloveretl.engine/test/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000189.html">[Cloveretl-svn-commits] CloverETL repos r2551 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#188">[ date ]</a>
+              <a href="thread.html#188">[ thread ]</a>
+              <a href="subject.html#188">[ subject ]</a>
+              <a href="author.html#188">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

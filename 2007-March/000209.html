@@ -1,0 +1,781 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2572 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2572%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703080828.l288SPfe029790%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000212.html">
+   <LINK REL="Next"  HREF="000210.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2572 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2572%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703080828.l288SPfe029790%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2572 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Mar  8 09:28:25 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000212.html">[Cloveretl-svn-commits] CloverETL repos r2571 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000210.html">[Cloveretl-svn-commits] CloverETL repos r2573 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#209">[ date ]</a>
+              <a href="thread.html#209">[ thread ]</a>
+              <a href="subject.html#209">[ subject ]</a>
+              <a href="author.html#209">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-08 09:28:22 +0100 (Thu, 08 Mar 2007)
+New Revision: 2572
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeInline.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeTL.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformat.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatInline.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatUsingTransform.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersTLReformat.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphParametrizedLookup.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphPartition.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphPhasesDemo.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphRevenues.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequence.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequenceCheckData.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopyEmbeddedMetadata.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopyLocale.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleLookup.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortData.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortUniversal.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSystemExecute.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphViewData.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXLSReadWrite.grf
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXMLExtract.grf
+Log:
+CHANGE:data was split and moved to data/delimited, data/fixlen or data/other
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeInline.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeInline.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeInline.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,12 +1,11 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates functionality of DENORMALIZER component with denormalization specified by inline Java source.&quot;
+-name=&quot;Testing NORMALIZER&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph demonstrates functionality of DENORMALIZER component with denormalization specified by inline Java source.&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 09:19:10 CET 2007&quot; name=&quot;Testing NORMALIZER&quot; revision=&quot;1.1&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;&gt;
+ &lt;attr name=&quot;DataPolicy&quot;&gt;Strict&lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;NORMALIZER&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;NORMALIZE&quot; type=&quot;NORMALIZER&quot;&gt;
+@@ -30,7 +29,7 @@
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/normalized.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;NORMALIZE:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;NORMALIZE:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (NORMALIZER)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;NORMALIZE:0&quot;/&gt;
++&lt;Edge fromNode=&quot;NORMALIZE:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (NORMALIZER)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeTL.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeTL.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphNormalizeTL.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,12 +1,11 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates functionality of NORMALIZER component with normalization specified by inline TransformLang source.&quot;
+-name=&quot;Testing NORMALIZER&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph demonstrates functionality of NORMALIZER component with normalization specified by inline TransformLang source.&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 09:20:06 CET 2007&quot; name=&quot;Testing NORMALIZER&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;&gt;
+ &lt;attr name=&quot;DataPolicy&quot;&gt;Strict&lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;NORMALIZER&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;NORMALIZE&quot; type=&quot;NORMALIZER&quot;&gt;
+@@ -26,7 +25,7 @@
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/normalized.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;NORMALIZE:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;NORMALIZE:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (NORMALIZER)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;NORMALIZE:0&quot;/&gt;
++&lt;Edge fromNode=&quot;NORMALIZE:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (NORMALIZER)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformat.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatInline.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatInline.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatInline.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,12 +1,12 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This example illustrates usage of Reformat component with transformation&#10;code (class) inlined (saved with the graph itself). The source code&#10;is automatically compiled at runtime.&#10;For successfull compilation, tools.jar library must be part of CLASSPATH.&#10;&quot; name=&quot;Testing Reformat&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This example illustrates usage of Reformat component with transformation&#10;code (class) inlined (saved with the graph itself). The source code&#10;is automatically compiled at runtime.&#10;For successfull compilation, tools.jar library must be part of CLASSPATH.&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 09:54:57 CET 2007&quot; name=&quot;Testing Reformat&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/ordersRef.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/ordersInfo.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.dat.out&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;REF&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;REF&quot; type=&quot;REFORMAT&quot;&gt;
+ &lt;attr name=&quot;transform&quot;&gt;
+@@ -16,28 +16,33 @@
+ 
+ public class reformatOrders extends DataRecordTransform{
+ 
+-	int counter=1;
++	int counter=0;
+ 	int field=0;
+ 
+-	public boolean transform(DataRecord source[], DataRecord[] target){
++	public boolean transform(DataRecord[] source, DataRecord[] target){
+ 		StringBuffer strBuf=new StringBuffer(80);
++		if (source[0]==null){
++		   System.err.println(&quot;NULL source[0]&quot;);
++		}
+ 		try{
+ 			// let's concatenate shipping address into one long string
+ 			strBuf.append(GetVal.getString(source[0],&quot;ShipName&quot;)).append(';');
+ 			strBuf.append(GetVal.getString(source[0],&quot;ShipAddress&quot;)).append(';');
+ 			strBuf.append(GetVal.getString(source[0],&quot;ShipCity&quot;)).append(';');
+ 			strBuf.append(GetVal.getString(source[0],&quot;ShipCountry&quot;));
+-			// mapping among source + target fields
++			// mapping among source &amp; target fields
+ 			// some fields get assigned directly from source fields, some
+ 			// are assigned from internall variables
+-			SetVal.setInt(target[0],&quot;OrderKey&quot;,counter);
+-			SetVal.setInt(target[0],&quot;OrderID&quot;,GetVal.getInt(source[0],&quot;OrderID&quot;));
+-			SetVal.setString(target[0],&quot;CustomerID&quot;,GetVal.getString(source[0],&quot;CustomerID&quot;));
+-			SetVal.setValue(target[0],&quot;OrderDate&quot;,GetVal.getDate(source[0],&quot;OrderDate&quot;));
+-			SetVal.setString(target[0],&quot;ShippedDate&quot;,&quot;02.02.1999&quot;);
+-			SetVal.setInt(target[0],&quot;ShipVia&quot;,GetVal.getInt(source[0],&quot;ShipVia&quot;));
+-			SetVal.setString(target[0],&quot;ShipTo&quot;,strBuf.toString());
++			SetVal.setInt(target[0],&quot;PRODUCTID&quot;,counter);
++			SetVal.setInt(target[0],&quot;ORDERID&quot;,GetVal.getInt(source[0],&quot;OrderID&quot;));
++			SetVal.setString(target[0],&quot;CUSTOMERID&quot;,GetVal.getString(source[0],&quot;CustomerID&quot;));
++			SetVal.setString(target[0],&quot;CUSTOMER&quot;,strBuf.toString());
++			SetVal.setInt(target[0], &quot;SHIPTIME&quot;, (int)( (GetVal.getDate(
++					source[0], &quot;RequiredDate&quot;).getTime() - GetVal.getDate(
++					source[0], &quot;ShippedDate&quot;).getTime())
++					/ 1000 / 60 / 60 / 24));
+ 		}catch(Exception ex){
++		  ex.printStackTrace();
+ 			errorMessage=ex.getMessage()+&quot; -&gt;occured with record :&quot;+counter;
+ 			return false;
+ 		}
+@@ -47,7 +52,7 @@
+ }
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-&lt;Edge fromNode=&quot;INPUT:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE&quot; inPort=&quot;0 (REF)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT)&quot; toNode=&quot;REF:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;REF:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (REF)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE&quot; inPort=&quot;0 (REF)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT)&quot; toNode=&quot;REF:0&quot;/&gt;
++&lt;Edge fromNode=&quot;REF:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (REF)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersReformatUsingTransform.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersTLReformat.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersTLReformat.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphOrdersTLReformat.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,12 +1,12 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This example illustrates usage of Reformat component with transformation&#10;code (class) inlined (saved with the graph itself). The source code&#10;is automatically compiled at runtime.&#10;For successfull compilation, tools.jar library must be part of CLASSPATH.&#10;&quot; name=&quot;Testing Reformat&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This example illustrates usage of Reformat component with transformation&#10;code (class) inlined (saved with the graph itself). The source code&#10;is automatically compiled at runtime.&#10;For successfull compilation, tools.jar library must be part of CLASSPATH.&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 10:25:39 CET 2007&quot; name=&quot;Testing Reformat&quot; revision=&quot;1.2&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/ordersRef.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/ordersInfo.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.dat.out&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;REF&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;REF&quot; type=&quot;REFORMAT&quot;&gt;
+ &lt;attr name=&quot;transform&quot;&gt;
+@@ -27,19 +27,16 @@
+ function transform()
+ {
+ 
+-$0.CustomerID := $0.CustomerID;
+-$0.OrderKey := ++key;
+-$0.OrderID := $0.OrderID;
+-$0.OrderDate := $0.OrderDate;
+-$0.ShippedDate := sum($0.OrderDate,7); // we ship 1 week later :-)
+-$0.ShipVia := $0.ShipVia;
+-$0.ShipTo := $0.ShipName+$0.ShipAddress+$0.ShipCity+$0.ShipCountry;
+-
++$0.CUSTOMERID := $0.CustomerID;
++$0.PRODUCTID := ++key;
++$0.ORDERID := $0.OrderID;
++$0.CUSTOMER := $0.ShipName+$0.ShipAddress+$0.ShipCity+$0.ShipCountry;
++$0.SHIPTIME := datediff($0.RequiredDate,$0.ShippedDate,day); 
+ }
+ 
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-&lt;Edge fromNode=&quot;INPUT:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE&quot; inPort=&quot;0 (REF)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT)&quot; toNode=&quot;REF:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;REF:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (REF)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE&quot; inPort=&quot;0 (REF)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT)&quot; toNode=&quot;REF:0&quot;/&gt;
++&lt;Edge fromNode=&quot;REF:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (REF)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphParametrizedLookup.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphParametrizedLookup.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphParametrizedLookup.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,13 +1,13 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Fri Jan 12 15:46:21 CET 2007&quot; description=&quot;This graph demonstrates usage of Node-level parameters&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 14:05:16 CET 2007&quot; name=&quot;Testing Simple Lookup with parameters&quot; revision=&quot;1.2&quot;&gt;
++&lt;Graph created=&quot;Fri Jan 12 15:46:21 CET 2007&quot; description=&quot;This graph demonstrates usage of Node-level parameters&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 10:28:52 CET 2007&quot; name=&quot;Testing Simple Lookup with parameters&quot; revision=&quot;1.3&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/joinedOrders.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/employees.fmt&quot; id=&quot;Metadata0&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/joinedOrders.fmt&quot; id=&quot;Metadata1&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata2&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node dataPolicy=&quot;Strict&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node dataPolicy=&quot;Strict&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;JOIN&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;JOIN&quot; type=&quot;REFORMAT&quot;&gt;
+ &lt;attr name=&quot;transform&quot;&gt;&#13;
+ import java.io.FileInputStream;&#13;
+@@ -28,7 +28,7 @@
+ 	public boolean init(){&#13;
+ 		&#13;
+ 	Parser parser=new DelimitedDataParser();&#13;
+-		DataRecordMetadata lookupMetadata = getDataRecordMetadata(&quot;InMetadata2&quot;);&#13;
++		DataRecordMetadata lookupMetadata = getDataRecordMetadata(&quot;Metadata0&quot;);&#13;
+ 		try{	&#13;
+ 		parser.init(lookupMetadata);&#13;
+ 		parser.setDataSource(new FileInputStream(parameters.getProperty(&quot;lookupFile&quot;)));&#13;
+@@ -57,7 +57,7 @@
+ 		&#13;
+ 		target[0].getField(0).setValue(source[0].getField(0).getValue());&#13;
+   		target[0].getField(1).setValue(source[0].getField(1).getValue());&#13;
+-		target[0].getField(2).setValue(source[0].getField(2).getValue());&#13;
++		target[0].getField(2).setValue(source[0].getField(2).getValue().toString());&#13;
+ 		target[0].getField(3).setValue(employee.getField(0).getValue().toString());&#13;
+ 		target[0].getField(4).setValue(employee.getField(1).getValue());&#13;
+ &#13;
+@@ -65,11 +65,11 @@
+ 	}&#13;
+ }&#13;
+ &lt;/attr&gt;
+-&lt;attr name=&quot;lookupFile&quot;&gt;data/employees.dat&lt;/attr&gt;
++&lt;attr name=&quot;lookupFile&quot;&gt;data/delimited/employees.dat&lt;/attr&gt;
+ &lt;attr name=&quot;keyField&quot;&gt;EmployeeID&lt;/attr&gt;
+ &lt;/Node&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;InMetadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;JOIN:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;JOIN:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;Metadata2&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;JOIN:0&quot;/&gt;
++&lt;Edge fromNode=&quot;JOIN:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;Metadata1&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphPartition.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphPhasesDemo.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphRevenues.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphRevenues.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphRevenues.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,57 +1,57 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This is practical ilustration of usage CloverETL.&#10;This graph tranforms data for branch bank. On inputs &#10;are clients, month interests and chargets and &#10;half-year bonus. On outputs we have aggregated &#10;revenues by clients, clients without revenues and &#10;clients from database, who are not in input file.&quot; name=&quot;Revenues of one half-year&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This is practical ilustration of usage CloverETL.&#10;This graph tranforms data for branch bank. On inputs &#10;are clients, month interests and chargets and &#10;half-year bonus. On outputs we have aggregated &#10;revenues by clients, clients without revenues and &#10;clients from database, who are not in input file.&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:08:54 CET 2007&quot; name=&quot;Revenues of one half-year&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata id=&quot;Metadata2&quot;&gt;
+-&lt;Record name=&quot;Aggr_revenues&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Aggr_revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;Aggr_revenues&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Aggr_revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata5&quot;&gt;
+-&lt;Record name=&quot;Bonus&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Bonus&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata4&quot;&gt;
+-&lt;Record name=&quot;Clients&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Clients&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata6&quot;&gt;
+-&lt;Record name=&quot;Db_revenues&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;year_month&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\n&quot; name=&quot;revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;Db_revenues&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;year_month&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\n&quot; name=&quot;revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata9&quot;&gt;
+-&lt;Record name=&quot;Disprate&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Disprate&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata10&quot;&gt;
+-&lt;Record name=&quot;Matched&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;Matched&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata3&quot;&gt;
+-&lt;Record name=&quot;Matching&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id_n&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Matching&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Contract_nr&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id_n&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata0&quot;&gt;
+-&lt;Record name=&quot;Without_revenue_matching&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id_n&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;Aggr_revenue&quot; nullable=&quot;true&quot; type=&quot;numeric&quot;/&gt;
++&lt;Record name=&quot;Without_revenue_matching&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; locale=&quot;cs.CZ&quot; name=&quot;Client_id_n&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;Aggr_revenue&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;numeric&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Connection dbConfig=&quot;koule_postgre.cfg&quot; id=&quot;DBConnection0&quot; type=&quot;JDBC&quot;/&gt;
+@@ -59,7 +59,7 @@
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+ &lt;Node dbConnection=&quot;DBConnection0&quot; enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Clients&quot; guiWidth=&quot;0&quot; guiX=&quot;8&quot; guiY=&quot;111&quot; id=&quot;DB_INPUT_TABLE1&quot; sqlQuery=&quot;select klient_id from p_zakaznik&quot; type=&quot;DB_INPUT_TABLE&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/bonus.csv&quot; guiHeight=&quot;0&quot; guiName=&quot;Bonus&quot; guiWidth=&quot;0&quot; guiX=&quot;8&quot; guiY=&quot;28&quot; id=&quot;DELIMITED_DATA_READER0&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/bonus.csv&quot; guiHeight=&quot;0&quot; guiName=&quot;Bonus&quot; guiWidth=&quot;0&quot; guiX=&quot;8&quot; guiY=&quot;28&quot; id=&quot;DELIMITED_DATA_READER0&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/not_found_clientst.xt&quot; guiHeight=&quot;0&quot; guiName=&quot;Not found clients&quot; guiWidth=&quot;0&quot; guiX=&quot;774&quot; guiY=&quot;28&quot; id=&quot;DELIMITED_DATA_WRITER2&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;164&quot; guiY=&quot;28&quot; id=&quot;EXT_SORT0&quot; sortKey=&quot;Client_id&quot; type=&quot;EXT_SORT&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Ext Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;164&quot; guiY=&quot;111&quot; id=&quot;EXT_SORT1&quot; sortKey=&quot;Client_id&quot; type=&quot;EXT_SORT&quot;/&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequence.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequenceCheckData.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequenceCheckData.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSequenceCheckData.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,25 +1,22 @@
+-&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Fri Jan 05 10:18:14 CET 2007&quot; description=&quot;This graph illustrates usage of Sort component. It sorts data based on specified key. &quot; guiVersion=&quot;1.5&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Fri Jan 05 15:55:58 CET 2007&quot; name=&quot;TestingSort&quot; revision=&quot;1.7&quot;&gt;
+-&lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata&quot;/&gt;
+-&lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+-&lt;/Global&gt;
+-&lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+-&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.sorted&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;536&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;Sequence Checker&quot; guiWidth=&quot;50&quot; guiX=&quot;363&quot; guiY=&quot;20&quot; id=&quot;SEQUENCE_CHECKER0&quot; type=&quot;SEQUENCE_CHECKER&quot;&gt;
+-&lt;attr name=&quot;locale&quot;&gt;EN&lt;/attr&gt;
+-&lt;attr name=&quot;useI18N&quot;&gt;true&lt;/attr&gt;
+-&lt;attr name=&quot;uniqueKeys&quot;&gt;false&lt;/attr&gt;
+-&lt;attr name=&quot;sortKey&quot;&gt;ShipName;ShipVia&lt;/attr&gt;
+-&lt;attr name=&quot;sortOrder&quot;&gt;A&lt;/attr&gt;
+-&lt;/Node&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;194&quot; guiY=&quot;20&quot; id=&quot;SORT0&quot; sortKey=&quot;ShipName;ShipVia&quot; sortOrder=&quot;Ascending&quot; type=&quot;SORT&quot;&gt;
+-&lt;attr name=&quot;locale&quot;&gt;EN&lt;/attr&gt;
+-&lt;attr name=&quot;useI18N&quot;&gt;true&lt;/attr&gt;
+-&lt;/Node&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge0&quot; inPort=&quot;0 (Sort)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;SORT0:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;SEQUENCE_CHECKER0:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (Sequence Checker)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;SORT0:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (Sequence Checker)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (Sort)&quot; toNode=&quot;SEQUENCE_CHECKER0:0&quot;/&gt;
+-&lt;/Phase&gt;
+-&lt;/Graph&gt;
++&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
++&lt;Graph created=&quot;Fri Jan 05 10:18:14 CET 2007&quot; description=&quot;This graph illustrates usage of Sort component. It sorts data based on specified key. &quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:13:17 CET 2007&quot; name=&quot;TestingSort&quot; revision=&quot;1.9&quot;&gt;
++&lt;Global&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
++&lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
++&lt;/Global&gt;
++&lt;Phase number=&quot;0&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.sorted&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;536&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;Sequence Checker&quot; guiWidth=&quot;50&quot; guiX=&quot;363&quot; guiY=&quot;20&quot; id=&quot;SEQUENCE_CHECKER0&quot; type=&quot;SEQUENCE_CHECKER&quot;&gt;
++&lt;attr name=&quot;locale&quot;&gt;EN&lt;/attr&gt;
++&lt;attr name=&quot;useI18N&quot;&gt;true&lt;/attr&gt;
++&lt;attr name=&quot;uniqueKeys&quot;&gt;false&lt;/attr&gt;
++&lt;attr name=&quot;sortKey&quot;&gt;ShipName;ShipVia&lt;/attr&gt;
++&lt;attr name=&quot;sortOrder&quot;&gt;A&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Sort&quot; guiWidth=&quot;0&quot; guiX=&quot;194&quot; guiY=&quot;20&quot; id=&quot;SORT0&quot; locale=&quot;EN&quot; sortKey=&quot;ShipName;ShipVia&quot; sortOrder=&quot;Ascending&quot; type=&quot;SORT&quot; useI18N=&quot;true&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;Edge0&quot; inPort=&quot;0 (Sort)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;SORT0:0&quot;/&gt;
++&lt;Edge fromNode=&quot;SEQUENCE_CHECKER0:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Sequence Checker)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
++&lt;Edge fromNode=&quot;SORT0:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (Sequence Checker)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (Sort)&quot; toNode=&quot;SEQUENCE_CHECKER0:0&quot;/&gt;
++&lt;/Phase&gt;
++&lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopy.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,22 +1,20 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates functionality of SimpleCopy component. Everything brought to SimpleCopy on port 0 is&#10;duplicated onto all connected output ports.&#10;It also shows functionality of Trash Component. It discards everything which is sent into it. Its purpose&#10;is debugging - shows how many records ended in it and can print incoming records, if desired (option debugPrint)&#10;&quot; name=&quot;Testing Simple Copy&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph demonstrates functionality of SimpleCopy component. Everything brought to SimpleCopy on port 0 is&#10;duplicated onto all connected output ports.&#10;It also shows functionality of Trash Component. It discards everything which is sent into it. Its purpose&#10;is debugging - shows how many records ended in it and can print incoming records, if desired (option debugPrint)&#10;&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:14:11 CET 2007&quot; name=&quot;Testing Simple Copy&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/employees.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;BROADCAST&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;BROADCAST&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;BROADCAST2&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;194&quot; id=&quot;BROADCAST2&quot; type=&quot;SIMPLE_COPY&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;&gt;
+-&lt;attr name=&quot;dataPolicy&quot;&gt;Strict&lt;/attr&gt;
+-&lt;/Node&gt;
++&lt;Node dataPolicy=&quot;Strict&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node debugFilename=&quot;${WORKSPACE}/output/Trash1_output.txt&quot; enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH1&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;TRASH1&quot; type=&quot;TRASH&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH2&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;107&quot; id=&quot;TRASH2&quot; type=&quot;TRASH&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;TRASH3&quot; guiWidth=&quot;50&quot; guiX=&quot;545&quot; guiY=&quot;194&quot; id=&quot;TRASH3&quot; type=&quot;TRASH&quot;/&gt;
+-&lt;Edge fromNode=&quot;BROADCAST:0&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE1&quot; inPort=&quot;0 (TRASH1)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (BROADCAST)&quot; toNode=&quot;TRASH1:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;BROADCAST:1&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE2&quot; inPort=&quot;0 (TRASH2)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;1 (BROADCAST)&quot; toNode=&quot;TRASH2:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;BROADCAST:2&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE3&quot; inPort=&quot;0 (BROADCAST2)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;2 (BROADCAST)&quot; toNode=&quot;BROADCAST2:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;BROADCAST2:0&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE4&quot; inPort=&quot;0 (TRASH3)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (BROADCAST2)&quot; toNode=&quot;TRASH3:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (BROADCAST)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;BROADCAST:0&quot;/&gt;
++&lt;Edge fromNode=&quot;BROADCAST:0&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE1&quot; inPort=&quot;0 (TRASH1)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (BROADCAST)&quot; toNode=&quot;TRASH1:0&quot;/&gt;
++&lt;Edge fromNode=&quot;BROADCAST:1&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE2&quot; inPort=&quot;0 (TRASH2)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;1 (BROADCAST)&quot; toNode=&quot;TRASH2:0&quot;/&gt;
++&lt;Edge fromNode=&quot;BROADCAST:2&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE3&quot; inPort=&quot;0 (BROADCAST2)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;2 (BROADCAST)&quot; toNode=&quot;BROADCAST2:0&quot;/&gt;
++&lt;Edge fromNode=&quot;BROADCAST2:0&quot; guiBendpoints=&quot;&quot; id=&quot;INNEREDGE4&quot; inPort=&quot;0 (TRASH3)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (BROADCAST2)&quot; toNode=&quot;TRASH3:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (BROADCAST)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;BROADCAST:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopyEmbeddedMetadata.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleCopyLocale.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSimpleLookup.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortData.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortData.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortData.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,14 +1,14 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph illustrates usage of Sort component. It sorts data based on specified key. &quot; name=&quot;TestingSort&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph illustrates usage of Sort component. It sorts data based on specified key. &quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:22:13 CET 2007&quot; name=&quot;TestingSort&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/delimited/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;20&quot; guiY=&quot;20&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.sorted&quot; guiHeight=&quot;25&quot; guiName=&quot;OUTPUT&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;OUTPUT&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;SORT&quot; guiWidth=&quot;50&quot; guiX=&quot;195&quot; guiY=&quot;20&quot; id=&quot;SORT&quot; sortKey=&quot;ShipName;ShipVia&quot; type=&quot;SORT&quot;/&gt;
+-&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (SORT)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;SORT:0&quot;/&gt;
+-&lt;Edge fromNode=&quot;SORT:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;InMetadata&quot; outPort=&quot;0 (SORT)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
++&lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (SORT)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;SORT:0&quot;/&gt;
++&lt;Edge fromNode=&quot;SORT:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (OUTPUT)&quot; metadata=&quot;Metadata0&quot; outPort=&quot;0 (SORT)&quot; toNode=&quot;OUTPUT:0&quot;/&gt;
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSortUniversal.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSystemExecute.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSystemExecute.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphSystemExecute.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,15 +1,18 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph ilustrates usage of System Ececute Component&quot; name=&quot;graphSystemExecute&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; description=&quot;This graph ilustrates usage of System Ececute Component&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:38:05 CET 2007&quot; name=&quot;graphSystemExecute&quot; revision=&quot;1.2&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata id=&quot;Metadata0&quot;&gt;
+-&lt;Record name=&quot;strings&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;\n&quot; locale=&quot;en.US&quot; name=&quot;Field1&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;strings&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;\n&quot; locale=&quot;en.US&quot; name=&quot;Field1&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/customers.dat&quot; finalRecord=&quot;30&quot; guiHeight=&quot;0&quot; guiName=&quot;Universal Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;56&quot; guiY=&quot;99&quot; id=&quot;DATA_READER0&quot; startRecord=&quot;0&quot; type=&quot;DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/fixlen/customers0.dat&quot; guiHeight=&quot;0&quot; guiName=&quot;Universal Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;56&quot; guiY=&quot;99&quot; id=&quot;DATA_READER0&quot; type=&quot;DATA_READER&quot;&gt;
++&lt;attr name=&quot;finalRecord&quot;&gt;30&lt;/attr&gt;
++&lt;attr name=&quot;startRecord&quot;&gt;0&lt;/attr&gt;
++&lt;/Node&gt;
+ &lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/command.out&quot; guiHeight=&quot;0&quot; guiName=&quot;Universal Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;459&quot; guiY=&quot;99&quot; id=&quot;DATA_WRITER0&quot; type=&quot;DATA_WRITER&quot;/&gt;
+ &lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;System execute&quot; guiWidth=&quot;0&quot; guiX=&quot;254&quot; guiY=&quot;99&quot; id=&quot;SYS_EXECUTE0&quot; interpreter=&quot;sh ${}&quot; type=&quot;SYS_EXECUTE&quot;&gt;
+ &lt;attr name=&quot;command&quot;&gt;cat
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphViewData.grf
+===================================================================
+(Binary files differ)
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXLSReadWrite.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXLSReadWrite.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXLSReadWrite.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,13 +1,13 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph created=&quot;Tue Oct 24 10:36:22 CEST 2006&quot; guiVersion=&quot;1.4&quot; licenseType=&quot;Evaluation license&quot; modified=&quot;Tue Oct 24 12:47:05 CEST 2006&quot; name=&quot;graphXLSRead&quot;&gt;
++&lt;Graph created=&quot;Tue Oct 24 10:36:22 CEST 2006&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:55:38 CET 2007&quot; name=&quot;graphXLSRead&quot; revision=&quot;1.4&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/ordersXLS.fmt&quot; id=&quot;Metadata0&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/delimited/orders.fmt&quot; id=&quot;Metadata0&quot;/&gt;
+ &lt;Connection dbConfig=&quot;koule_postgre.cfg&quot; id=&quot;DBConnection0&quot; type=&quot;JDBC&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Partition&quot; guiWidth=&quot;0&quot; guiX=&quot;272&quot; guiY=&quot;168&quot; id=&quot;PARTITION0&quot; partitionKey=&quot;SHIPVIA&quot; ranges=&quot;1;2;3&quot; type=&quot;PARTITION&quot;/&gt;
+-&lt;Node enabled=&quot;enabled&quot; fieldMap=&quot;ORDERID=$a;CUSTOMERID=$b;EMPLOYEEID=$c;ORDERDATE=$d;REQUIREDDA=$d;SHIPPEDDAT=$f;SHIPVIA=$g;FREIGHT=$h;SHIPNAME=$i;SHIPADDRES=$j;SHIPCITY=$k;SHIPREGION=$l;SHIPPOSTAL=$n;SHIPCOUNTR=$m&quot; fileURL=&quot;${WORKSPACE}/data/ORDERS.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;74&quot; guiY=&quot;168&quot; id=&quot;XLS_READER1&quot; metadataRow=&quot;1&quot; sheetNumber=&quot;0&quot; type=&quot;XLS_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Partition&quot; guiWidth=&quot;0&quot; guiX=&quot;272&quot; guiY=&quot;168&quot; id=&quot;PARTITION0&quot; partitionKey=&quot;ShipVia&quot; ranges=&quot;1;2;3&quot; type=&quot;PARTITION&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fieldMap=&quot;OrderID=$A;CustomerID=$B;EmployeeID=$C;OrderDate=$D;RequiredDate=$E;ShippedDate=$F;ShipVia=$G;Freight=$H;ShipName=$I;ShipAddress=$J;ShipCity=$K;ShipRegion=$L;ShipPostalCode=$M;ShipCountry=$N&quot; fileURL=&quot;${WORKSPACE}/data/other/ORDERS.xls&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Reader&quot; guiWidth=&quot;0&quot; guiX=&quot;74&quot; guiY=&quot;168&quot; id=&quot;XLS_READER1&quot; metadataRow=&quot;1&quot; sheetNumber=&quot;0&quot; type=&quot;XLS_READER&quot;/&gt;
+ &lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/orders.partitioned.xls&quot; firstColumn=&quot;f&quot; guiHeight=&quot;0&quot; guiName=&quot;XLS Data Writer&quot; guiWidth=&quot;0&quot; guiX=&quot;476&quot; guiY=&quot;65&quot; id=&quot;XLS_WRITER0&quot; namesRow=&quot;2&quot; sheetName=&quot;via1&quot; type=&quot;XLS_WRITER&quot;&gt;
+ &lt;attr name=&quot;saveNames&quot;&gt;true&lt;/attr&gt;
+ &lt;/Node&gt;
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXMLExtract.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXMLExtract.grf	2007-03-08 08:27:43 UTC (rev 2571)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphXMLExtract.grf	2007-03-08 08:28:22 UTC (rev 2572)
+@@ -1,72 +1,82 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph name=&quot;XXX&quot;&gt;
++&lt;Graph created=&quot;Wed Mar 07 09:01:26 CET 2007&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Wed Mar 07 11:57:12 CET 2007&quot; name=&quot;XXX&quot; revision=&quot;1.0&quot;&gt;
+ &lt;Global&gt;
+ &lt;Metadata id=&quot;Metadata2&quot;&gt;
+-&lt;Record name=&quot;BenefitsOthers&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;mobilephone&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;car&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;empID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;BenefitsOthers&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;mobilephone&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;car&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;empID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata3&quot;&gt;
+-&lt;Record name=&quot;BenFinancial&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;monthly_bonus&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;yearly_bonus&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;BenFinancial&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;monthly_bonus&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;yearly_bonus&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata1&quot;&gt;
+-&lt;Record name=&quot;Children&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;chname&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;age&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;parentID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Children&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;chname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;age&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;parentID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata4&quot;&gt;
+-&lt;Record name=&quot;customers&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;name&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;joinedKey&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;customers&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;name&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;joinedKey&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata0&quot;&gt;
+-&lt;Record name=&quot;Employees&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;empID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;basic_salary&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;firstname&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;surname&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
++&lt;Record name=&quot;Employees&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;empID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;basic_salary&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;firstname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;surname&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata6&quot;&gt;
+-&lt;Record name=&quot;joinedBenefits&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;car&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;mobilephone&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;financial_bonus&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;joinedBenefits&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;car&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;mobilephone&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;financial_bonus&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;seqKey&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Metadata id=&quot;Metadata5&quot;&gt;
+-&lt;Record name=&quot;Projects&quot; type=&quot;delimited&quot;&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;projName&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;inProjectID&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;projManager&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;Start&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;End&quot; nullable=&quot;true&quot; type=&quot;string&quot;/&gt;
+-&lt;Field delimiter=&quot;;&quot; name=&quot;empID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
+-&lt;Field delimiter=&quot;\r\n&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; type=&quot;integer&quot;/&gt;
++&lt;Record name=&quot;Projects&quot; recordSize=&quot;-1&quot; type=&quot;delimited&quot;&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;projName&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;inProjectID&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;projManager&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;Start&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;End&quot; nullable=&quot;true&quot; shift=&quot;0&quot; type=&quot;string&quot;/&gt;
++&lt;Field delimiter=&quot;;&quot; name=&quot;empID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
++&lt;Field delimiter=&quot;\r\n&quot; name=&quot;jobID&quot; nullable=&quot;false&quot; shift=&quot;0&quot; type=&quot;integer&quot;/&gt;
+ &lt;/Record&gt;
+ &lt;/Metadata&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;Sequence cached=&quot;50&quot; fileURL=&quot;seqkey.seq&quot; id=&quot;Sequence0&quot; name=&quot;seqKey&quot; start=&quot;0&quot; step=&quot;1&quot; type=&quot;SIMPLE_SEQUENCE&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node OneRecordPerLine=&quot;false&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputEMPL.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Employees&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;27&quot; id=&quot;DELIMITED_DATA_WRITER0&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputBENEF.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Join - Benefits&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;369&quot; id=&quot;DELIMITED_DATA_WRITER1&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputCHILD.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Children&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;106&quot; id=&quot;DELIMITED_DATA_WRITER2&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputPROJ.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Projects&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;191&quot; id=&quot;DELIMITED_DATA_WRITER3&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-&lt;Node OneRecordPerLine=&quot;true&quot; append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputCUSTOM.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Customers&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;282&quot; id=&quot;DELIMITED_DATA_WRITER4&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputEMPL.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Employees&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;27&quot; id=&quot;DELIMITED_DATA_WRITER0&quot; type=&quot;DELIMITED_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;false&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputBENEF.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Join - Benefits&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;369&quot; id=&quot;DELIMITED_DATA_WRITER1&quot; type=&quot;DELIMITED_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputCHILD.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Children&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;106&quot; id=&quot;DELIMITED_DATA_WRITER2&quot; type=&quot;DELIMITED_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputPROJ.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Projects&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;191&quot; id=&quot;DELIMITED_DATA_WRITER3&quot; type=&quot;DELIMITED_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/XMLoutputCUSTOM.txt&quot; guiHeight=&quot;0&quot; guiName=&quot;Customers&quot; guiWidth=&quot;0&quot; guiX=&quot;391&quot; guiY=&quot;282&quot; id=&quot;DELIMITED_DATA_WRITER4&quot; type=&quot;DELIMITED_DATA_WRITER&quot;&gt;
++&lt;attr name=&quot;OneRecordPerLine&quot;&gt;true&lt;/attr&gt;
++&lt;/Node&gt;
+ &lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;Merge Join&quot; guiWidth=&quot;0&quot; guiX=&quot;208&quot; guiY=&quot;369&quot; id=&quot;MERGE_JOIN0&quot; joinKey=&quot;seqKey&quot; slaveOverrideKey=&quot;seqKey&quot; type=&quot;MERGE_JOIN&quot;&gt;
+ &lt;attr name=&quot;transform&quot;&gt;${out.0.car} = ${in.0.car};&#13;
+ ${out.0.seqKey} = ${in.0.seqKey};&#13;
+@@ -75,7 +85,7 @@
+ &#13;
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;XMLExtract&quot; guiWidth=&quot;0&quot; guiX=&quot;56&quot; guiY=&quot;135&quot; id=&quot;XML_EXTRACT0&quot; sourceUri=&quot;${WORKSPACE}/data/employees.xml&quot; type=&quot;XML_EXTRACT&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;0&quot; guiName=&quot;XMLExtract&quot; guiWidth=&quot;0&quot; guiX=&quot;56&quot; guiY=&quot;135&quot; id=&quot;XML_EXTRACT0&quot; sourceUri=&quot;${WORKSPACE}/data/other/employees.xml&quot; type=&quot;XML_EXTRACT&quot;&gt;
+ &lt;attr name=&quot;mapping&quot;&gt;&lt;Mappings&gt;&#13;
+ 	&lt;Mapping element=&quot;employee&quot; outPort=&quot;0&quot; xmlFields=&quot;salary&quot; cloverFields=&quot;basic_salary&quot;&gt;&#13;
+ 		&lt;Mapping element=&quot;child&quot; outPort=&quot;1&quot; parentKey=&quot;empID&quot; generatedKey=&quot;parentID&quot;/&gt;&#13;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000212.html">[Cloveretl-svn-commits] CloverETL repos r2571 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000210.html">[Cloveretl-svn-commits] CloverETL repos r2573 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#209">[ date ]</a>
+              <a href="thread.html#209">[ thread ]</a>
+              <a href="subject.html#209">[ subject ]</a>
+              <a href="author.html#209">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

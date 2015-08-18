@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2388 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2388%20-%0A%09trunk/cloveretl.engine/src/org/jetel/interpreter&In-Reply-To=%3C200701291446.l0TEkQjd001755%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000025.html">
+   <LINK REL="Next"  HREF="000027.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2388 -	trunk/cloveretl.engine/src/org/jetel/interpreter</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2388%20-%0A%09trunk/cloveretl.engine/src/org/jetel/interpreter&In-Reply-To=%3C200701291446.l0TEkQjd001755%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2388 -	trunk/cloveretl.engine/src/org/jetel/interpreter">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Jan 29 15:46:26 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000025.html">[Cloveretl-svn-commits] CloverETL repos r2387 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+        <LI>Next message: <A HREF="000027.html">[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-29 15:46:25 +0100 (Mon, 29 Jan 2007)
+New Revision: 2388
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+Log:
+BUGFIX:#10113
+
+Modified: trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-01-29 14:21:39 UTC (rev 2387)
++++ trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-01-29 14:46:25 UTC (rev 2388)
+@@ -1564,9 +1564,8 @@
+     
+     public Object visit(CLVFMapping node, Object data) {
+         DataField field=outputRecords[node.recordNo].getField(node.fieldNo);
+-        int arity=node.arity; // how many children we have defined
++        int arity=node.jjtGetNumChildren(); // how many children we have defined
+         Object value=null;
+-        boolean success=false;
+         try{
+             // we try till success or no more options
+             for (int i=0;i&lt;arity;i++){
+@@ -1579,7 +1578,6 @@
+                     }else{
+                         field.setValue(value);
+                     }
+-                    success=true;
+                     break; // success during assignment, finish looping
+                }catch(Exception ex){
+                     if (i == arity-1)
+@@ -1604,10 +1602,6 @@
+                     +&quot;) - assigning \&quot;&quot; + value + &quot;\&quot; (&quot;+(value!=null ? value.getClass(): &quot;unknown class&quot; )+&quot;)&quot;);
+             
+         }
+-        if (!success){
+-            logger.fatal(&quot;fatal error in mapping on line : &quot;+node.getLineNumber()+&quot; : &quot;+
+-                    node.getColumnNumber());
+-        }
+         return data;
+     }
+     
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000025.html">[Cloveretl-svn-commits] CloverETL repos r2387 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+</A></li>
+	<LI>Next message: <A HREF="000027.html">[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#26">[ date ]</a>
+              <a href="thread.html#26">[ thread ]</a>
+              <a href="subject.html#26">[ subject ]</a>
+              <a href="author.html#26">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

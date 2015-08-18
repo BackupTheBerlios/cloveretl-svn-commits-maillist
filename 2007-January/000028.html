@@ -1,0 +1,434 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2390 - in	trunk/cloveretl.engine/src/org/jetel: graph main
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2390%20-%20in%0A%09trunk/cloveretl.engine/src/org/jetel%3A%20graph%20main&In-Reply-To=%3C200701291456.l0TEuTG1002522%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000027.html">
+   <LINK REL="Next"  HREF="000029.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2390 - in	trunk/cloveretl.engine/src/org/jetel: graph main</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2390%20-%20in%0A%09trunk/cloveretl.engine/src/org/jetel%3A%20graph%20main&In-Reply-To=%3C200701291456.l0TEuTG1002522%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2390 - in	trunk/cloveretl.engine/src/org/jetel: graph main">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Jan 29 15:56:29 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000027.html">[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+        <LI>Next message: <A HREF="000029.html">[Cloveretl-svn-commits] CloverETL repos r2391 -	trunk/cloveretl.engine/src/org/jetel/main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-01-29 15:56:27 +0100 (Mon, 29 Jan 2007)
+New Revision: 2390
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/graph/TransformationGraph.java
+   trunk/cloveretl.engine/src/org/jetel/main/runGraph.java
+Log:
+UPDATE:added reporting of graph Abort caused by user action
+
+Modified: trunk/cloveretl.engine/src/org/jetel/graph/TransformationGraph.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/graph/TransformationGraph.java	2007-01-29 14:55:55 UTC (rev 2389)
++++ trunk/cloveretl.engine/src/org/jetel/graph/TransformationGraph.java	2007-01-29 14:56:27 UTC (rev 2390)
+@@ -336,31 +336,39 @@
+ 	 * @since     April 2, 2002
+ 	 */
+ 	public Result run() {
+-		long timestamp = System.currentTimeMillis();
+-		watchDog = new WatchDog(this, phasesArray, trackingInterval);
++        long timestamp = System.currentTimeMillis();
++        watchDog = new WatchDog(this, phasesArray, trackingInterval);
+ 
+-		logger.info(&quot;Starting WatchDog thread ...&quot;);
+-		watchDog.start();
+-		try {
+-			watchDog.join();
+-		} catch (InterruptedException ex) {
+-			logger.error(ex);
+-			return Result.ABORTED;
+-		}
+-		logger.info(&quot;WatchDog thread finished - total execution time: &quot; 
+-				+ (System.currentTimeMillis() - timestamp) / 1000
+-				+ &quot; (sec)&quot;);
++        logger.info(&quot;Starting WatchDog thread ...&quot;);
++        watchDog.start();
++        try {
++            watchDog.join();
++        } catch (InterruptedException ex) {
++            logger.error(ex);
++            return Result.ABORTED;
++        }
++        logger.info(&quot;WatchDog thread finished - total execution time: &quot;
++                + (System.currentTimeMillis() - timestamp) / 1000 + &quot; (sec)&quot;);
+ 
+-		freeResources();
++        freeResources();
+ 
+-		if (watchDog.getStatus() == Result.FINISHED_OK) {
+-			logger.info(&quot;Graph execution finished successfully&quot;);
+-		} else {
+-			logger.error(&quot;!!! Graph execution finished with errors !!!&quot;);
+-		}
++        switch (watchDog.getStatus()) {
++        case FINISHED_OK:
++            logger.info(&quot;Graph execution finished successfully&quot;);
++            break;
++        case ABORTED:
++            logger.error(&quot;!!! Graph execution aborted !!!&quot;);
++            break;
++        case ERROR:
++            logger.error(&quot;!!! Graph execution finished with errors !!!&quot;);
++            break;
++        default:
++            logger.fatal(&quot;Unexpected result when executing graph !&quot;);
++        }
++        
+         return watchDog.getStatus();
+ 
+-	}
++    }
+ 
+ 
+ 
+
+Modified: trunk/cloveretl.engine/src/org/jetel/main/runGraph.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/main/runGraph.java	2007-01-29 14:55:55 UTC (rev 2389)
++++ trunk/cloveretl.engine/src/org/jetel/main/runGraph.java	2007-01-29 14:56:27 UTC (rev 2390)
+@@ -155,132 +155,150 @@
+ 	 * @param  args  Description of the Parameter
+ 	 */
+ 	public static void main(String args[]) {
+-		boolean verbose = false;
++        boolean verbose = false;
+         boolean loadFromSTDIN = false;
+-		Properties properties = new Properties();
+-		int trackingInterval=-1;
+-		String pluginsRootDirectory = null;
++        Properties properties = new Properties();
++        int trackingInterval = -1;
++        String pluginsRootDirectory = null;
+         String password = null;
+         String logHost = null;
+-		
+-		System.out.println(&quot;***  CloverETL framework/transformation graph runner ver &quot;+RUN_GRAPH_VERSION+&quot;, (c) 2002-06 D.Pavlis, released under GNU Lesser General Public License  ***&quot;);
+-		System.out.println(&quot; Running with framework version: &quot;+JetelVersion.MAJOR_VERSION+&quot;.&quot;+JetelVersion.MINOR_VERSION+&quot; build#&quot;+JetelVersion.BUILD_NUMBER+&quot; compiled &quot;+JetelVersion.LIBRARY_BUILD_DATETIME);
+-		System.out.println();
+-        
+-		if (args.length &lt; 1) {
+-			printHelp();
+-			System.exit(-1);
+-		}
+-        
+-		// process command line arguments
+-		for (int i = 0; i &lt; args.length; i++) {
+-			if (args[i].startsWith(VERBOSE_SWITCH)) {
+-				verbose = true;
+-			}else if (args[i].startsWith(PROPERTY_FILE_SWITCH)){
+-				i++;
+-				try {
+-					InputStream inStream = new BufferedInputStream(new FileInputStream(args[i]));
+-					properties.load(inStream);
+-				} catch (IOException ex) {
+-					logger.error(ex.getMessage(), ex);
+-					System.exit(-1);
+-				}
+-			}else if (args[i].startsWith(PROPERTY_DEFINITION_SWITCH)){
+-			   	//String[] nameValue=args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,&quot;&quot;).split(&quot;=&quot;);
+-				//properties.setProperty(nameValue[0],nameValue[1]);
+-		    	String tmp =  args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,&quot;&quot;);
+-        	    properties.setProperty(tmp.substring(0,tmp.indexOf(&quot;=&quot;)),tmp.substring(tmp.indexOf(&quot;=&quot;) +1)); 
+-			}else if (args[i].startsWith(TRACKING_INTERVAL_SWITCH)) {
+-				i++;
+-                try{
++
++        System.out
++                .println(&quot;***  CloverETL framework/transformation graph runner ver &quot;
++                        + RUN_GRAPH_VERSION
++                        + &quot;, (c) 2002-06 D.Pavlis, released under GNU Lesser General Public License  ***&quot;);
++        System.out.println(&quot; Running with framework version: &quot;
++                + JetelVersion.MAJOR_VERSION + &quot;.&quot; + JetelVersion.MINOR_VERSION
++                + &quot; build#&quot; + JetelVersion.BUILD_NUMBER + &quot; compiled &quot;
++                + JetelVersion.LIBRARY_BUILD_DATETIME);
++        System.out.println();
++
++        if (args.length &lt; 1) {
++            printHelp();
++            System.exit(-1);
++        }
++
++        // process command line arguments
++        for (int i = 0; i &lt; args.length; i++) {
++            if (args[i].startsWith(VERBOSE_SWITCH)) {
++                verbose = true;
++            } else if (args[i].startsWith(PROPERTY_FILE_SWITCH)) {
++                i++;
++                try {
++                    InputStream inStream = new BufferedInputStream(
++                            new FileInputStream(args[i]));
++                    properties.load(inStream);
++                } catch (IOException ex) {
++                    logger.error(ex.getMessage(), ex);
++                    System.exit(-1);
++                }
++            } else if (args[i].startsWith(PROPERTY_DEFINITION_SWITCH)) {
++                // String[]
++                // nameValue=args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,&quot;&quot;).split(&quot;=&quot;);
++                // properties.setProperty(nameValue[0],nameValue[1]);
++                String tmp = args[i].replaceFirst(PROPERTY_DEFINITION_SWITCH,
++                        &quot;&quot;);
++                properties.setProperty(tmp.substring(0, tmp.indexOf(&quot;=&quot;)), tmp
++                        .substring(tmp.indexOf(&quot;=&quot;) + 1));
++            } else if (args[i].startsWith(TRACKING_INTERVAL_SWITCH)) {
++                i++;
++                try {
+                     trackingInterval = Integer.parseInt(args[i]);
+-                }catch(NumberFormatException ex){
+-                    System.err.println(&quot;Invalid tracking parameter: \&quot;&quot;+args[i]+&quot;\&quot;&quot;);
++                } catch (NumberFormatException ex) {
++                    System.err.println(&quot;Invalid tracking parameter: \&quot;&quot;
++                            + args[i] + &quot;\&quot;&quot;);
+                     System.exit(-1);
+                 }
+-			}else if (args[i].startsWith(INFO_SWITCH)){
+-			    printInfo();
+-			    System.exit(0);
+-            }else if (args[i].startsWith(PLUGINS_SWITCH)){
++            } else if (args[i].startsWith(INFO_SWITCH)) {
++                printInfo();
++                System.exit(0);
++            } else if (args[i].startsWith(PLUGINS_SWITCH)) {
+                 i++;
+                 pluginsRootDirectory = args[i];
+-            }else if (args[i].startsWith(PASSWORD_SWITCH)){
++            } else if (args[i].startsWith(PASSWORD_SWITCH)) {
+                 i++;
+-                password = args[i]; 
+-            }else if (args[i].startsWith(LOAD_FROM_STDIN_SWITCH)){
+-                loadFromSTDIN=true;
+-            }else if (args[i].startsWith(LOG_HOST_SWITCH)){
++                password = args[i];
++            } else if (args[i].startsWith(LOAD_FROM_STDIN_SWITCH)) {
++                loadFromSTDIN = true;
++            } else if (args[i].startsWith(LOG_HOST_SWITCH)) {
+                 i++;
+-                logHost = args[i]; 
+-            }else if (args[i].startsWith(&quot;-&quot;)) {
+-				System.err.println(&quot;Unknown option: &quot;+args[i]);
+-				System.exit(-1);
++                logHost = args[i];
++            } else if (args[i].startsWith(&quot;-&quot;)) {
++                System.err.println(&quot;Unknown option: &quot; + args[i]);
++                System.exit(-1);
+             }
+-		}
++        }
+ 
+-        //setup log4j appenders
+-        if(logHost != null) {
++        // setup log4j appenders
++        if (logHost != null) {
+             String[] hostAndPort = logHost.split(&quot;:&quot;);
+-            if(hostAndPort[0].length() == 0 || hostAndPort.length &gt; 2) {
+-                System.err.println(&quot;Invalid log destination, i.e. -loghost localhost:4445&quot;);
++            if (hostAndPort[0].length() == 0 || hostAndPort.length &gt; 2) {
++                System.err
++                        .println(&quot;Invalid log destination, i.e. -loghost localhost:4445&quot;);
+                 System.exit(-1);
+             }
+             int port = 4445;
+             try {
+-                if(hostAndPort.length == 2) {
++                if (hostAndPort.length == 2) {
+                     port = Integer.parseInt(hostAndPort[1]);
+                 }
+-            } catch(NumberFormatException e) {
+-                System.err.println(&quot;Invalid log destination, i.e. -loghost localhost:4445&quot;);
++            } catch (NumberFormatException e) {
++                System.err
++                        .println(&quot;Invalid log destination, i.e. -loghost localhost:4445&quot;);
+                 System.exit(-1);
+             }
+-            Logger.getRootLogger().addAppender(new SocketAppender(hostAndPort[0], port));
++            Logger.getRootLogger().addAppender(
++                    new SocketAppender(hostAndPort[0], port));
+         }
+ 
+-        //engine initialization - should be called only once
++        // engine initialization - should be called only once
+         runGraph.initEngine(pluginsRootDirectory, password);
+-        
+-		//prapere input stream with XML graph definition
++
++        // prapere input stream with XML graph definition
+         InputStream in = null;
+         if (loadFromSTDIN) {
+             System.out.println(&quot;Graph definition loaded from STDIN&quot;);
+             in = System.in;
+         } else {
+-            System.out.println(&quot;Graph definition file: &quot; + args[args.length - 1]);
+-            try{
++            System.out.println(&quot;Graph definition file: &quot;
++                    + args[args.length - 1]);
++            try {
+                 URL fileURL = FileUtils.getFileURL(null, args[args.length - 1]);
+                 in = fileURL.openStream();
+             } catch (IOException e) {
+-                System.err.println(&quot;Error - graph definition file can't be read: &quot; + e.getMessage());
++                System.err
++                        .println(&quot;Error - graph definition file can't be read: &quot;
++                                + e.getMessage());
+                 System.exit(-1);
+             }
+         }
+-        
+-        //loading graph from the input stream
++
++        // loading graph from the input stream
+         TransformationGraph graph = null;
+         try {
+             graph = runGraph.loadGraph(in, properties);
+ 
+-            //check graph elements configuration
++            // check graph elements configuration
+             logger.info(&quot;Checking graph configuration...&quot;);
+             ConfigurationStatus status = graph.checkConfig(null);
+             status.log();
+ 
+-            if(!graph.init()) {
+-                throw new GraphConfigurationException(&quot;Graph initialization failed.&quot;);
++            if (!graph.init()) {
++                throw new GraphConfigurationException(
++                        &quot;Graph initialization failed.&quot;);
+             }
+ 
+             if (verbose) {
+-                //this can be called only after graph.init()
++                // this can be called only after graph.init()
+                 graph.dumpGraphConfiguration();
+             }
+-        }catch(XMLConfigurationException ex){
++        } catch (XMLConfigurationException ex) {
+             logger.error(&quot;Error in reading graph from XML !&quot;, ex);
+             if (verbose) {
+                 ex.printStackTrace(System.err);
+             }
+             System.exit(-1);
+-        }catch(GraphConfigurationException ex){
++        } catch (GraphConfigurationException ex) {
+             logger.error(&quot;Error - graph's configuration invalid !&quot;, ex);
+             if (verbose) {
+                 ex.printStackTrace(System.err);
+@@ -293,35 +311,42 @@
+             }
+             System.exit(-1);
+         }
+-        
++
+         // set tracking interval
+-		if(trackingInterval!=-1){
+-			graph.setTrackingInterval(trackingInterval*1000);
+-		}
+-		
+-		//	start all Nodes (each node is one thread)
+-		Result result=Result.N_A;
+-		try {
++        if (trackingInterval != -1) {
++            graph.setTrackingInterval(trackingInterval * 1000);
++        }
++
++        // start all Nodes (each node is one thread)
++        Result result = Result.N_A;
++        try {
+             result = graph.run();
+-		} catch (RuntimeException ex) {
+-			System.err.println(&quot;Fatal error during graph run !&quot;);
+-			System.err.println(ex.getCause().getMessage());
+-			if (verbose) {
+-				ex.printStackTrace();
+-			}
+-			System.exit(-1);
+-		}
+-		if (result==Result.FINISHED_OK) {
+-			// everything O.K.
+-			System.out.println(&quot;Execution of graph successful !&quot;);
+-			System.exit(0);
+-		} else {
+-			// something FAILED !!
+-			System.err.println(&quot;Execution of graph failed !&quot;);
+-			System.exit(result.code());
+-		}
++        } catch (RuntimeException ex) {
++            System.err.println(&quot;Fatal error during graph run !&quot;);
++            System.err.println(ex.getCause().getMessage());
++            if (verbose) {
++                ex.printStackTrace();
++            }
++            System.exit(-1);
++        }
++        switch (result) {
+ 
+-	}
++        case FINISHED_OK:
++            // everything O.K.
++            System.out.println(&quot;Execution of graph successful !&quot;);
++            System.exit(0);
++            break;
++        case ABORTED:
++            // execution was ABORTED !!
++            System.err.println(&quot;Execution of graph aborted !&quot;);
++            System.exit(result.code());
++            break;
++        default:
++            System.err.println(&quot;Execution of graph failed !&quot;);
++            System.exit(result.code());
++        }
++
++    }
+     
+     
+ 	private static void printHelp() {
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000027.html">[Cloveretl-svn-commits] CloverETL repos r2389 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+	<LI>Next message: <A HREF="000029.html">[Cloveretl-svn-commits] CloverETL repos r2391 -	trunk/cloveretl.engine/src/org/jetel/main
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#28">[ date ]</a>
+              <a href="thread.html#28">[ thread ]</a>
+              <a href="subject.html#28">[ subject ]</a>
+              <a href="author.html#28">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

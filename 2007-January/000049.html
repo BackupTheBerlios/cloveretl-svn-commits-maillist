@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2411 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2411%20-%0A%09branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200701311221.l0VCLvaI007753%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000048.html">
+   <LINK REL="Next"  HREF="000050.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2411 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2411%20-%0A%09branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter&In-Reply-To=%3C200701311221.l0VCLvaI007753%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2411 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Jan 31 13:21:57 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000048.html">[Cloveretl-svn-commits] CloverETL repos r2410 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000050.html">[Cloveretl-svn-commits] CloverETL repos r2412 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-31 13:21:57 +0100 (Wed, 31 Jan 2007)
+New Revision: 2411
+
+Modified:
+   branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+Log:
+BUGFIX#35419:CloverDataWriter - don't flush empty buffer to file
+
+Modified: branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java
+===================================================================
+--- branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-01-31 11:05:38 UTC (rev 2410)
++++ branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/formatter/CloverDataFormatter.java	2007-01-31 12:21:57 UTC (rev 2411)
+@@ -139,9 +139,8 @@
+ 					ByteBufferUtils.flush(idxBuffer,idxWriter);
+ 					idxWriter.close();
+ 					ByteBufferUtils.reload(idxBuffer,idxReader);
+-				}else{
+-					idxBuffer.flip();
+ 				}
++				idxBuffer.flip();
+ 				long startValue = 0;//first index
+ 				int position;
+ 				if (out instanceof ZipOutputStream) {
+@@ -221,6 +220,7 @@
+ 		while (buffer.remaining() &gt;= LONG_SIZE_BYTES){
+ 			if (idxBuffer.remaining() &lt; SHORT_SIZE_BYTES ){//end of idxBuffer, reload it
+ 				ByteBufferUtils.reload(idxBuffer,idxReader);
++				idxBuffer.flip();
+ 			}
+ 			if (idxBuffer.remaining() &lt; SHORT_SIZE_BYTES ){//there is no more sizes to working up
+ 				break;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000048.html">[Cloveretl-svn-commits] CloverETL repos r2410 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000050.html">[Cloveretl-svn-commits] CloverETL repos r2412 -	branches/cloveretl.engine.rel-2-0-4/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#49">[ date ]</a>
+              <a href="thread.html#49">[ thread ]</a>
+              <a href="subject.html#49">[ subject ]</a>
+              <a href="author.html#49">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

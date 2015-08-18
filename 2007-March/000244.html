@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2607 -	trunk/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2607%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200703130836.l2D8aMjp031220%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000243.html">
+   <LINK REL="Next"  HREF="000245.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2607 -	trunk/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2607%20-%0A%09trunk/cloveretl.engine/examples&In-Reply-To=%3C200703130836.l2D8aMjp031220%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2607 -	trunk/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Mar 13 09:36:22 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000243.html">[Cloveretl-svn-commits] CloverETL repos r2606 -	trunk/cloveretl.engine/examples/metadata
+</A></li>
+        <LI>Next message: <A HREF="000245.html">[Cloveretl-svn-commits] CloverETL repos r2609 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#244">[ date ]</a>
+              <a href="thread.html#244">[ thread ]</a>
+              <a href="subject.html#244">[ subject ]</a>
+              <a href="author.html#244">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-13 09:36:22 +0100 (Tue, 13 Mar 2007)
+New Revision: 2607
+
+Removed:
+   trunk/cloveretl.engine/examples/customizedTransformExample.java
+   trunk/cloveretl.engine/examples/employees.list.dat
+Log:
+CHANGE:data was split and moved to data/delimited, data/fixlen or data/other
+
+Deleted: trunk/cloveretl.engine/examples/customizedTransformExample.java
+===================================================================
+--- trunk/cloveretl.engine/examples/customizedTransformExample.java	2007-03-13 08:35:34 UTC (rev 2606)
++++ trunk/cloveretl.engine/examples/customizedTransformExample.java	2007-03-13 08:36:22 UTC (rev 2607)
+@@ -1,32 +0,0 @@
+-import java.util.Properties;
+-
+-import org.apache.commons.logging.LogFactory;
+-import org.jetel.component.CustomizedRecordTransform;
+-import org.jetel.component.DataRecordTransform;
+-import org.jetel.data.DataRecord;
+-import org.jetel.data.sequence.Sequence;
+-import org.jetel.exception.ComponentNotReadyException;
+-import org.jetel.exception.TransformException;
+-import org.jetel.metadata.DataRecordMetadata;
+-
+-
+-public class customizedTransformExample extends DataRecordTransform {
+-	
+-	CustomizedRecordTransform transformation;
+-	
+-	public boolean init(Properties arg0, DataRecordMetadata[] arg1, DataRecordMetadata[] arg2) throws ComponentNotReadyException {
+-		transformation = new CustomizedRecordTransform(LogFactory.getLog(customizedTransformExample.class));
+-		transformation.addFieldToFieldRule(&quot;*.*&quot;, &quot;*.*&quot;);
+-		Sequence sequence = getGraph().getSequence(&quot;Sequence0&quot;);
+-		sequence.reset();
+-		transformation.addSequenceToFieldRule(&quot;0.no&quot;, sequence);
+-		transformation.setGraph(this.getGraph());
+-		return transformation.init(arg0, arg1, arg2);
+-	}
+-
+-	public boolean transform(DataRecord[] arg0, DataRecord[] arg1)
+-			throws TransformException {
+-		return transformation.transform(arg0, arg1);
+-	}
+-
+-}
+
+Deleted: trunk/cloveretl.engine/examples/employees.list.dat
+===================================================================
+(Binary files differ)
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000243.html">[Cloveretl-svn-commits] CloverETL repos r2606 -	trunk/cloveretl.engine/examples/metadata
+</A></li>
+	<LI>Next message: <A HREF="000245.html">[Cloveretl-svn-commits] CloverETL repos r2609 -	trunk/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#244">[ date ]</a>
+              <a href="thread.html#244">[ thread ]</a>
+              <a href="subject.html#244">[ subject ]</a>
+              <a href="author.html#244">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2562 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2562%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200703070954.l279slZE019495%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000199.html">
+   <LINK REL="Next"  HREF="000201.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2562 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2562%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200703070954.l279slZE019495%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2562 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Mar  7 10:54:47 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000199.html">[Cloveretl-svn-commits] CloverETL repos r2561 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000201.html">[Cloveretl-svn-commits] CloverETL repos r2563 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#200">[ date ]</a>
+              <a href="thread.html#200">[ thread ]</a>
+              <a href="subject.html#200">[ subject ]</a>
+              <a href="author.html#200">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-07 10:54:46 +0100 (Wed, 07 Mar 2007)
+New Revision: 2562
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java
+Log:
+UPDATE:DataGenerator - better error messaging in init() method
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java	2007-03-06 13:21:46 UTC (rev 2561)
++++ trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java	2007-03-07 09:54:46 UTC (rev 2562)
+@@ -191,17 +191,19 @@
+  
+         randomField = new boolean[metadata.getNumFields()];
+ 		Arrays.fill(randomField, false);
+-		int randomIndex;
+-        int sequenceIndex;
++		int randomIndex = -1;
++        int sequenceIndex = -1;
+         DataField tmpField;
+         char fieldType;
+         //cut random and sequence fields from pattern record
+         //prepare random multiplier and move for random fields (against Random class defaults)
+         //prepare sequence ID
+         for (int i=0;i&lt;metadata.getNumFields();i++){
+-        	randomIndex = StringUtils.findString(metadata.getField(i).getName(), 
+-        			randomFields);
+-        	if (randomIndex &gt; -1){//field found among random fields
++			if (randomFields != null) {
++				randomIndex = StringUtils.findString(metadata.getField(i)
++						.getName(), randomFields);
++			}        	
++			if (randomIndex &gt; -1){//field found among random fields
+         		cutMetadata.delField(metadata.getField(i).getName());
+         		randomField[i] = true;
+         		fieldType = metadata.getField(i).getType();
+@@ -299,9 +301,11 @@
+ 							metadata.getField(i).getName() + &quot; : &quot; + metadata.getField(i).getTypeAsString());
+ 				}
+         	}else{//field not found among random fields
+-        		sequenceIndex = StringUtils.findString(metadata.getField(i).getName(), 
++        		if (sequenceFields != null) {
++        			sequenceIndex = StringUtils.findString(metadata.getField(i).getName(), 
+         				sequenceFields);
+         		if (sequenceIndex &gt; -1){//field found among sequence fields
++				}
+ 					if (cutMetadata.getNumFields() &gt; 1) {
+ 						cutMetadata.delField(metadata.getField(i).getName());
+ 					}else{
+@@ -349,8 +353,17 @@
+ 			}
+ 			try {
+ 				patternRecord = parser.getNext();
++				if (patternRecord == null) {
++					ComponentNotReadyException e = 
++						new ComponentNotReadyException(this, 
++								&quot;Can't get record from pattern: &quot; + StringUtils.quote(pattern));
++					e.setAttributeName(XML_PATTERN_ATTRIBUTE);
++					throw e;
++				}
+ 			} catch (JetelException e) {
+-				throw new ComponentNotReadyException(this, e);
++				ComponentNotReadyException e1 = new ComponentNotReadyException(this, e);
++				e1.setAttributeName(XML_PATTERN_ATTRIBUTE);
++				throw e1;
+ 			}
+ 			parser.close();
+ 		}		
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000199.html">[Cloveretl-svn-commits] CloverETL repos r2561 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000201.html">[Cloveretl-svn-commits] CloverETL repos r2563 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/data
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#200">[ date ]</a>
+              <a href="thread.html#200">[ thread ]</a>
+              <a href="subject.html#200">[ subject ]</a>
+              <a href="author.html#200">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

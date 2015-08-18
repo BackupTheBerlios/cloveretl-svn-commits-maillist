@@ -1,0 +1,281 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2384 -	trunk/cloveretl.engine/src/org/jetel/util
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2384%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200701290914.l0T9EBCf003378%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000021.html">
+   <LINK REL="Next"  HREF="000023.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2384 -	trunk/cloveretl.engine/src/org/jetel/util</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2384%20-%0A%09trunk/cloveretl.engine/src/org/jetel/util&In-Reply-To=%3C200701290914.l0T9EBCf003378%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2384 -	trunk/cloveretl.engine/src/org/jetel/util">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Jan 29 10:14:11 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000021.html">[Cloveretl-svn-commits] CloverETL repos r2383 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000023.html">[Cloveretl-svn-commits] CloverETL repos r2385 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-01-29 10:14:10 +0100 (Mon, 29 Jan 2007)
+New Revision: 2384
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/util/BitArray.java
+Log:
+UPDATE:performance optimalized
+
+Modified: trunk/cloveretl.engine/src/org/jetel/util/BitArray.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/util/BitArray.java	2007-01-26 13:16:48 UTC (rev 2383)
++++ trunk/cloveretl.engine/src/org/jetel/util/BitArray.java	2007-01-29 09:14:10 UTC (rev 2384)
+@@ -18,7 +18,6 @@
+ *
+ */
+ package org.jetel.util;
+-import java.lang.IndexOutOfBoundsException;
+ import java.nio.ByteBuffer;
+ import java.util.Arrays;
+ /**
+@@ -35,6 +34,7 @@
+ 
+ 	private  byte bits[];
+ 	private  int length;
++    private  int lengthBytes;
+ 
+ 
+ 	/**
+@@ -45,7 +45,8 @@
+ 	public BitArray(int size) {
+ 		length = size;
+ 		if (length&lt;1) throw new RuntimeException(&quot;Can't create ZERO length array !&quot;);
+-		bits = new byte[(size-1) / 8 + 1];
++		bits = new byte[((size-1) &gt;&gt; 3) + 1];
++        lengthBytes=bits.length;
+ 		// init array
+         Arrays.fill(bits,(byte)0);
+ 	}
+@@ -61,6 +62,7 @@
+     private BitArray(byte[] bits,int length){
+         this.bits=bits;
+         this.length=length;
++        this.lengthBytes=bitsLength2Bytes(length);
+         
+     }
+     
+@@ -78,20 +80,31 @@
+     }
+ 
+     /**
+-     * Resizes the BitArray to new size &amp; initializes all
+-     * bits to 0.
++     * Utility method which makes sure we can
++     * accomodate specified number of bits and then
++     * resets all bits.
+      * 
+      * @param size
++     * @since 23.1.2007
++     */
++    public void resize(int size){
++       ensureSize(size);
++       resetAll();
++    }
++    
++    /**
++     * Ensures that the BitArray can accomodate specified
++     * number of bits
++     * 
++     * @param size
+      * @since 18.1.2007
+      */
+-    public void resize(int size){
++    public void ensureSize(int size){
+         length = size;
+-        if (length&lt;1) throw new RuntimeException(&quot;Can't create ZERO length array !&quot;);
+-        if (bits.length &lt; ((size-1) / 8 + 1)){
+-            bits = new byte[(size-1) / 8 + 1];
++        lengthBytes = ((size-1) &gt;&gt; 3) + 1; 
++        if (bits.length &lt; lengthBytes){
++            bits = new byte[lengthBytes];
+         }
+-        // init array
+-        Arrays.fill(bits,(byte)0);
+        
+     }
+     
+@@ -102,9 +115,6 @@
+ 	 *@param  index  which bit to set
+ 	 */
+ 	public final void set(int index) {
+-		if (index &gt;= length) {
+-			throw new IndexOutOfBoundsException();
+-		}
+ 		bits[index &gt;&gt; 3] |= (byte) (1 &lt;&lt; (index % 8));
+ 	}
+ 
+@@ -116,19 +126,16 @@
+ 	 *@param  index  which bit to reset
+ 	 */
+ 	public final void reset(int index) {
+-		if (index &gt;= length) {
+-			throw new IndexOutOfBoundsException();
+-		}
+ 		bits[index &gt;&gt; 3] &amp;= (~((byte) (1 &lt;&lt; (index % 8))));
+ 	}
+ 
+     
+     public final void resetAll(){
+-        Arrays.fill(bits, (byte)0);
++        Arrays.fill(bits,0,lengthBytes,(byte)0);
+     }
+     
+     public final void setAll(){
+-        Arrays.fill(bits,(byte)0xFF);
++        Arrays.fill(bits,0,lengthBytes,(byte)0xFF);
+     }
+ 
+ 	/**
+@@ -138,24 +145,20 @@
+ 	 *@param  index  which bit to check
+ 	 *@return        true/false according to bit state
+ 	 */
+-	public final boolean get(int index) {
+-		if (index &gt;= length) {
+-			throw new IndexOutOfBoundsException();
+-		}
+-		byte pattern = (byte) (1 &lt;&lt; (index % 8));
+-		return (bits[index &gt;&gt; 3] &amp; pattern) == pattern ? true : false;
++	public final boolean isSet(int index) {
++		return (bits[index &gt;&gt; 3] &amp; ((byte) (1 &lt;&lt; (index % 8)))) != 0;
+ 	}
+ 
+ 
+ 	/**
+ 	 *  Gets state of specified bit&lt;br&gt;
+-	 *  Synonym for get()
++	 *  Synonym for isSet()
+ 	 *
+ 	 *@param  index  which bit to check
+ 	 *@return        true/false according to bit state
+ 	 */
+-	public final boolean isSet(int index) {
+-		return get(index);
++	public final boolean get(int index) {
++		return isSet(index);
+ 	}
+ 
+ 
+@@ -213,7 +216,7 @@
+      *@since          October 29, 2002
+      */
+     public void serialize(ByteBuffer buffer) {
+-         buffer.put(bits);
++         buffer.put(bits,0,lengthBytes);
+     }
+ 
+ 
+@@ -224,7 +227,7 @@
+      *@since          October 29, 2002
+      */
+     public void deserialize(ByteBuffer buffer) {
+-        buffer.get(bits);
++        buffer.get(bits,0,lengthBytes);
+     }
+ 
+     
+@@ -253,6 +256,11 @@
+         bytes[bit &gt;&gt; 3] |= (byte) (1 &lt;&lt; (bit % 8));
+     }
+     
++    public final static void set(ByteBuffer bytes,int base,int bit){
++        final int position=bit &gt;&gt; 3 + bytes.position() + base ;
++        bytes.put(position, (byte)( bytes.get(position) | (1 &lt;&lt; (bit % 8))));
++    }
++    
+     /**
+      *  Gets status of specified bit in array of bytes - counting
+      * from left.
+@@ -264,10 +272,14 @@
+      * @since 18.1.2007
+      */
+     public final static boolean isSet(byte[] bytes,int bit){
+-        final byte pattern = (byte) (1 &lt;&lt; (bit % 8));
+-        return ((bytes[bit &gt;&gt; 3] &amp; pattern) == pattern );
++        return ((bytes[bit &gt;&gt; 3] &amp; ((byte) (1 &lt;&lt; (bit % 8)))) != 0 );
+     }
+     
++    public final static boolean isSet(ByteBuffer bytes,int base, int bit){
++        final int position=bit &gt;&gt; 3 + bytes.position() + base ;
++        return ((bytes.get(position) &amp; ((byte) (1 &lt;&lt; (bit % 8))))!= 0); 
++        
++    }
+     
+     /**
+      * Resets specified bit in array of bytes - counting
+@@ -281,6 +293,22 @@
+     public final static void reset(byte[] bytes, int bit){
+         bytes[bit &gt;&gt; 3] &amp;= (~((byte) (1 &lt;&lt; (bit % 8))));
+     }
++  
++    public final static void reset(ByteBuffer bytes, int base, int bit){
++        final int position=bit &gt;&gt; 3 + bytes.position()+base;
++        bytes.put(position, (byte)( bytes.get(position) &amp; (~((1 &lt;&lt; (bit % 8))))));
++    }
++
++    /**
++     * How many bytes are used to store the number
++     * of bits this BitArray can represent
++     * 
++     * @return the lengthBytes
++     * @since 25.1.2007
++     */
++    public int getLengthBytes() {
++        return lengthBytes;
++    }   
+ }
+ /*
+  *  End class BitArray
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000021.html">[Cloveretl-svn-commits] CloverETL repos r2383 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000023.html">[Cloveretl-svn-commits] CloverETL repos r2385 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#22">[ date ]</a>
+              <a href="thread.html#22">[ thread ]</a>
+              <a href="subject.html#22">[ subject ]</a>
+              <a href="author.html#22">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

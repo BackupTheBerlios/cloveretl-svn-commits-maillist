@@ -1,0 +1,474 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2506 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2506%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200702261746.l1QHko6Q031748%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000143.html">
+   <LINK REL="Next"  HREF="000145.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2506 -	trunk/cloveretl.engine/src/org/jetel/data/parser</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2506%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200702261746.l1QHko6Q031748%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2506 -	trunk/cloveretl.engine/src/org/jetel/data/parser">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 26 18:46:50 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000143.html">[Cloveretl-svn-commits] CloverETL repos r2505 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000145.html">[Cloveretl-svn-commits] CloverETL repos r2507 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-26 18:46:49 +0100 (Mon, 26 Feb 2007)
+New Revision: 2506
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java
+   trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java
+   trunk/cloveretl.engine/src/org/jetel/data/parser/XLSParser.java
+Log:
+UPDATE:XLSReader can now read from more sheets
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java	2007-02-26 17:45:05 UTC (rev 2505)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/JExcelXLSDataParser.java	2007-02-26 17:46:49 UTC (rev 2506)
+@@ -44,6 +44,7 @@
+ import org.jetel.exception.JetelException;
+ import org.jetel.metadata.DataFieldMetadata;
+ import org.jetel.util.StringUtils;
++import org.jetel.util.WcardPattern;
+ 
+ /**
+  * Parsing data from xls file using JExcelAPI.
+@@ -61,6 +62,7 @@
+ 	private Sheet sheet;
+ 	private Cell cell;
+ 	private String charset = null;
++	private short sheetCounter;
+ 	
+ 	/**
+ 	 * Default constructor
+@@ -241,28 +243,50 @@
+        }catch(Exception ex){
+             throw new ComponentNotReadyException(ex);
+         }
+-        //setting sheet for reading data
+-        if (sheetName!=null){
+-            sheet = wb.getSheet(sheetName);
+-        }else{
+-            try {
+-                sheet = wb.getSheet(sheetNumber);
+-            }catch(IndexOutOfBoundsException ex){
+-                throw new ComponentNotReadyException(&quot;There is no sheet with number \&quot;&quot; +   sheetNumber +&quot;\&quot;&quot;);
+-            }
++         currentRow = firstRow;
++         sheetCounter = -1;
++         if (sheetNumber != null){
++        	 sheetNumberIterator = new NumberIterator(sheetNumber);
++         }
++        if (!getNextSheet()) {
++        	throw new ComponentNotReadyException(&quot;There is no sheet conforming sheet name nor sheet number pattern&quot;);
+         }
+-        if (sheet == null) {
+-            throw new ComponentNotReadyException(&quot;There is no sheet with name \&quot;&quot; + sheetName +&quot;\&quot;&quot;);
+-        }
+-        currentRow = firstRow;
+-		if (lastRow == -1) {
+-			lastRow = sheet.getRows();
+-		}        
+ 		if (metadata != null) {
+         	fieldNumber = new int[metadata.getNumFields()][2];
+         	mapFields();
+         }
+ 	}
++	
++	@Override
++	public boolean getNextSheet() {
++    	if (sheetNumberIterator != null){
++    		if (!sheetNumberIterator.hasNext()){
++    			return false;
++    		}
++    		try{
++    			sheet = wb.getSheet(sheetNumberIterator.next());
++    		}catch(IndexOutOfBoundsException e){
++    			return false;
++    		}
++    	}else{
++    		boolean found = false;
++    		while (!found){
++    			try {
++					sheet = wb.getSheet(++sheetCounter);
++				} catch (IndexOutOfBoundsException e) {
++					return false;
++				}
++				if (WcardPattern.checkName(sheetName, sheet.getName())) {
++					found = true;
++				}
++    		}
++    	}
++        currentRow = firstRow;
++		if (lastRow == -1 || lastRow &gt; sheet.getRows()) {
++			lastRow = sheet.getRows();
++		}       
++		return true;
++	}
+ 
+ 	public String getCharset() {
+ 		return charset;
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java	2007-02-26 17:45:05 UTC (rev 2505)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/XLSDataParser.java	2007-02-26 17:46:49 UTC (rev 2506)
+@@ -28,6 +28,7 @@
+ import java.util.ArrayList;
+ import java.util.Iterator;
+ import java.util.Map;
++import java.util.regex.Pattern;
+ 
+ import org.apache.poi.hssf.usermodel.HSSFCell;
+ import org.apache.poi.hssf.usermodel.HSSFDataFormat;
+@@ -41,6 +42,7 @@
+ import org.jetel.exception.JetelException;
+ import org.jetel.metadata.DataFieldMetadata;
+ import org.jetel.util.StringUtils;
++import org.jetel.util.WcardPattern;
+ 
+ /**
+  * Parsing data from xls file using POI library.
+@@ -58,6 +60,7 @@
+ 	private HSSFRow row;
+ 	private HSSFCell cell;
+ 	private HSSFDataFormat format;
++	private short sheetCounter;
+ 	
+ 	/**
+ 	 * This method gets string representation of cell value 
+@@ -182,30 +185,50 @@
+         }catch(IOException ex){
+             throw new ComponentNotReadyException(ex);
+         }
+-        //setting sheet for reading data
+-        if (sheetName!=null){
+-            sheet = wb.getSheet(sheetName);
+-        }else{
+-            try {
+-                sheet = wb.getSheetAt(sheetNumber);
+-            }catch(IndexOutOfBoundsException ex){
+-                throw new ComponentNotReadyException(&quot;There is no sheet with number \&quot;&quot; +   sheetNumber +&quot;\&quot;&quot;);
+-            }
++        format = wb.createDataFormat();
++         sheetCounter = -1;
++         if (sheetNumber != null){
++        	 sheetNumberIterator = new NumberIterator(sheetNumber);
++         }
++        if (!getNextSheet()) {
++        	throw new ComponentNotReadyException(&quot;There is no sheet conforming sheet name nor sheet number pattern&quot;);
+         }
+-        if (sheet == null) {
+-            throw new ComponentNotReadyException(&quot;There is no sheet with name \&quot;&quot; + sheetName +&quot;\&quot;&quot;);
+-        }
+-        format = wb.createDataFormat();
+-        currentRow = firstRow;
+-		if (lastRow == -1) {
+-			lastRow = sheet.getLastRowNum();
+-		}        
+ 		if (metadata != null) {
+         	fieldNumber = new int[metadata.getNumFields()][2];
+         	mapFields();
+         }
+     }
+ 
++    @Override
++    public boolean getNextSheet() {
++    	if (sheetNumberIterator != null){
++    		if (!sheetNumberIterator.hasNext()){
++    			return false;
++    		}
++    		try{
++    			sheet = wb.getSheetAt(sheetNumberIterator.next());
++    		}catch(IndexOutOfBoundsException e){
++    			return false;
++    		}
++    	}else{
++    		boolean found = false;
++    		while (!found){
++    			try {
++					sheet = wb.getSheetAt(++sheetCounter);
++				} catch (IndexOutOfBoundsException e) {
++					return false;
++				}
++				if (WcardPattern.checkName(sheetName, wb.getSheetName(sheetCounter))) {
++					found = true;
++				}
++    		}
++    	}
++        currentRow = firstRow;
++		if (lastRow == -1 || lastRow &gt; sheet.getLastRowNum()) {
++			lastRow = sheet.getLastRowNum();
++		}       
++		return true;
++    }
+ 	
+ 	/**
+ 	 * If clover fields and xls colums are set there is made mapping between coresponding fields and cells
+@@ -306,3 +329,4 @@
+ 	}
+ 
+ }
++
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/XLSParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/XLSParser.java	2007-02-26 17:45:05 UTC (rev 2505)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/XLSParser.java	2007-02-26 17:46:49 UTC (rev 2506)
+@@ -21,7 +21,9 @@
+ 
+ package org.jetel.data.parser;
+ 
++import java.util.Iterator;
+ import java.util.Map;
++import java.util.regex.Pattern;
+ 
+ import javax.naming.InvalidNameException;
+ 
+@@ -34,6 +36,7 @@
+ import org.jetel.exception.JetelException;
+ import org.jetel.exception.PolicyType;
+ import org.jetel.metadata.DataRecordMetadata;
++import org.jetel.util.StringUtils;
+ 
+ /**
+  * Parses data from xls file. Order of method calling:
+@@ -70,7 +73,8 @@
+ 	protected DataRecordMetadata metadata = null;
+ 	protected IParserExceptionHandler exceptionHandler;
+ 	protected String sheetName = null;
+-	protected int sheetNumber = 0;
++	protected String sheetNumber = null;
++	protected NumberIterator sheetNumberIterator = null;
+ 	protected int recordCounter = 1;
+ 	protected int firstRow = 0;
+ 	protected int currentRow;
+@@ -115,14 +119,7 @@
+ 
+ 		record.init();
+ 
+-		record = parseNext(record);
+-		if(exceptionHandler != null ) {  //use handler only if configured
+-			while(exceptionHandler.isExceptionThrowed()) {
+-                exceptionHandler.handleException();
+-				record = parseNext(record);
+-			}
+-		}
+-		return record;
++		return getNext(record);
+ 	}
+ 
+ 	/**
+@@ -145,9 +142,22 @@
+ 				record = parseNext(record);
+ 			}
+ 		}
++		if (record == null) {//record from current sheet
++			if (getNextSheet()) {
++				record = getNext();
++			}
++		}
+ 		return record;
+ 	}
+ 
++	/**
++	 * This method checks if there is next sheet with name conforming with 
++	 * sheetName or sheetNumber pattern
++	 * 
++	 * @return
++	 */
++	public abstract boolean getNextSheet();
++	
+ 	/* (non-Javadoc)
+ 	 * @see org.jetel.data.parser.Parser#getPolicyType()
+ 	 */
+@@ -326,7 +336,7 @@
+ 	 * 
+ 	 * @return
+ 	 */
+-	public int getSheetNumber() {
++	public String getSheetNumber() {
+ 		return sheetNumber;
+ 	}
+ 
+@@ -375,7 +385,7 @@
+ 	 * 
+ 	 * @param sheetNumber
+ 	 */
+-	public void setSheetNumber(int sheetNumber) {
++	public void setSheetNumber(String sheetNumber) {
+ 		this.sheetNumber = sheetNumber;
+ 	}
+ 
+@@ -430,3 +440,120 @@
+ 	}
+ 
+ }
++/**
++ * Class for resolving integer number from given mask.&lt;br&gt;
++ * Mask can be in form: 
++ * &lt;ul&gt;&lt;li&gt;*&lt;/li&gt;
++ * &lt;li&gt;number&lt;/li&gt;
++ * &lt;li&gt;minNuber-maxNumber&lt;/li&gt;
++ * &lt;li&gt;*-maxNumber&lt;/li&gt;
++ * &lt;li&gt;minNumber-*&lt;/li&gt;
++ * or as their combination separated by comma, eg. 1,3,5-7,9-*
++ * 
++ * @author avackova (<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">agata.vackova at javlinconsulting.cz</A>) ; 
++ * (c) JavlinConsulting s.r.o.
++ *  www.javlinconsulting.cz
++ *
++ * @since Feb 23, 2007
++ *
++ */
++class NumberIterator implements Iterator&lt;Integer&gt;{
++	
++	private String pattern;
++	private String subPattern;
++	private int index = 0;
++	private int comaIndex;
++	private int next = 0;
++	private PositiveIntervalIterator intervalIterator = null;
++	
++	/**
++	 * Constructor from given mask
++	 * 
++	 * @param pattern
++	 */
++	public NumberIterator(String pattern){
++		this.pattern = pattern.trim();
++	}
++	
++	public boolean hasNext() {
++		if (pattern.equals(&quot;*&quot;)) {
++			subPattern = pattern;
++			return true;
++		}		
++		if (intervalIterator != null) {
++			return intervalIterator.hasNext();
++		}
++		if (index == pattern.length()) {
++			return false;
++		}
++		comaIndex = pattern.indexOf(',', index);
++		if (comaIndex == -1) {
++			subPattern = pattern.substring(index).trim();
++			index = pattern.length();
++		}else{
++			subPattern = pattern.substring(index,comaIndex).trim();
++			index = comaIndex + 1;
++		}
++		if (StringUtils.isInteger(subPattern)) {
++			intervalIterator = null;
++			return true;
++		}else {
++			intervalIterator = new PositiveIntervalIterator(subPattern);
++			return intervalIterator.hasNext();
++		}
++	}
++	
++	public Integer next() {
++		if (intervalIterator != null) {
++			return intervalIterator.next();
++		}else{
++			if (StringUtils.isInteger(subPattern)) {
++				return Integer.parseInt(subPattern);
++			}else{
++				return next++;
++			}
++		}
++	}
++	
++	public void remove() {
++		throw new UnsupportedOperationException();
++	}
++	
++	private class PositiveIntervalIterator implements Iterator&lt;Integer&gt;{
++		
++		private final static int FIRST_ELEMENT = 0;
++		
++		private String firstPattern;
++		private String lastPattern;
++		private int next = 0;
++		private int last = FIRST_ELEMENT - 1;
++		
++		PositiveIntervalIterator(String pattern) {
++			if (!Pattern.matches(&quot;[0-9]*-[0-9]*|[0-9]*-\\*|\\*-[0-9]*&quot;, pattern)){
++				throw new IllegalArgumentException(&quot;Wrong pattern&quot;);
++			}
++			firstPattern = pattern.substring(0,pattern.indexOf('-')).trim();
++			lastPattern = pattern.substring(pattern.indexOf('-') + 1).trim();
++			if (!firstPattern.equals(&quot;*&quot;)) {
++				next = Integer.parseInt(firstPattern);
++			}
++			if (!lastPattern.equals(&quot;*&quot;)){
++				last = Integer.parseInt(lastPattern);
++			}
++		}
++		
++		public boolean hasNext() {
++			return (last == FIRST_ELEMENT -1 || next &lt;= last);
++		}
++
++		public Integer next() {
++			return hasNext() ? next++ : null;
++		}
++		
++		public void remove() {
++			throw new UnsupportedOperationException();
++		}
++		
++	}
++	
++}
+\ No newline at end of file
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000143.html">[Cloveretl-svn-commits] CloverETL repos r2505 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000145.html">[Cloveretl-svn-commits] CloverETL repos r2507 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#144">[ date ]</a>
+              <a href="thread.html#144">[ thread ]</a>
+              <a href="subject.html#144">[ subject ]</a>
+              <a href="author.html#144">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2542 -	trunk/cloveretl.lookup/src/org/jetel/lookup
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2542%20-%0A%09trunk/cloveretl.lookup/src/org/jetel/lookup&In-Reply-To=%3C200703021024.l22AOLaF003328%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000180.html">
+   <LINK REL="Next"  HREF="000181.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2542 -	trunk/cloveretl.lookup/src/org/jetel/lookup</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2542%20-%0A%09trunk/cloveretl.lookup/src/org/jetel/lookup&In-Reply-To=%3C200703021024.l22AOLaF003328%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2542 -	trunk/cloveretl.lookup/src/org/jetel/lookup">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Mar  2 11:24:21 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000180.html">[Cloveretl-svn-commits] CloverETL repos r2541 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+        <LI>Next message: <A HREF="000181.html">[Cloveretl-svn-commits] CloverETL repos r2543 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#179">[ date ]</a>
+              <a href="thread.html#179">[ thread ]</a>
+              <a href="subject.html#179">[ subject ]</a>
+              <a href="author.html#179">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-02 11:24:19 +0100 (Fri, 02 Mar 2007)
+New Revision: 2542
+
+Modified:
+   trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java
+Log:
+CHANGE:RnageLookupTable - better comparator
+
+Modified: trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java
+===================================================================
+--- trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java	2007-03-02 10:24:12 UTC (rev 2541)
++++ trunk/cloveretl.lookup/src/org/jetel/lookup/RangeLookupTable.java	2007-03-02 10:24:19 UTC (rev 2542)
+@@ -43,7 +43,6 @@
+ 	protected int[] keyFields = null;
+ 	protected Iterator&lt;DataRecord&gt; subTableIterator;
+ 	protected RuleBasedCollator collator = null;
+-	protected boolean intervalOverlap = true;
+ 	
+ 	/**
+ 	 * Constructor for most general range lookup table 
+@@ -52,31 +51,20 @@
+ 	 * @param metadata metadata defining this lookup table
+ 	 * @param parser parser for reading defining records
+ 	 * @param collator collator for comparing string fields
+-	 * @param intervalOverlap indicates if intervals can overlap
+ 	 */
+ 	public RangeLookupTable(String id, DataRecordMetadata metadata, Parser parser, 
+-			RuleBasedCollator collator, boolean intervalOverlap){
++			RuleBasedCollator collator){
+ 		super(id);
+ 		this.metadata = metadata;
+ 		this.dataParser = parser;
+ 		this.collator = collator;
+-		this.intervalOverlap = intervalOverlap;
+ 	}
+ 
+-	public RangeLookupTable(String id, DataRecordMetadata metadata, Parser parser, 
+-			RuleBasedCollator collator){
+-		this(id,metadata,parser,collator,true);
+-	}
+-
+-	public RangeLookupTable(String id, DataRecordMetadata metadata, Parser parser, boolean intervalOverlap){
+-		this(id,metadata,parser,null, intervalOverlap);
+-	}
+-	
+ 	public RangeLookupTable(String id, DataRecordMetadata metadata, Parser parser){
+-		this(id,metadata,parser,null,true);
++		this(id,metadata,parser,null);
+ 	}
++	
+ 
+-
+ 	/* (non-Javadoc)
+ 	 * @see org.jetel.graph.GraphElement#init()
+ 	 */
+@@ -129,15 +117,10 @@
+ 			tmpRecord.getField(2*i+1).setValue(keyRecord.getField(keyFields[i]));
+ 			tmpRecord.getField(2*(i+1)).setValue(keyRecord.getField(keyFields[i]));
+ 		}
+-		
+-		if (!intervalOverlap) {
+-			subTable = lookupTable.tailSet(tmpRecord);
+-			numFound = subTable.size() &gt; 0 ? 1 : 0;
+-			subTableIterator = subTable.iterator();
+-			return numFound &gt; 0 ? subTableIterator.next() : null;
+-		}		
+-		//when intervals overlap we have to go throgh all records
+-		subTableIterator = lookupTable.iterator();
++		//get all greater intervals
++		subTable = lookupTable.tailSet(tmpRecord);
++		subTableIterator = subTable.iterator();
++		numFound = 0;
+ 		return getNext();
+ 	}
+ 
+@@ -149,35 +132,39 @@
+ 	 * @see org.jetel.data.lookup.LookupTable#getNext()
+ 	 */
+ 	public DataRecord getNext() {
+-		if (!intervalOverlap) return null;
+-		
+-		if (subTableIterator.hasNext()) {
++		//get next interval if exists
++		if (subTableIterator != null &amp;&amp; subTableIterator.hasNext()) {
+ 			tmp = subTableIterator.next();
+ 		}else{
+ 			return null;
+ 		}
+-		int comparison = comparator.compare(tmp, tmpRecord);
+-		//if key has more than one field we have to try all:
+-		//for record 10,68 (tmp = 10-10,68-68)
+-		//records in tailSet:
+-		//0-10,0-100  - OK
+-		//0-10,100-200 - bad
+-		//10-20,0-100 - OK
+-		//10-20,100-200 - bad
+-		if (comparison == 0) {
+-			return tmp;
++		//check if requested value is still in first key interval:
++		//Must be: keyRecord.value &gt;= currentInterval.start
++		if (tmpRecord.getField(1).compareTo(tmp.getField(1)) == -1) {
++			subTableIterator = null;
++			return null;
+ 		}
+-		return getNext();
++		//first key interval OK, check rest
++		for (int i=3;i&lt;tmp.getNumFields();i+=2){
++			if (!(tmpRecord.getField(i).compareTo(tmp.getField(i)) &gt; -1 &amp;&amp; 
++					tmpRecord.getField(i+1).compareTo(tmp.getField(i+1)) &lt; 1)) {
++				return getNext();
++			}
++		}
++		numFound++;
++		return tmp;
+ 	}
+ 
+ 	/* (non-Javadoc)
+ 	 * @see org.jetel.data.lookup.LookupTable#getNumFound()
+ 	 */
+ 	public int getNumFound() {
+-		if (!intervalOverlap) {
+-			return numFound;
+-		}
+-		throw new UnsupportedOperationException();
++		int tmp = 0;
++		while (getNext() != null) {}
++		tmp = numFound;
++		subTableIterator = subTable.iterator();
++		numFound = 0;
++		return tmp;
+ 	}
+ 
+ 	/* (non-Javadoc)
+@@ -220,8 +207,8 @@
+ 		
+ 		RecordComparator[] startComparator;//comparator for odd fields
+ 		RecordComparator[] endComparator;//comparator for even fields
+-		int comparison;
+-		boolean point;//indicates if comparing record is interval or &quot;value&quot;, see RangeLookupTable.get(DataRecord) - tmpRecord
++		int startComparison;
++		int endComparison;
+ 
+ 		/**
+ 		 * Costructor
+@@ -242,27 +229,28 @@
+ 			this(metadata,null);
+ 		}
+ 		
++		/* (non-Javadoc)
++		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
++		 * 
++		 * Interval o2 is before interval o1 of its start is before start of o2, or it is
++		 * a subinterval of o2.
++		 * Intervals are equal if their start and end points are equal.
++		 * Interval o2 is after interval o1 if and only if its start and end are greater then 
++		 * start and end of interval o1 respectively
++		 */
+ 		public int compare(DataRecord o1, DataRecord o2) {
+ 			for (int i=0;i&lt;startComparator.length;i++){
+-				point = o1.getField(startComparator[i].getKeyFields()[0]).getValue().equals(
+-							o1.getField(endComparator[i].getKeyFields()[0]).getValue()) ||
+-						o2.getField(startComparator[i].getKeyFields()[0]).getValue().equals(
+-							o2.getField(endComparator[i].getKeyFields()[0]).getValue());
+-				comparison = startComparator[i].compare(o1, o2) + endComparator[i].compare(o1, o2);
+-				if (!point) {//comparing to intervals
+-					//if one is not subinterval of the second shuld not return 0
+-					if (comparison &lt; 0) {
++				startComparison = startComparator[i].compare(o1, o2);
++				endComparison = endComparator[i].compare(o1, o2);
++				if (startComparison + endComparison &lt; 0) return -1;
++				if (startComparison + endComparison &gt; 0) {
++					if (startComparison == 1 &amp;&amp; endComparison == 0) {
+ 						return -1;
+-					}
+-					if (comparison &gt; 0) {
++					}else{
+ 						return 1;
+ 					}
+-				//when one of o1,o2 is &quot;value&quot; can be inside or on the edge	
+-				}else if (comparison == -2){
+-					return -1;
+-				}else if (comparison == 2){
+-					return 1;
+ 				}
++				if (endComparison != 0) return endComparison;
+ 			}
+ 			return 0;
+ 		}
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000180.html">[Cloveretl-svn-commits] CloverETL repos r2541 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+	<LI>Next message: <A HREF="000181.html">[Cloveretl-svn-commits] CloverETL repos r2543 -	trunk/cloveretl.engine/src/org/jetel/util
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#179">[ date ]</a>
+              <a href="thread.html#179">[ thread ]</a>
+              <a href="subject.html#179">[ subject ]</a>
+              <a href="author.html#179">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

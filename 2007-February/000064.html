@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2427 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2427%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine&In-Reply-To=%3C200702011421.l11EL6BF031796%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000063.html">
+   <LINK REL="Next"  HREF="000065.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2427 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2427%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine&In-Reply-To=%3C200702011421.l11EL6BF031796%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2427 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb  1 15:21:06 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000063.html">[Cloveretl-svn-commits] CloverETL repos r2426 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/docs
+</A></li>
+        <LI>Next message: <A HREF="000065.html">[Cloveretl-svn-commits] CloverETL repos r2428 -	trunk/cloveretl.engine/docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-02-01 15:21:04 +0100 (Thu, 01 Feb 2007)
+New Revision: 2427
+
+Added:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.bat
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.sh
+Log:
+INIT: added new &quot;run scripts&quot;.
+
+Added: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.bat
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.bat	2007-02-01 14:20:38 UTC (rev 2426)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.bat	2007-02-01 14:21:04 UTC (rev 2427)
+@@ -0,0 +1,22 @@
+<A HREF="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">+ at echo</A> off
++
++rem ********************************
++rem usage - run.bat &lt;graph_name.grf&gt;
++rem ********************************
++
++rem ***** set this before using script *****
++set JAVA_HOME=c:\Program Files (x86)\Java\jdk1.5.0_04
++set ENGINE_PATH=.
++set LIB_PATH=.\lib
++set TRANSFORM_PATH=.
++rem ****************************************
++
++set ENGINE_JAR=%ENGINE_PATH%\cloveretl.engine.jar
++set COMMONS_LOGGING_JAR=%LIB_PATH%\commons-logging.jar
++set JAVOLUTION_JAR=%LIB_PATH%\javolution.jar
++set JMS_JAR=%LIB_PATH%\jms.jar
++set JXL_JAR=%LIB_PATH%\jxl.jar
++set LOG4J_JAR=%LIB_PATH%\log4j-1.2.12.zip
++set POI_JAR=%LIB_PATH%\poi-2.5.1.jar
++
++java -cp &quot;%TRANSFORM_PATH%;%ENGINE_JAR%;%COMMONS_LOGGING_JAR%;%JAVOLUTION_JAR%;%JMS_JAR%;%JXL_JAR%;%LOG4J_JAR%;%POI_JAR%;%JAVA_HOME%\lib\tools.jar&quot; org.jetel.main.runGraph %1
+
+Added: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.sh
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.sh	2007-02-01 14:20:38 UTC (rev 2426)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/run.sh	2007-02-01 14:21:04 UTC (rev 2427)
+@@ -0,0 +1,19 @@
++#!/bin/sh
++
++# ************************************
++# usage - run.bat &lt;graph_name.grf&gt;
++
++# ***** set this before using script *****
++JAVA_HOME=&quot;/opt/jdk1.5&quot;
++ENGINE_PATH=&quot;.&quot;
++LIBS_PATH=&quot;./lib&quot;
++TRANSFORM_PATH=&quot;.&quot;
++# ****************************************
++
++ENGINE_JAR=&quot;$ENGINE_PATH/cloveretl.engine.jar&quot;
++
++for i in $LIBS_PATH/*.jar $LIBS_PATH/*.zip; do
++JARS=&quot;$JARS:$i&quot;
++done;
++
++java -classpath &quot;$TRANSFORM_PATH:$ENGINE_JAR:$JARS:$JAVA_HOME/lib/tools.jar&quot; org.jetel.main.runGraph $1
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000063.html">[Cloveretl-svn-commits] CloverETL repos r2426 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/docs
+</A></li>
+	<LI>Next message: <A HREF="000065.html">[Cloveretl-svn-commits] CloverETL repos r2428 -	trunk/cloveretl.engine/docs
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#64">[ date ]</a>
+              <a href="thread.html#64">[ thread ]</a>
+              <a href="subject.html#64">[ subject ]</a>
+              <a href="author.html#64">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

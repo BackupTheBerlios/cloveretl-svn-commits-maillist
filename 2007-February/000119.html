@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2482 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2482%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702190829.l1J8TQP2006143%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000118.html">
+   <LINK REL="Next"  HREF="000120.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2482 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2482%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702190829.l1J8TQP2006143%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2482 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Feb 19 09:29:26 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000118.html">[Cloveretl-svn-commits] CloverETL repos r2481 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+        <LI>Next message: <A HREF="000120.html">[Cloveretl-svn-commits] CloverETL repos r2483 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-19 09:29:26 +0100 (Mon, 19 Feb 2007)
+New Revision: 2482
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java
+Log:
+UPDATE:DataGenerator - string set as constant
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java	2007-02-16 16:01:59 UTC (rev 2481)
++++ trunk/cloveretl.component/src/org/jetel/component/DataGenerator.java	2007-02-19 08:29:26 UTC (rev 2482)
+@@ -138,11 +138,13 @@
+ 
+ 	/** XML attribute names */
+ 	private static final String XML_PATTERN_ATTRIBUTE = &quot;pattern&quot;;
+-	private static final String XML_RANDOM_FIELDS_ATTRIBUTE = &quot;randomFields&quot;;
++	public static final String XML_RANDOM_FIELDS_ATTRIBUTE = &quot;randomFields&quot;;
+ 	private static final String XML_RANDOM_SEED_ATTRIBUTE = &quot;randomSeed&quot;;
+-	private static final String XML_SEQUENCE_FIELDS_ATTRIBUTE = &quot;sequenceFields&quot;;
++	public static final String XML_SEQUENCE_FIELDS_ATTRIBUTE = &quot;sequenceFields&quot;;
+ 	private static final String XML_RECORDS_NUMBER_ATTRIBUTE = &quot;recordsNumber&quot;; 
+ 	
++	public final static String EQUAL_CHAR = &quot;=&quot;;
++	
+ 	private final int MIN = 0;
+ 	private final int MAX = 1;
+ 	private final int MULTIPLIER = 2; 
+@@ -532,8 +534,9 @@
+ 		if (randomFields != null){
+ 			StringBuilder fields = new StringBuilder();
+ 			for (int i=0;i&lt;randomFields.length;i++){
++				fields.append(EQUAL_CHAR);
+ 				fields.append(randomFields[i]);
+-				fields.append(&quot;=random(&quot;);
++				fields.append(&quot;random(&quot;);
+ 				fields.append(randomRanges[i][MIN]);
+ 				fields.append(',');
+ 				fields.append(randomRanges[i][MAX]);
+@@ -547,7 +550,7 @@
+ 			StringBuilder fields = new StringBuilder();
+ 			for (int i=0;i&lt;sequenceFields.length;i++){
+ 				fields.append(sequenceFields[i]);
+-				fields.append(&quot;=&quot;);
++				fields.append(EQUAL_CHAR);
+ 				if (sequenceIDs[i] != null) {
+ 					fields.append(sequenceIDs[i]);
+ 				}				
+@@ -580,7 +583,7 @@
+ 		int commaIndex;
+ 		int rightParantesisIndex;
+ 		for (int i = 0; i &lt; fields.length; i++) {
+-			param = fields[i].split(&quot;=&quot;);
++			param = fields[i].split(EQUAL_CHAR);
+ 			this.randomFields[i] = param[0].trim();
+ 			if (param.length &gt; 1){
+ 				leftParenthesisIndex = param[1].indexOf('('); 
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000118.html">[Cloveretl-svn-commits] CloverETL repos r2481 -	trunk/cloveretl.engine/src/org/jetel/metadata
+</A></li>
+	<LI>Next message: <A HREF="000120.html">[Cloveretl-svn-commits] CloverETL repos r2483 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#119">[ date ]</a>
+              <a href="thread.html#119">[ thread ]</a>
+              <a href="subject.html#119">[ subject ]</a>
+              <a href="author.html#119">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

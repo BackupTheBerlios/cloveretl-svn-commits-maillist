@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2416 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2416%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200701311350.l0VDoWFP020032%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000053.html">
+   <LINK REL="Next"  HREF="000055.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2416 -	trunk/cloveretl.engine/src/org/jetel/data/parser</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2416%20-%0A%09trunk/cloveretl.engine/src/org/jetel/data/parser&In-Reply-To=%3C200701311350.l0VDoWFP020032%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2416 -	trunk/cloveretl.engine/src/org/jetel/data/parser">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Wed Jan 31 14:50:32 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000053.html">[Cloveretl-svn-commits] CloverETL repos r2415 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+        <LI>Next message: <A HREF="000055.html">[Cloveretl-svn-commits] CloverETL repos r2417 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-01-31 14:50:31 +0100 (Wed, 31 Jan 2007)
+New Revision: 2416
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java
+Log:
+UPDATE:DelimitedDataReader;trim attribute is now of type Boolean
+
+Modified: trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java	2007-01-31 13:48:01 UTC (rev 2415)
++++ trunk/cloveretl.engine/src/org/jetel/data/parser/DataParser.java	2007-01-31 13:50:31 UTC (rev 2416)
+@@ -94,7 +94,7 @@
+ 	
+ 	private boolean treatMultipleDelimitersAsOne = false;
+ 	
+-	private BoolExt trim = BoolExt.NOT_SET; 
++	private Boolean trim = null; 
+ 	
+ 	public DataParser() {
+ 		decoder = Charset.forName(Defaults.DataParser.DEFAULT_CHARSET_DECODER).newDecoder();
+@@ -264,11 +264,14 @@
+ 		int mark;
+ 		long size = 0;
+ 		boolean inQuote;
+-		boolean skipBlanks = skipLeadingBlanks;
++		boolean skipBlanks;
+ 		
+ 		recordCounter++;
+ 		recordBuffer.clear();
+ 		for (fieldCounter = 0; fieldCounter &lt; metadata.getNumFields(); fieldCounter++) {
++			skipBlanks = skipLeadingBlanks
++					|| trim == Boolean.TRUE
++					|| (trim == null &amp;&amp; metadata.getField(fieldCounter).isTrim());
+ 			if (metadata.getField(fieldCounter).isDelimited()) { //delimited data field
+ 				// field
+ 				// read data till we reach field delimiter, record delimiter,
+@@ -285,6 +288,11 @@
+ 						//delimiter update
+ 						delimiterSearcher.update((char) character);
+ 						
++						//skip leading blanks
++						if (skipBlanks) 
++							if(Character.isWhitespace(character)) continue; 
++							else skipBlanks = false;
++
+ 						//quotedStrings
+ 						if (quotedStrings 
+ 								&amp;&amp; metadata.getField(fieldCounter).getType() == DataFieldMetadata.STRING_FIELD) {
+@@ -309,16 +317,18 @@
+ 								return parsingErrorFound(&quot;Unexpected record delimiter&quot;, record, fieldCounter);
+ 							}
+ 						}
+-						if (trim == BoolExt.FALSE
+-								|| (trim == BoolExt.NOT_SET &amp;&amp; !metadata
+-										.getField(fieldCounter).isTrim())
+-								|| !Character.isWhitespace(character)) {
+-							fieldBuffer.append((char) character);
+-						}						
++						//fieldDelimiter update
++						fieldBuffer.append((char) character);
++
+ 						//test field delimiter
+ 						if (!inQuote) {
+ 							if(delimiterSearcher.isPattern(fieldCounter)) {
+-								fieldBuffer.setLength(fieldBuffer.length() - delimiterSearcher.getMatchLength());
++									fieldBuffer.setLength(fieldBuffer.length()
++										- delimiterSearcher.getMatchLength());
++									if ((trim == Boolean.TRUE || (trim == null 
++											&amp;&amp; metadata.getField(fieldCounter).isTrim()))) {
++										StringUtils.trimTrailing(fieldBuffer);
++									}
+ 								if(treatMultipleDelimitersAsOne)
+ 									while(followFieldDelimiter(fieldCounter));
+ 								break;
+@@ -329,8 +339,8 @@
+ 					throw new RuntimeException(getErrorMessage(ex.getMessage(),	null, fieldCounter));
+ 				}
+ 			} else { //fixlen data field
++				mark = 0;
+ 				fieldBuffer.setLength(0);
+-				mark = 0;
+ 				try {
+ 					for(int i = 0; i &lt; fieldLengths[fieldCounter]; i++) {
+ 						//end of file
+@@ -339,24 +349,26 @@
+ 						}
+ 
+ 						//skip leading blanks
+-						if(skipBlanks) 
++						if (skipBlanks) 
+ 							if(Character.isWhitespace(character)) continue; 
+ 							else skipBlanks = false;
+ 
+-						if (trim == BoolExt.FALSE
+-								|| (trim == BoolExt.NOT_SET &amp;&amp; !metadata
+-										.getField(fieldCounter).isTrim())
+-								|| !Character.isWhitespace(character)) {
+-							fieldBuffer.append((char) character);
+-						}						
++						//keep track of trailing blanks
++						if(!Character.isWhitespace(character)) {
++							mark = i;
++						} 
++
++						fieldBuffer.append((char) character);
+ 					}
+ 					if(fieldBuffer.length() &gt; 0) {
+-						fieldBuffer.setLength(fieldBuffer.length() - (fieldLengths[fieldCounter] - mark - 1));
++						fieldBuffer.setLength(fieldBuffer.length() - 
++								(fieldLengths[fieldCounter] - mark - 1));
+ 					}
+ 				} catch (Exception ex) {
+ 					throw new RuntimeException(getErrorMessage(ex.getMessage(),	null, fieldCounter));
+ 				}
+ 			}
++
+ 			// did we have EOF situation ?
+ 			if (character == -1) {
+ 				try {
+@@ -711,24 +723,12 @@
+         return null;
+     }
+ 
+-	public String getTrim() {
+-		return trim.toString();
++	public Boolean getTrim() {
++		return trim;
+ 	}
+ 
+-	public void setTrim(String trim) {
+-		switch (trim.charAt(0)) {
+-		case 't':
+-		case 'T':
+-			this.trim = BoolExt.TRUE;
+-			break;
+-		case 'f':
+-		case 'F':
+-			this.trim = BoolExt.FALSE;
+-			break;
+-		default:
+-			this.trim = BoolExt.NOT_SET;
+-			break;
+-		}
++	public void setTrim(Boolean trim) {
++		this.trim = trim;
+ 	}
+ }
+ /*
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000053.html">[Cloveretl-svn-commits] CloverETL repos r2415 -	trunk/cloveretl.component/src/org/jetel/component
+</A></li>
+	<LI>Next message: <A HREF="000055.html">[Cloveretl-svn-commits] CloverETL repos r2417 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#54">[ date ]</a>
+              <a href="thread.html#54">[ thread ]</a>
+              <a href="subject.html#54">[ subject ]</a>
+              <a href="author.html#54">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

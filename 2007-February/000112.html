@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2475 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2475%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200702161318.l1GDIZog031448%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000111.html">
+   <LINK REL="Next"  HREF="000113.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2475 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2475%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200702161318.l1GDIZog031448%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2475 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Fri Feb 16 14:18:35 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000111.html">[Cloveretl-svn-commits] CloverETL repos r2474 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000113.html">[Cloveretl-svn-commits] CloverETL repos r2476 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-16 14:18:35 +0100 (Fri, 16 Feb 2007)
+New Revision: 2475
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashInline.grf
+Log:
+UPDATE:graph updated to work with actual engine version
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashInline.grf
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashInline.grf	2007-02-16 13:18:16 UTC (rev 2474)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/graphJoinHashInline.grf	2007-02-16 13:18:35 UTC (rev 2475)
+@@ -1,28 +1,18 @@
+ &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+-&lt;Graph description=&quot;This graph demonstrates how to use HASH_JOIN component for 3way join. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; name=&quot;Testing Hash Joiner&quot;&gt;
++&lt;Graph created=&quot;Fri Feb 16 10:01:53 CET 2007&quot; description=&quot;This graph demonstrates how to use HASH_JOIN component for 3way join. HASH_JOIN component&#10;performs joining of master data with slave data based on specified key. First all slave&#10;data are read and hash-table is constructed from them. Then for every master record, attempt&#10;is made to find corresponding slave-record.&#10;HASH_JOIN performs better than SORT/MERGE_JOIN when you have relatively small slave data set&#10;and big master data set. It doesn't require master and slave data to be sorted&quot; guiVersion=&quot;1.6&quot; licenseType=&quot;Unlicensed clover.GUI&quot; modified=&quot;Fri Feb 16 11:47:07 CET 2007&quot; name=&quot;Testing Hash Joiner&quot; revision=&quot;1.1&quot;&gt;
+ &lt;Global&gt;
+-&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
+-&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/customers.fmt&quot; id=&quot;InMetadata3&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/employees.fmt&quot; id=&quot;InMetadata2&quot;/&gt;
+ &lt;Metadata fileURL=&quot;metadata/joinedOrders3way.fmt&quot; id=&quot;OutMetadata&quot;/&gt;
++&lt;Metadata fileURL=&quot;metadata/orders.fmt&quot; id=&quot;InMetadata1&quot;/&gt;
+ &lt;Property fileURL=&quot;workspace.prm&quot; id=&quot;GraphParameter0&quot;/&gt;
+ &lt;/Global&gt;
+ &lt;Phase number=&quot;0&quot;&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/orders.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT2&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/employees.dat&quot;
+-/&gt;
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;INPUT3&quot; type=&quot;DELIMITED_DATA_READER&quot;
+-fileURL=&quot;${WORKSPACE}/data/customers_delimited.txt&quot;
+-/&gt;
+-
+-&lt;Node enabled=&quot;enabled&quot; id=&quot;JOIN&quot; type=&quot;HASH_JOIN&quot;
+-joinKey=&quot;EmployeeID=EmployeeID#CustomerID=CUSTOMERID&quot;
+-joinType=&quot;leftOuter&quot;
+-slaveDuplicates=&quot;true&quot;
+-&gt;&lt;attr name=&quot;transform&quot;&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/orders.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT1&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;48&quot; id=&quot;INPUT1&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/employees.dat&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT2&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;136&quot; id=&quot;INPUT2&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/data/customers_delimited.txt&quot; guiHeight=&quot;25&quot; guiName=&quot;INPUT3&quot; guiWidth=&quot;50&quot; guiX=&quot;59&quot; guiY=&quot;223&quot; id=&quot;INPUT3&quot; type=&quot;DELIMITED_DATA_READER&quot;/&gt;
++&lt;Node enabled=&quot;enabled&quot; guiHeight=&quot;25&quot; guiName=&quot;JOIN&quot; guiWidth=&quot;50&quot; guiX=&quot;256&quot; guiY=&quot;48&quot; id=&quot;JOIN&quot; joinKey=&quot;EmployeeID=EmployeeID#CustomerID=CUSTOMERID&quot; joinType=&quot;leftOuter&quot; slaveDuplicates=&quot;true&quot; type=&quot;EXT_HASH_JOIN&quot;&gt;
++&lt;attr name=&quot;transform&quot;&gt;
+ import org.jetel.component.DataRecordTransform;
+ import org.jetel.data.*;
+ 
+@@ -54,14 +44,10 @@
+ 
+ &lt;/attr&gt;
+ &lt;/Node&gt;
+-
+-&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;370&quot; guiY=&quot;20&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+-
++&lt;Node append=&quot;false&quot; enabled=&quot;enabled&quot; fileURL=&quot;${WORKSPACE}/output/joined_data_hash.out&quot; guiHeight=&quot;25&quot; guiName=&quot;WRITER&quot; guiWidth=&quot;50&quot; guiX=&quot;448&quot; guiY=&quot;48&quot; id=&quot;WRITER&quot; type=&quot;DELIMITED_DATA_WRITER&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT1:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE1&quot; inPort=&quot;0 (JOIN)&quot; metadata=&quot;InMetadata1&quot; outPort=&quot;0 (INPUT1)&quot; toNode=&quot;JOIN:0&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT2:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE2&quot; inPort=&quot;1 (JOIN)&quot; metadata=&quot;InMetadata2&quot; outPort=&quot;0 (INPUT2)&quot; toNode=&quot;JOIN:1&quot;/&gt;
+ &lt;Edge fromNode=&quot;INPUT3:0&quot; guiBendpoints=&quot;&quot; id=&quot;INEDGE3&quot; inPort=&quot;2 (JOIN)&quot; metadata=&quot;InMetadata3&quot; outPort=&quot;0 (INPUT3)&quot; toNode=&quot;JOIN:2&quot;/&gt;
+-
+ &lt;Edge fromNode=&quot;JOIN:0&quot; guiBendpoints=&quot;&quot; id=&quot;OUTEDGE&quot; inPort=&quot;0 (WRITER)&quot; metadata=&quot;OutMetadata&quot; outPort=&quot;0 (JOIN)&quot; toNode=&quot;WRITER:0&quot;/&gt;
+-
+ &lt;/Phase&gt;
+ &lt;/Graph&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000111.html">[Cloveretl-svn-commits] CloverETL repos r2474 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000113.html">[Cloveretl-svn-commits] CloverETL repos r2476 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#112">[ date ]</a>
+              <a href="thread.html#112">[ thread ]</a>
+              <a href="subject.html#112">[ subject ]</a>
+              <a href="author.html#112">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

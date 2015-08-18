@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2499 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-February/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2499%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702221023.l1MANJXM013626%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000136.html">
+   <LINK REL="Next"  HREF="000138.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2499 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2499%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200702221023.l1MANJXM013626%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2499 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Thu Feb 22 11:23:19 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000136.html">[Cloveretl-svn-commits] CloverETL repos r2498 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/util
+</A></li>
+        <LI>Next message: <A HREF="000138.html">[Cloveretl-svn-commits] CloverETL repos r2500 -	trunk/cloveretl.engine/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-02-22 11:23:18 +0100 (Thu, 22 Feb 2007)
+New Revision: 2499
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+Log:
+UPDATE:XLSReader - attributes standartization
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-02-21 13:29:03 UTC (rev 2498)
++++ trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-02-22 10:23:18 UTC (rev 2499)
+@@ -21,8 +21,6 @@
+ 
+ package org.jetel.component;
+ 
+-import java.io.FileInputStream;
+-import java.io.IOException;
+ import java.security.InvalidParameterException;
+ 
+ import org.apache.commons.logging.Log;
+@@ -43,6 +41,7 @@
+ import org.jetel.graph.Result;
+ import org.jetel.graph.TransformationGraph;
+ import org.jetel.util.ComponentXMLAttributes;
++import org.jetel.util.MultiFileReader;
+ import org.jetel.util.StringUtils;
+ import org.jetel.util.SynchronizeUtils;
+ import org.w3c.dom.Element;
+@@ -132,6 +131,7 @@
+ 	/** XML attribute names */
+ 	public static final String XML_STARTROW_ATTRIBUTE = &quot;startRow&quot;;
+ 	public static final String XML_FINALROW_ATTRIBUTE = &quot;finalRow&quot;;
++	public static final String XML_NUMRECORDS_ATTRIBUTE = &quot;numRecords&quot;;
+ 	public static final String XML_MAXERRORCOUNT_ATTRIBUTE = &quot;maxErrorCount&quot;;
+ 	public final static String XML_FILE_ATTRIBUTE = &quot;fileURL&quot;;
+ 	public final static String XML_DATAPOLICY_ATTRIBUTE = &quot;dataPolicy&quot;;
+@@ -149,9 +149,11 @@
+ 	private String fileURL;
+ 	private int startRow = 0;
+ 	private int finalRow = -1;
++	private int numRecords = -1;
+ 	private int maxErrorCount = -1;
+     
+ 	private XLSParser parser;
++	private MultiFileReader reader;
+ 	private PolicyType policyType = PolicyType.STRICT;
+ 	
+ 	private String sheetName;
+@@ -159,7 +161,7 @@
+ 	private int metadataRow = 0;
+ 	private String[][] fieldMap;
+ 	
+-	public final static boolean usePOI = true;
++	public final static boolean usePOI = false;
+ 
+ 	/**
+ 	 * @param id
+@@ -199,11 +201,10 @@
+ 		DataRecord record = new DataRecord(getOutputPort(OUTPUT_PORT).getMetadata());
+ 		record.init();
+ 		int errorCount = 0;
+-		int diffRow = (startRow != -1) ? finalRow - startRow +1: finalRow ;
+ 		try {
+ 			while (((record) != null) &amp;&amp; runIt) {
+ 				try {
+-					record = parser.getNext(record);
++					record = reader.getNext(record);
+ 					if (record!=null){
+ 						writeRecordBroadcast(record);
+ 					}
+@@ -218,9 +219,6 @@
+ 			            }
+ 			        }
+ 				}
+-				if(finalRow != -1 &amp;&amp; parser.getRecordCount() &gt; diffRow) {
+-					break;
+-				}
+ 				SynchronizeUtils.cloverYield();
+ 			}
+ 		} catch (Exception e) {
+@@ -291,6 +289,9 @@
+ 			if (xattribs.exists(XML_FINALROW_ATTRIBUTE)){
+ 				aXLSReader.setFinalRow(xattribs.getInteger(XML_FINALROW_ATTRIBUTE));
+ 			}
++			if (xattribs.exists(XML_NUMRECORDS_ATTRIBUTE)){
++				aXLSReader.setNumRecords(xattribs.getInteger(XML_NUMRECORDS_ATTRIBUTE));
++			}
+ 			if (xattribs.exists(XML_MAXERRORCOUNT_ATTRIBUTE)){
+ 				aXLSReader.setMaxErrorCount(xattribs.getInteger(XML_MAXERRORCOUNT_ATTRIBUTE));
+ 			}
+@@ -388,6 +389,7 @@
+ 			throw new InvalidParameterException(&quot;Invalid finalRow parameter.&quot;);
+ 		}
+ 		this.finalRow = finalRecord;
++		parser.setLastRow(finalRow);
+ 	}
+ 
+ 	/**
+@@ -450,12 +452,21 @@
+ 		}else{
+ 			parser.setMappingType(XLSDataParser.NO_METADATA_INFO);
+ 		}
+-		try {
+-			parser.init(getOutputPort(OUTPUT_PORT).getMetadata());
+-            parser.setDataSource(new FileInputStream(fileURL));
+-		} catch (IOException ex) {
+-			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
+-		}
++//		try {
++//			parser.init(getOutputPort(OUTPUT_PORT).getMetadata());
++//            parser.setDataSource(new FileInputStream(fileURL));
++//		} catch (IOException ex) {
++//			throw new ComponentNotReadyException(getId() + &quot;IOError: &quot; + ex.getMessage());
++//		}
++            reader = new MultiFileReader(parser, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
++	        reader.setLogger(logger);
++	        reader.setNumRecords(numRecords);
++	        try {
++	            reader.init(getOutputPort(OUTPUT_PORT).getMetadata());
++	        } catch(ComponentNotReadyException e) {
++	            e.setAttributeName(XML_FILE_ATTRIBUTE);
++	            throw e;
++	        }
+ 	}
+ 
+ 	private void setSheetName(String sheetName) {
+@@ -470,4 +481,8 @@
+ 		this.sheetNumber = sheetNumber;
+ 	}
+ 
++	public void setNumRecords(int numRecords) {
++		this.numRecords = numRecords;
++	}
++
+ }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000136.html">[Cloveretl-svn-commits] CloverETL repos r2498 - in trunk:	cloveretl.component/src/org/jetel/component	cloveretl.engine/src/org/jetel/util
+</A></li>
+	<LI>Next message: <A HREF="000138.html">[Cloveretl-svn-commits] CloverETL repos r2500 -	trunk/cloveretl.engine/src/org/jetel/component
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#137">[ date ]</a>
+              <a href="thread.html#137">[ thread ]</a>
+              <a href="subject.html#137">[ subject ]</a>
+              <a href="author.html#137">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

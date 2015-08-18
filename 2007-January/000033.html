@@ -1,0 +1,166 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2395 -	trunk/cloveretl.engine/src/org/jetel/interpreter
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-January/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2395%20-%0A%09trunk/cloveretl.engine/src/org/jetel/interpreter&In-Reply-To=%3C200701301038.l0UAcWRe012121%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000032.html">
+   <LINK REL="Next"  HREF="000034.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2395 -	trunk/cloveretl.engine/src/org/jetel/interpreter</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2395%20-%0A%09trunk/cloveretl.engine/src/org/jetel/interpreter&In-Reply-To=%3C200701301038.l0UAcWRe012121%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2395 -	trunk/cloveretl.engine/src/org/jetel/interpreter">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Jan 30 11:38:32 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000032.html">[Cloveretl-svn-commits] CloverETL repos r2394 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+        <LI>Next message: <A HREF="000034.html">[Cloveretl-svn-commits] CloverETL repos r2396 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: dpavlis
+Date: 2007-01-30 11:38:31 +0100 (Tue, 30 Jan 2007)
+New Revision: 2395
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+   trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangParser.jjt
+Log:
+UPDATE:added option to initialize variable to value at definition
+
+Modified: trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-01-30 09:30:18 UTC (rev 2394)
++++ trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangExecutor.java	2007-01-30 10:38:31 UTC (rev 2395)
+@@ -1503,6 +1503,43 @@
+         }
+         stack.storeVar(node.localVar, node.varSlot, value);
+         
++        if (node.jjtGetNumChildren()&gt;0){
++            node.jjtGetChild(0).jjtAccept(this, data);
++            Object initValue=stack.pop();
++            
++            try {
++                if (value instanceof Numeric) {
++                        ((Numeric) value).setValue((Numeric) initValue);
++                } else if (value instanceof StringBuilder) {
++                    StringBuilder var = (StringBuilder) value;
++                    var.setLength(0);
++                    StringUtils.strBuffAppend(var,(CharSequence) initValue);
++                } else if (value instanceof Boolean) {
++                    stack.storeVar(node.localVar,node.varSlot, (Boolean)initValue); // boolean is not updatable - we replace the reference
++                    // stack.put(varName,((Boolean)value).booleanValue() ?
++                    // Stack.TRUE_VAL : Stack.FALSE_VAL);
++                } else if (value instanceof Date) {
++                    ((Date) value).setTime(((Date) initValue).getTime());
++                } else {
++                    throw new TransformLangExecutorRuntimeException(node,
++                            &quot;unknown variable \&quot;&quot; + node.name + &quot;\&quot;&quot;);
++                }
++            } catch (ClassCastException ex) {
++                throw new TransformLangExecutorRuntimeException(node,
++                        &quot;invalid assignment of \&quot;&quot; + initValue + &quot;\&quot; to variable \&quot;&quot;
++                                + node.name + &quot;\&quot; - incompatible data types&quot;);
++            } catch (NumberFormatException ex){
++                throw new TransformLangExecutorRuntimeException(node,
++                        &quot;invalid assignment of number \&quot;&quot; + initValue + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;+ex.getMessage());    
++            } catch (TransformLangExecutorRuntimeException ex){
++                throw ex;
++            } catch (Exception ex){
++                throw new TransformLangExecutorRuntimeException(node,
++                        &quot;invalid assignment of \&quot;&quot; + value + &quot;\&quot; to variable \&quot;&quot; + node.name + &quot;\&quot; : &quot;+ex.getMessage());  
++            }
++            
++        }
++        
+         return data;
+     }
+ 
+
+Modified: trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangParser.jjt
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangParser.jjt	2007-01-30 09:30:18 UTC (rev 2394)
++++ trunk/cloveretl.engine/src/org/jetel/interpreter/TransformLangParser.jjt	2007-01-30 10:38:31 UTC (rev 2395)
+@@ -405,6 +405,9 @@
+     t = &lt;IDENTIFIER&gt;{
+      if (!parserHelper.addVariable(t.image)){
+        throw new ParseException(t, &quot;variable [&quot;+t.image+&quot;] already declared&quot;);
+       }
+      else {
+        // is it local variable declaration ?
+ 
+		if (parserHelper.inFunctionDeclaration){
+          jjtThis.setVarSlot(parserHelper.getLocalVariableSlot(t.image));
+          jjtThis.setLocalVariale(true);
+        }
+        else {
+          jjtThis.setVarSlot(parserHelper.getGlobalVariableSlot(t.image));
+          jjtThis.setLocalVariale(false);
+        }
+        jjtThis.setName(t.image);
+      }
+    }
++    
++    [&quot;=&quot; ConditionalOrExpression()]
++    
+  }catch (ParseException e){
+    parseExceptions.add(e);
+//following code causes parser to cough     
+ //do {
+//      t = getNextToken();
+//    }
+//    while (t.kind != SEMICOLON);
+  }
+}
+ 
+@@ -436,7 +439,7 @@
+   	)
+   	&lt;MAPPING&gt; 
+   	
+-  	ConditionalOrExpression() (&quot;:&quot; ConditionalOrExpression())* {jjtThis.setArity(jjtree.nodeArity());}
++  	ConditionalOrExpression() (&quot;:&quot; ConditionalOrExpression())*
+ }
+ 
+ /* Other nonterminals and their productions */
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000032.html">[Cloveretl-svn-commits] CloverETL repos r2394 -	trunk/cloveretl.engine/src/org/jetel/graph
+</A></li>
+	<LI>Next message: <A HREF="000034.html">[Cloveretl-svn-commits] CloverETL repos r2396 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#33">[ date ]</a>
+              <a href="thread.html#33">[ thread ]</a>
+              <a href="subject.html#33">[ subject ]</a>
+              <a href="author.html#33">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

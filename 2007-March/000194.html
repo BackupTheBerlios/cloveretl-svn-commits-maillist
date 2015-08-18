@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2556 -	trunk/cloveretl.engine/src/org/jetel/metadata
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2556%20-%0A%09trunk/cloveretl.engine/src/org/jetel/metadata&In-Reply-To=%3C200703060907.l2697mJt012780%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000193.html">
+   <LINK REL="Next"  HREF="000195.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2556 -	trunk/cloveretl.engine/src/org/jetel/metadata</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2556%20-%0A%09trunk/cloveretl.engine/src/org/jetel/metadata&In-Reply-To=%3C200703060907.l2697mJt012780%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2556 -	trunk/cloveretl.engine/src/org/jetel/metadata">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Tue Mar  6 10:07:48 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000193.html">[Cloveretl-svn-commits] CloverETL repos r2555 -	trunk/cloveretl.engine
+</A></li>
+        <LI>Next message: <A HREF="000195.html">[Cloveretl-svn-commits] CloverETL repos r2557 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#194">[ date ]</a>
+              <a href="thread.html#194">[ thread ]</a>
+              <a href="subject.html#194">[ subject ]</a>
+              <a href="author.html#194">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: otasanek
+Date: 2007-03-06 10:07:47 +0100 (Tue, 06 Mar 2007)
+New Revision: 2556
+
+Modified:
+   trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadata.java
+   trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java
+Log:
+UPDATE: better record delimiter attribute on record metadata conversion of spec chars.
+
+Modified: trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadata.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadata.java	2007-03-06 09:00:23 UTC (rev 2555)
++++ trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadata.java	2007-03-06 09:07:47 UTC (rev 2556)
+@@ -28,6 +28,7 @@
+ import java.util.Map;
+ import java.util.Properties;
+ 
++import org.jetel.data.Defaults;
+ import org.jetel.exception.InvalidGraphObjectNameException;
+ import org.jetel.util.BitArray;
+ import org.jetel.util.StringUtils;
+@@ -549,15 +550,21 @@
+ 	}
+ 
+ 	public boolean isSpecifiedRecordDelimiter() {
+-		return recordDelimiters != null;
++		return getRecordDelimiters() != null;
+ 	}
+ 
+ 	public String[] getRecordDelimiters() {
++        if(recordDelimiters == null) {
++            String rd = getRecordProperties().getProperty(DataRecordMetadataXMLReaderWriter.RECORD_DELIMITER_ATTR);
++            if(rd != null) {
++                setRecordDelimiter(StringUtils.stringToSpecChar(rd).split(Defaults.DataFormatter.DELIMITER_DELIMITERS_REGEX));
++            }
++        }
+ 		return recordDelimiters;
+ 	}
+ 
+     public String getRecordDelimiter() {
+-        return recordDelimiters == null ? &quot;&quot; : recordDelimiters[0];
++        return getRecordDelimiters() == null ? &quot;&quot; : recordDelimiters[0];
+     }
+     
+     /**
+
+Modified: trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java
+===================================================================
+--- trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java	2007-03-06 09:00:23 UTC (rev 2555)
++++ trunk/cloveretl.engine/src/org/jetel/metadata/DataRecordMetadataXMLReaderWriter.java	2007-03-06 09:07:47 UTC (rev 2556)
+@@ -148,7 +148,7 @@
+ 	private static final String NAME_ATTR = &quot;name&quot;; 
+     private static final String TYPE_ATTR = &quot;type&quot;;
+     private static final String RECORD_SIZE_ATTR = &quot;recordSize&quot;;
+-    private static final String RECORD_DELIMITER_ATTR = &quot;recordDelimiter&quot;;
++    public  static final String RECORD_DELIMITER_ATTR = &quot;recordDelimiter&quot;;
+ 	private static final String DELIMITER_ATTR = &quot;delimiter&quot;;
+ 	private static final String FORMAT_ATTR = &quot;format&quot;;
+ 	private static final String DEFAULT_ATTR = &quot;default&quot;;
+@@ -297,7 +297,7 @@
+         metadataElement.setAttribute(TYPE_ATTR, rt);
+ 
+         if(!StringUtils.isEmpty(record.getRecordDelimiter())) {
+-            metadataElement.setAttribute(RECORD_DELIMITER_ATTR, record.getRecordDelimiter());
++            metadataElement.setAttribute(RECORD_DELIMITER_ATTR, StringUtils.specCharToString(record.getRecordDelimiter()));
+         }
+ 
+         if (record.getRecordSize() != 0) {
+@@ -445,7 +445,7 @@
+ 				recordType = itemValue;
+ 			} else if (itemName.equalsIgnoreCase(&quot;locale&quot;)) {
+ 				recLocaleStr = itemValue;
+-			} else if (itemName.equalsIgnoreCase(&quot;recordDelimiter&quot;)) {
++			} else if (itemName.equalsIgnoreCase(RECORD_DELIMITER_ATTR)) {
+ 				recordDelimiter = itemValue;
+ 			} else if (itemName.equalsIgnoreCase(RECORD_SIZE_ATTR)) {
+ 				sizeStr = itemValue;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000193.html">[Cloveretl-svn-commits] CloverETL repos r2555 -	trunk/cloveretl.engine
+</A></li>
+	<LI>Next message: <A HREF="000195.html">[Cloveretl-svn-commits] CloverETL repos r2557 -	trunk/cloveretl.engine/src/org/jetel/graph/runtime
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#194">[ date ]</a>
+              <a href="thread.html#194">[ thread ]</a>
+              <a href="subject.html#194">[ subject ]</a>
+              <a href="author.html#194">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

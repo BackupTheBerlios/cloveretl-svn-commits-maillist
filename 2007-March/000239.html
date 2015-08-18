@@ -1,0 +1,907 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2601 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2601%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121448.l2CEm5Rl029160%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000238.html">
+   <LINK REL="Next"  HREF="000240.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2601 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2601%20-%0A%09branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples&In-Reply-To=%3C200703121448.l2CEm5Rl029160%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2601 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar 12 15:48:05 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000238.html">[Cloveretl-svn-commits] CloverETL repos r2600 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+        <LI>Next message: <A HREF="000240.html">[Cloveretl-svn-commits] CloverETL repos r2602 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#239">[ date ]</a>
+              <a href="thread.html#239">[ thread ]</a>
+              <a href="subject.html#239">[ subject ]</a>
+              <a href="author.html#239">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-12 15:48:02 +0100 (Mon, 12 Mar 2007)
+New Revision: 2601
+
+Modified:
+   branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/readme.html
+Log:
+MINOR:better description
+
+Modified: branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/readme.html
+===================================================================
+--- branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/readme.html	2007-03-12 14:47:26 UTC (rev 2600)
++++ branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples/readme.html	2007-03-12 14:48:02 UTC (rev 2601)
+@@ -5,7 +5,7 @@
+ 	&lt;TITLE&gt;CloverETL examples&lt;/TITLE&gt;
+ 	&lt;META NAME=&quot;GENERATOR&quot; CONTENT=&quot;OpenOffice.org 2.0  (Linux)&quot;&gt;
+ 	&lt;META NAME=&quot;CREATED&quot; CONTENT=&quot;20061005;11474600&quot;&gt;
+-	&lt;META NAME=&quot;CHANGED&quot; CONTENT=&quot;20070312;10365100&quot;&gt;
++	&lt;META NAME=&quot;CHANGED&quot; CONTENT=&quot;20070312;15385400&quot;&gt;
+ 	&lt;STYLE TYPE=&quot;text/css&quot;&gt;
+ 	&lt;!--
+ 		@page { size: 8.5in 11in }
+@@ -364,13 +364,10 @@
+ for input records can be embedded directly into graph. It is again
+ dynamically compiled at run-time.&lt;BR&gt;In this example you can see
+ joining more then two input sets. Master data from &lt;TT&gt;orders.dat&lt;/TT&gt;
+-are joined with two slave inputs: first &lt;FONT FACE=&quot;Cumberland AMT, monospace&quot;&gt;employees.dat
+-&lt;/FONT&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;due to key field &lt;/FONT&gt;&lt;FONT FACE=&quot;Cumberland AMT, monospace&quot;&gt;EmployeeID
+-&lt;/FONT&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;and with the second,
+-&lt;/FONT&gt;&lt;FONT FACE=&quot;Cumberland AMT, monospace&quot;&gt;customers_delimited.txt&lt;/FONT&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;,
+-due to key field &lt;/FONT&gt;&lt;FONT FACE=&quot;Cumberland AMT, monospace&quot;&gt;CustomerID.&lt;/FONT&gt;
+-&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;So in output record there are
+-information from all three input files.&lt;/FONT&gt;&lt;/P&gt;
++are joined with two slave inputs: first &lt;TT&gt;employees.dat&lt;/TT&gt; due to
++key field &lt;TT&gt;EmployeeID&lt;/TT&gt; and with the second,
++&lt;TT&gt;customers_delimited.txt&lt;/TT&gt;, due to key field &lt;TT&gt;CustomerID.&lt;/TT&gt;
++So in output record there are information from all three input files.&lt;/P&gt;
+ &lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:$JAVA_HOME/lib/tools.jar&lt;/TT&gt;&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphJoinHashInline.grf&quot; TARGET=&quot;_blank&quot;&gt;graphJoinHashInline.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
+@@ -404,7 +401,8 @@
+ &lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphSortData.grf&quot; TARGET=&quot;_blank&quot;&gt;graphSortData.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
+-&lt;H3&gt;&lt;!-- Sort Universal --&gt;Sort Universal example&lt;/H3&gt;
++&lt;H3&gt;&lt;A NAME=&quot;Sort Universal example|outline&quot;&gt;&lt;/A&gt;&lt;!-- Sort Universal --&gt;Sort
++Universal example&lt;/H3&gt;
+ &lt;P&gt;Similar to previous example, this one sorts input data. The
+ difference is that the exact datafile to be sorted is not hardcoded
+ within graph definition, it is determined based on supplied
+@@ -463,10 +461,9 @@
+ 	&lt;/P&gt;
+ &lt;/UL&gt;
+ &lt;P&gt;It is possible to write your own partition function. It has to
+-implement &lt;FONT COLOR=&quot;#000000&quot;&gt;&lt;FONT FACE=&quot;Cumberland AMT, monospace&quot;&gt;&lt;A HREF=&quot;<A HREF="http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/partition/PartitionFunction.html">http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/partition/PartitionFunction.html</A>&quot;&gt;org.jetel.component.partition.PartitionFunction&lt;/A&gt;
+-&lt;/FONT&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;and can be write as java
+-source or in &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;Transformation
+-Language.&lt;/A&gt;&lt;/FONT&gt;&lt;/FONT&gt;&lt;/P&gt;
++implement &lt;TT&gt;&lt;A HREF=&quot;<A HREF="http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/partition/PartitionFunction.html">http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/partition/PartitionFunction.html</A>&quot;&gt;org.jetel.component.partition.PartitionFunction&lt;/A&gt;
++&lt;/TT&gt;and can be write as java source or in &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;Transformation
++Language.&lt;/A&gt;&lt;/P&gt;
+ &lt;P&gt;Executing example:&lt;BR&gt;&lt;TT&gt;java -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphPartition.grf&quot; TARGET=&quot;_blank&quot;&gt;graphPartition.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
+@@ -486,12 +483,12 @@
+ &lt;P&gt;CloverETL can read and write data from/to xls files. In this
+ example data are read from &lt;TT&gt;ORDERS.xls&lt;/TT&gt; file, partitioned to 3
+ parts and each of thees parts are saved in &lt;TT&gt;orders.partitioned.xls&lt;/TT&gt;
+-file in another sheet. 
++file in different sheets. 
+ &lt;/P&gt;
+-&lt;P&gt;&lt;I&gt;I&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;mportant: 1.Because it is
+-impossible to write to different sheets in the same time each writing
+-component has to be in different phase. 2. &lt;/FONT&gt;&lt;/I&gt;&lt;TT&gt;&lt;I&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;poi-2.5.1.jar
+-(reading/writing to excel files library) has to be in execution path.&lt;/FONT&gt;&lt;/I&gt;&lt;/TT&gt;&lt;/P&gt;
++&lt;P&gt;&lt;I&gt;Important: 1.Because it is impossible to write to different
++sheets in the same time each writing component has to be in different
++phase. 2. &lt;/I&gt;&lt;TT&gt;&lt;I&gt;poi-2.5.1.jar (reading/writing to excel files
++library) has to be in execution path.&lt;/I&gt;&lt;/TT&gt;&lt;/P&gt;
+ &lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples:../lib/poi-2.5.1.jar&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphXLSReadWrite.grf&quot; TARGET=&quot;_blank&quot;&gt;graphXLSReadWrite.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
+@@ -500,11 +497,32 @@
+ read from &lt;TT&gt;employees.xml &lt;/TT&gt;file. &#8220;Mapping&#8221; attribute
+ describes dependencies between xml nodes and metadata fields. 
+ &lt;/P&gt;
+-&lt;P&gt;&lt;I&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;Important: tools&lt;/FONT&gt;&lt;/I&gt;&lt;TT&gt;&lt;I&gt;&lt;FONT FACE=&quot;Thorndale AMT, serif&quot;&gt;.jar
+-has to be in execution path.&lt;/FONT&gt;&lt;/I&gt;&lt;/TT&gt;&lt;/P&gt;
++&lt;P&gt;&lt;I&gt;Important: tools.jar has to be in execution path.&lt;/I&gt;&lt;/P&gt;
+ &lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:$JAVA_HOME/lib/tools.jar&lt;/TT&gt;&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphXMLExtract.grf&quot; TARGET=&quot;_blank&quot;&gt;graphXMLExtract.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
++&lt;H3&gt;&lt;!-- Read example --&gt;Different ways of reading files&lt;/H3&gt;
++&lt;P&gt;There are few components for reading data from flat file:
++Delimited Data Reader &#8211; reads delimited data, Fixlen Data Reader &#8211;
++reads data of fixed length and Universal Data Reader, which can read
++delimited or fixed length data depending on metadata on output port.
++There are others reader components for reading data in different
++formats: DBFDataReader &#8211; reads dBase tables, XMLExtract &#8211; reads
++xml files, XLSDataReader &#8211; reads excel files, Clover Data Reader &#8211;
++reads data saved in clover internal folders. Most of thees readers
++can read data from &#8220;MultiFile&#8221; - it means that in fileURL
++attribute can be wildcards as * or ?. This illustrates following
++example:&lt;/P&gt;
++&lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
++&quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:$JAVA_HOME/lib/tools.jar&lt;/TT&gt;&quot;
++org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphCloverData.grf&quot;&gt;graphCloverData.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
++&lt;P&gt;It is possible to omit some data from flat file. For such purpose
++there is attribute &lt;SPAN STYLE=&quot;text-decoration: none&quot;&gt;shift on
++metadata, which indicates how many characters should be omitted from
++last field. Usage of this feature you can see in following example:&lt;/SPAN&gt;&lt;/P&gt;
++&lt;P&gt;&lt;SPAN STYLE=&quot;text-decoration: none&quot;&gt;Executing:&lt;BR&gt;&lt;TT&gt;java -cp
++&quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:&lt;TT&gt;../lib/poi-2.5.1.jar&lt;/TT&gt;&lt;/TT&gt;&quot;
++org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphGenerateData.grf&quot;&gt;graphGenerateData.grf&lt;/A&gt;&lt;/TT&gt;&lt;/SPAN&gt;&lt;/P&gt;
+ &lt;HR&gt;
+ &lt;H2&gt;&lt;!-- Database related examples --&gt;Database related examples&lt;/H2&gt;
+ &lt;P&gt;When experimenting with database, presented example graphs expect
+@@ -633,6 +651,32 @@
+ &lt;P&gt;Executing:&lt;BR&gt;j&lt;TT&gt;&lt;TT&gt;ava -cp
+ &quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:$JAVA_HOME/lib/tools.jar&lt;/TT&gt;&lt;/TT&gt;&quot;
+ org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphDBRead.grf&quot; TARGET=&quot;_blank&quot;&gt;graphDBRead.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
++&lt;H3&gt;&lt;!-- Approximative join example --&gt;Approximative join example&lt;/H3&gt;
++&lt;P&gt;Approximative join component is used for joining data which are
++similar on given fields. It requires data to be prepared: it joins
++data from two data flows with the same value of &lt;TT&gt;matching key &lt;/TT&gt;and
++similar value of &lt;TT&gt;join key. &lt;/TT&gt;In this example data are read
++from from file&lt;TT&gt;customers0.dat &lt;/TT&gt;and from database table
++&lt;TT&gt;employee; &lt;/TT&gt;then for both flows there is generated &lt;TT&gt;matching
++key &lt;/TT&gt;consisting of 4 letters of last name (flat file: lname,
++database: last_name) and 3 letters of first name (flat file: fname,
++database: first_name) . Approximative join component joins data from
++thees flows (sorted due the &lt;TT&gt;matching key&lt;/TT&gt;) ; it compares
++records with the same matching key only, but to conforming output
++sends only thees, which join key is similar enough (conformity
++attribute), so among conforming records you can found such record: &lt;TT&gt;4
++Damstra &lt;FONT COLOR=&quot;#ff0000&quot;&gt;Robert&lt;/FONT&gt; Damstra &lt;FONT COLOR=&quot;#ff0000&quot;&gt;Roberta&lt;/FONT&gt;
++0.875&#8221; &lt;/TT&gt;- with conformity 0.875 (conformity equals 1 means that
++records are identical).&lt;/P&gt;
++&lt;P&gt;This graph illustrates usage of &lt;TT&gt;CustomizedRecordTransform&lt;/TT&gt;
++class too. This class extend abstract class &lt;A HREF=&quot;<A HREF="http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/DataRecordTransform.html">http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/DataRecordTransform.html</A>&quot;&gt;DataRecordTransform&lt;/A&gt;
++and allows to create complex transformation in relatively easy way.&lt;/P&gt;
++&lt;P&gt;Executing:&lt;BR&gt;&lt;TT&gt;Prepare transform class:&lt;BR&gt;javac -cp
++&quot;../cloveretl.engine.jar:&lt;TT&gt;../lib/commons-logging.jar&lt;/TT&gt;&quot;
++javaExamples/customizedTransformExample.java&lt;BR&gt;Execute graph:&lt;BR&gt;java
++-cp
++&quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples&lt;TT&gt;:$JAVA_HOME/lib/tools.jar&lt;/TT&gt;&quot;
++org.jetel.main.runGraph -plugins ../plugins &lt;A HREF=&quot;graphAproximativeJoin.grf&quot; TARGET=&quot;_blank&quot;&gt;graphAproximativeJoin.grf&lt;/A&gt;&lt;/TT&gt;&lt;/P&gt;
+ &lt;H3&gt;&lt;!-- Real life example --&gt;Real life example&lt;/H3&gt;
+ &lt;P STYLE=&quot;margin-bottom: 0in&quot;&gt;This is practical illustration of usage
+ CloverETL. This graph transforms data for branch bank. On inputs are
+@@ -649,222 +693,606 @@
+ &lt;/P&gt;
+ &lt;HR&gt;
+ &lt;H1&gt;&lt;!--- ALL EXAMPLES INDEX ---&gt;Index of all examples&lt;/H1&gt;
+-&lt;TABLE WIDTH=288 BORDER=0 CELLPADDING=2 CELLSPACING=0&gt;
+-	&lt;COL WIDTH=284&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++&lt;TABLE WIDTH=100% BORDER=0 CELLPADDING=2 CELLSPACING=0&gt;
++	&lt;COL WIDTH=64*&gt;
++	&lt;COL WIDTH=192*&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphAggregateSorted.grf&quot;&gt;graphAggregateSorted.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of Aggregate component. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphAggregateUnsorted.grf&quot;&gt;graphAggregateUnsorted.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of Aggregate component. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphAproximativeJoin.grf&quot;&gt;graphAproximativeJoin.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P STYLE=&quot;margin-bottom: 0in&quot;&gt;In this example data are read from
++			from file &lt;TT&gt;customers0.dat &lt;/TT&gt;and from database table
++			&lt;TT&gt;employee; &lt;/TT&gt;then for both flows there is generated &lt;TT&gt;matching
++			key &lt;/TT&gt;consisting of 4 letters of last name (flat file: lname,
++			database: last_name) and 3 letters of first name (flat file:
++			fname, database: first_name) . Approximative join component joins
++			data from thees flows (sorted due the &lt;TT&gt;matching key&lt;/TT&gt;) ; it
++			compares records with the same matching key only, but to
++			conforming output sends only thees, which join key is similar
++			enough (conformity attribute), so among conforming records you can
++			found such record: &#8220;&lt;TT&gt;&lt;FONT SIZE=2&gt;4 Damstra &lt;FONT COLOR=&quot;#ff0000&quot;&gt;Robert&lt;/FONT&gt;
++			Damstra &lt;FONT COLOR=&quot;#ff0000&quot;&gt;Roberta&lt;/FONT&gt; 0.875&#8221; &lt;/FONT&gt;&lt;/TT&gt;-
++			with conformity 0.875 (conformity equals 1 means that records are
++			identical).&lt;/P&gt;
++			&lt;P&gt;This graph illustrates usage of &lt;TT&gt;CustomizedRecordTransform&lt;/TT&gt;
++			class too. This class extend abstract class &lt;A HREF=&quot;<A HREF="http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/DataRecordTransform.html">http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/DataRecordTransform.html</A>&quot;&gt;DataRecordTransform&lt;/A&gt;
++			and allows to create complex transformation in relatively easy
++			way.&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphCloverData.grf&quot;&gt;graphCloverData.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of CloverDataReader/Writer
++			components. This components reads/writes data in clover internal
++			format and can be used for moving data between different graphs.
++			Reading/writing data in clover format is faster then in any other
++			format. This graph shows how works StructureWriter component (it
++			can be used for writing records and some additional information
++			eg. in xml format).&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBExecute.grf&quot;&gt;graphDBExecute.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how-to run SQL/DDL/DML commands against
++			database. Commands in SQLCode are delimited by semicolon and are
++			executed one by one. If needed, they may be grouped into single
++			transaction. 
++			&lt;/P&gt;
++			&lt;P&gt;This graph creates two tables (EMPLOYEE and EMPLOYEE_TMP) and
++			populates table EMPLOYEE with sample data.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBFJoin.grf&quot;&gt;graphDBFJoin.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates complex transformation. It reads data
++			about orders made and combines them (joins) with data about which
++			items were purchased. It then adds information about which company
++			made particular order/bought particular item. It illustrates usage
++			of DBFDataReader,Sort,MergeJoin,HashJoin,Filter. It also shows how
++			to embed data transformation routine directly into transformation
++			graph layout file (both joins have the transformations embedded).
++			Note: It is faster to reference record's fields by index as
++			opposite to names &#8211; used in this example.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBFJoinTL.grf&quot;&gt;graphDBFJoinTL.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates complex transformation like preceding
++			example, but transformations are written in &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;Transform
++			Language&lt;/A&gt;,&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBJoin.grf&quot;&gt;graphDBJoin.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph shows usage of DBJoin component: data are read from
++			flat file and joined with the records from database due to
++			conforming key field (lname in records read from file, last_name
++			in records read from database).&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBFLoad.grf&quot;&gt;graphDBFLoad.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates reading data from DBF file.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBLoad.grf&quot;&gt;graphDBLoad.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how to propagate data to database.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBLoad5.grf&quot;&gt;graphDBLoad5.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of dbFields and cloverFields
++			parameters of DB_OUTPUT_TABLE component. Parameter dbFields allows
++			to specify that only certain fields of target DB table will be
++			populated. Parameter cloverFields allows to specify which
++			input/Clover fields are used for populating target fields. The
++			final mapping is determined by the order in which Clover fields
++			and DB fields appear in the parameters or can be set directly.
++			Note: parameter batchMode allows for grouping of inserts into DB
++			thus increasing throughput. It works only with DBs/JDBC drivers
++			which support this feature (e.g. Oracle).&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBLoad6.grf&quot;&gt;graphDBLoad6.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how to run hand-written SQL/DML against
++			DB. Parameters (question-marks) are substituted by input fields
++			(in order they are listed in cloverFields). Also target parameter
++			types are devised from input field types - this may cause some
++			problems when trying to map incompatible data types.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBLookup.grf&quot; TARGET=&quot;_blank&quot;&gt;graphDBLookup.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how to join data using reformat
++			component.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBRead.grf&quot; TARGET=&quot;_blank&quot;&gt;graphDBRead.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph reads personal data from three sources and finds
++			records with the same values on corresponding fields (lname &#8211;
++			last_name, fname &#8211; first_name). Matching pairs are transformed
++			into one output record and saved in
++			&lt;TT&gt;intersection_customer_employee.txt&lt;/TT&gt; file.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBUnload.grf&quot;&gt;graphDBUnload.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;In this example, the DBInputTable component connects to
++			database and unloads all records from &lt;B&gt;employee&lt;/B&gt; table. It
++			then stores the records in &lt;TT&gt;employees.list.out&lt;/TT&gt; file. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphDBUnloadParametrized.grf&quot;&gt;graphDBUnloadParametrized.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how to read not all records from
++			database. This example is similar to &lt;A HREF=&quot;graphDBJoin.grf&quot;&gt;graphDBJoin.grf&lt;/A&gt;,
++			but found records from database are not sent to transformation
++			function, but directly to output port. For illustration in the
++			next phase are read all data from the same table.&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphDBUnloadUniversal.grf&quot;&gt;graphDBUnloadUniversal.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of dynamic metadata generation
++			based on SQL query. It allows unloading of database data without
++			prior assembly of DB table metadata. Dynamic metadata can be for
++			example used for easy migration of data between two different
++			databases when one universal graph with parameters specifying
++			which table should be unload/migrated can be used. This graph
++			requires db_table parameter to be defined. When running this
++			graph, use command like this one: &lt;TT&gt;java -cp
++			&quot;../cloveretl.engine.jar:../lib/commons-logging.jar:../lib/log4j-1.2.12.zip:../lib/javolution.jar:javaExamples
++			&quot; org.jetel.main.runGraph -plugins
++			../plugins-P:db_table=Employee graphDBUnloadUniversal.grf &lt;/TT&gt;Note:
++			where clause 1=0 in SQL query in dynamic metadata definition is
++			there only for speeding up query processing - no real data is
++			needed, only metadata describing the result - thus we specify
++			condition which ensures that no data should really be returned -
++			it is up to database whether it will optimize the execution plan
++			based on this.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphDenormalizeInline.grf&quot;&gt;graphDenormalizeInline.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of DENORMALIZER component
++			with denormalization specified by inline Java source.&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphDenormalizeTL.grf&quot;&gt;graphDenormalizeTL.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of DENORMALIZER component
++			with denormalization specified by inline &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;TransformLang&lt;/A&gt;
++			source.&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
++			&lt;P&gt;&lt;A HREF=&quot;graphGenerateData.grf&quot;&gt;graphGenerateData.grf&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;&lt;BR&gt;
++			&lt;/P&gt;
++		&lt;/TD&gt;
++	&lt;/TR&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphExtFilter.grf&quot;&gt;graphExtFilter.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This illustrates usage of Filter and HashJoin components.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphExtFilter2.grf&quot;&gt;graphExtFilter2.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph shows some more functionality of EXT_FILTER
++			component. Filters all employees younger than 41 years. The
++			current age is calculated as today's date minus date of birth.
++			Notice that instead of classical comparison operators ==,!=,
++			...etc... one can use their textual abbreviations .eq. .ne. .lt.
++			.gt. ...etc...&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphFilter.grf&quot;&gt;graphFilter.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of Filter component. It
++			can filter on text, date, integer, numeric fields with comparison
++			[&gt;, &lt;, ==, &lt;=, &gt;=, !=]. Text fields can also be
++			compared to a Java regexp using ~ (tilda) operator. A filter can
++			be made of different parts separated by a &quot;;&quot;
++			(semicolon). If one of the parts is verified, the record passes
++			the filter (it's an OR combination of the parts, and AND can be
++			achieved by several filters cascaded). Date format used for
++			comparison depends on input field's format &#8211; e.g. if input field
++			HireDate has defined date format &quot;yyyy-MM-dd&quot;, then the
++			same format must be used in filter when specifying date constant.
++			This graph produces two output files: First with all employees who
++			were hired before 1993-12-31. Second with all employees who have
++			in their memo that they are &quot;fluent&quot; in some language
++			Note: some of the comparison operators have to be XML encoded -
++			e.g. &quot;&gt;&quot; as &quot;&amp;gt;&quot; etc. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphIntersectData.grf&quot;&gt;graphIntersectData.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of DATA_INTERSECT
++			component - performs joining of two sorted (based on specified
++			key) data flows (A and B) and outputs: 1. to port 0 records found
++			only in flow A 2. to port 1 records found in A &amp; B 3. to port
++			2 records found only in flow B . Records both in flow A &amp;B
++			should be unique&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphJoinData.grf&quot;&gt;graphJoinData.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of SORT and MERGE_JOIN
++			components. MERGE_JOIN component performs joining of master data
++			with slave data based on specified key. It requires both master
++			and slave data to be sorted according to used key. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphJoinHash.grf&quot;&gt;graphJoinHash.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of HASH_JOIN components.
++			HASH_JOIN component performs joining of master data with slave
++			data based on specified key. First all slave data (from all slave
++			ports) are read and hash-tables are constructed from them. Then
++			for every master record, attempt is made to find corresponding
++			slave-records. HASH_JOIN performs better than SORT/MERGE_JOIN when
++			you have relatively small slave data set and big master data set.
++			It doesn't require master and slave data to be sorted.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphJoinHashInline.grf&quot;&gt;graphJoinHashInline.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates how to use HASH_JOIN component for 3way
++			join. HASH_JOIN component performs joining of master data with
++			slave data based on specified key. First all slave data are read
++			and hash-tables are constructed from them. Then for every master
++			record, attempt is made to find corresponding slave-records.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphJoinHashUsingTransform.grf&quot;&gt;graphJoinHashUsingTransform.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of HASH_JOIN components.
++			Transformation function is written in compacted form.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphJoinHashUsingTransformLanguage.grf&quot;&gt;graphJoinHashUsingTransformLanguage.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of HASH_JOIN components.
++			Transformation function is written in &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;Transform
++			Language&lt;/A&gt;,&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphMergeData.grf&quot;&gt;graphMergeData.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of MERGE component. It merges data
++			based on specified key. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphOrdersReformat.grf&quot;&gt;graphOrdersReformat.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This example illustrates usage of Reformat component. Source
++			data contains info about orders customers made. We add artificial
++			key - ProductID which is a sequence of integers. We also combine
++			individual fields of ship-to-address (address,city,country) into
++			one single field. Reformat component calls &quot;reformatOrders&quot;
++			class which implements &lt;A HREF=&quot;<A HREF="http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/RecordTransform.html">http://cloveretl.berlios.de/docs/JavaDoc/org/jetel/component/RecordTransform.html</A>&quot;&gt;RecordTransform
++			interface&lt;/A&gt; (required by Reformat component). The directory in
++			which recormatOrders class exists must be part of the Java
++			classpath&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphOrdersReformatInline.grf&quot;&gt;graphOrdersReformatInline.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This example illustrates usage of Reformat component with
++			transformation code (class) inlined (saved with the graph itself).
++			The source code is automatically compiled at runtime. For
++			successful compilation, tools.jar library must be part of
++			CLASSPATH.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphOrdersReformatUsingTransform.grf&quot;&gt;graphOrdersReformatUsingTransform.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This example illustrates usage of Reformat component with
++			transformation written in compact form.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphOrdersTLReformat.grf&quot;&gt;graphOrdersTLReformat.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This example illustrates usage of Reformat component with
++			transformation written in &lt;A HREF=&quot;../docs/CloverETL_transformation_language.odt&quot;&gt;Transform
++			Language&lt;/A&gt;,&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphParametrizedLookup.grf&quot;&gt;graphParametrizedLookup.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates usage of Node-level parameters.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphPartition.grf&quot;&gt;graphPartition.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of Partition component.
++			This component can be used to split input data flow into several
++			(based on number of connected output ports) output data flows. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphPhasesDemo.grf&quot;&gt;graphPhasesDemo.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of several components in different
++			phases. First, all components from phase 0 are run, then the
++			execution continues with phase 1. Data which crosses phase
++			boundary is automatically buffered so the data producing node can
++			finish its work and the data consuming node can later start
++			reading the data. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphRevenues.grf&quot;&gt;graphRevenues.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This is practical illustration of usage CloverETL. This graph
++			transforms data for branch bank. On inputs are clients, month
++			interests and charges and half-year bonus. On outputs we have
++			aggregated revenues by clients, clients without revenues and
++			clients from database, who are not in input file.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSequence.grf&quot;&gt;graphSequence.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This example extends graphOrdersReformat in a sense that the
++			counter used for generating PRODUCTID is taken from Sequence
++			object which is persistent between graph executions &#8211; i.e. you
++			get continuous sequence of unique numbers. For successfull
++			compilation, tools.jar library must be part of CLASSPATH.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSimpleCopy.grf&quot;&gt;graphSimpleCopy.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of SimpleCopy component.
++			Everything brought to SimpleCopy on port 0 is duplicated onto all
++			connected output ports. It also shows functionality of Trash
++			Component. It discards everything which is sent into it. Its
++			purpose is debugging - shows how many records ended in it and can
++			print incoming records, if desired (option debugPrint)&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSimpleCopyEmbeddedMetadata.grf&quot;&gt;graphSimpleCopyEmbeddedMetadata.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of SimpleCopy component.
++			Everything brought to SimpleCopy on port 0 is duplicated onto all
++			connected output ports. It also shows functionality of Trash
++			Component. It discards everything which is sent into it. Its
++			purpose is debugging - shows how many records ended in it and can
++			print incoming records, if desired (option debugPrint). Metadata
++			in this graph is embedded directly to graph instead of external
++			file.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSimpleCopyLocale.grf&quot;&gt;graphSimpleCopyLocale.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph demonstrates functionality of SimpleCopy component.
++			Everything brought to SimpleCopy on port 0 is duplicated onto all
++			connected output ports. It also shows functionality of Trash
++			Component. It discards everything which is sent into it. Its
++			purpose is debugging - shows how many records ended in it and can
++			print incoming records, if desired (option debugPrint). Metadata
++			in this graph is embedded directly to graph instead of external
++			file. Output metadata is the same as input except that for
++			BirthDate and HireDate, locale property is defined. It allows to
++			specify language or language.Country locale which is used when
++			formatting output. In this example, date info on input is expected
++			to be in dd/MM/yyyy format, whereas on output it should follow
++			US/UK standard -&gt; (usually defined as MM/dd/YYYY).&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSimpleLookup.grf&quot;&gt;graphSimpleLookup.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates how to join data using reformat
++			component.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSortData.grf&quot;&gt;graphSortData.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of Sort component. It sorts data
++			based on specified key. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSortUniversal.grf&quot;&gt;graphSortUniversal.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph illustrates usage of Sort component. It sorts data
++			based on specified key. It also shows how to use parameters/global
++			properties within graph. For executing see &lt;A HREF=&quot;#Sort Universal example|outline&quot;&gt;Sort
++			Universal example.&lt;/A&gt;&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphSystemExecute.grf&quot;&gt;graphSystemExecute.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph ilustrates usage of System Ececute Component&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphViewData.grf&quot;&gt;graphViewData.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;This graph is a simple utility which demonstrates usage of
++			parameters. It allows viewing content of particular data file (in
++			delimited format). It reads in data and stores them in &quot;debug&quot;
++			format.&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphXLSReadWrite.grf&quot;&gt;graphXLSReadWrite.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;In this example data are read from &lt;TT&gt;ORDERS.xls&lt;/TT&gt; file,
++			partitioned to 3 parts and each of thees parts are saved in
++			&lt;TT&gt;orders.partitioned.xls&lt;/TT&gt; file in different sheets. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+-	&lt;TR&gt;
+-		&lt;TD WIDTH=284&gt;
++	&lt;TR VALIGN=TOP&gt;
++		&lt;TD WIDTH=25%&gt;
+ 			&lt;P&gt;&lt;A HREF=&quot;graphXMLExtract.grf&quot;&gt;graphXMLExtract.grf&lt;/A&gt;&lt;/P&gt;
+ 		&lt;/TD&gt;
++		&lt;TD WIDTH=75%&gt;
++			&lt;P&gt;In this example data are read from &lt;TT&gt;employees.xml &lt;/TT&gt;file.
++			&#8220;Mapping&#8221; attribute describes dependencies between xml nodes
++			and metadata fields. 
++			&lt;/P&gt;
++		&lt;/TD&gt;
+ 	&lt;/TR&gt;
+ &lt;/TABLE&gt;
+ &lt;P&gt;&lt;BR&gt;&lt;BR&gt;
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000238.html">[Cloveretl-svn-commits] CloverETL repos r2600 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+	<LI>Next message: <A HREF="000240.html">[Cloveretl-svn-commits] CloverETL repos r2602 -	branches/cloveretl.engine.rel-2-1-0/cloveretl.engine/examples
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#239">[ date ]</a>
+              <a href="thread.html#239">[ thread ]</a>
+              <a href="subject.html#239">[ subject ]</a>
+              <a href="author.html#239">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>

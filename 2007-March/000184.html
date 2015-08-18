@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+ <HEAD>
+   <TITLE> [Cloveretl-svn-commits] CloverETL repos r2546 -	trunk/cloveretl.component/src/org/jetel/component
+   </TITLE>
+   <LINK REL="Index" HREF="http://lists.berlios.de/pipermail/cloveretl-svn-commits/2007-March/index.html" >
+   <LINK REL="made" HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2546%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200703051016.l25AG0ma025964%40sheep.berlios.de%3E">
+   <META NAME="robots" CONTENT="index,nofollow">
+   <style type="text/css">
+       pre {
+           white-space: pre-wrap;       /* css-2.1, curent FF, Opera, Safari */
+           }
+   </style>
+   <META http-equiv="Content-Type" content="text/html; charset=us-ascii">
+   <LINK REL="Previous"  HREF="000183.html">
+   <LINK REL="Next"  HREF="000185.html">
+ </HEAD>
+ <BODY BGCOLOR="#ffffff">
+   <H1>[Cloveretl-svn-commits] CloverETL repos r2546 -	trunk/cloveretl.component/src/org/jetel/component</H1>
+    <B>cloveretl-svn-commits at lists.berlios.de</B> 
+    <A HREF="mailto:cloveretl-svn-commits%40lists.berlios.de?Subject=Re%3A%20%5BCloveretl-svn-commits%5D%20CloverETL%20repos%20r2546%20-%0A%09trunk/cloveretl.component/src/org/jetel/component&In-Reply-To=%3C200703051016.l25AG0ma025964%40sheep.berlios.de%3E"
+       TITLE="[Cloveretl-svn-commits] CloverETL repos r2546 -	trunk/cloveretl.component/src/org/jetel/component">cloveretl-svn-commits at lists.berlios.de
+       </A><BR>
+    <I>Mon Mar  5 11:16:00 CET 2007</I>
+    <P><UL>
+        <LI>Previous message: <A HREF="000183.html">[Cloveretl-svn-commits] CloverETL repos r2545 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+        <LI>Next message: <A HREF="000185.html">[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+    <HR>  
+<!--beginarticle-->
+<PRE>Author: agad
+Date: 2007-03-05 11:15:59 +0100 (Mon, 05 Mar 2007)
+New Revision: 2546
+
+Modified:
+   trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+Log:
+UPDATE:XLSReader - better error mesaging in checkConfig() method
+
+Modified: trunk/cloveretl.component/src/org/jetel/component/XLSReader.java
+===================================================================
+--- trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-03-03 17:15:42 UTC (rev 2545)
++++ trunk/cloveretl.component/src/org/jetel/component/XLSReader.java	2007-03-05 10:15:59 UTC (rev 2546)
+@@ -256,14 +256,21 @@
+         try {//check sheetNumber parameter
+ 			if (sheetNumber != null) {
+ 				Iterator&lt;Integer&gt; number = new NumberIterator(sheetNumber,0,Integer.MAX_VALUE);
+-				number.hasNext();
++				if (!number.hasNext()) {
++					throw new IllegalArgumentException(&quot;There is no sheet with requested number&quot;);
++				}				
+ 			}            
+ 	        try{//sheet number OK, check file name
+ 	            reader = new MultiFileReader(parser, getGraph() != null ? getGraph().getProjectURL() : null, fileURL);
+ 	            reader.init(getOutputPort(OUTPUT_PORT).getMetadata());
+ 	            reader.close();
+ 	        }catch(ComponentNotReadyException e){
+-	            ConfigurationProblem problem = new ConfigurationProblem(e.getMessage(), ConfigurationStatus.Severity.ERROR, this, ConfigurationStatus.Priority.NORMAL);
++	            ConfigurationProblem problem = new ConfigurationProblem(
++						&quot;Problem with file URL: &quot; + fileURL + &quot; or not valid &quot;
++								+ &quot;sheet number: \&quot;&quot; + sheetNumber
++								+ &quot;\&quot; nor sheet name: \&quot;&quot; + sheetName + &quot;\&quot;&quot;,
++						ConfigurationStatus.Severity.ERROR, this,
++						ConfigurationStatus.Priority.NORMAL);
+ 	            problem.setAttributeName(XML_FILE_ATTRIBUTE);
+ 	            status.add(problem);
+ 	        }
+
+
+</PRE>
+
+<!--endarticle-->
+    <HR>
+    <P><UL>
+        <!--threads-->
+	<LI>Previous message: <A HREF="000183.html">[Cloveretl-svn-commits] CloverETL repos r2545 -	trunk/cloveretl.engine/test/org/jetel/data/lookup
+</A></li>
+	<LI>Next message: <A HREF="000185.html">[Cloveretl-svn-commits] CloverETL repos r2547 -	trunk/cloveretl.engine/src/org/jetel/data/parser
+</A></li>
+         <LI> <B>Messages sorted by:</B> 
+              <a href="date.html#184">[ date ]</a>
+              <a href="thread.html#184">[ thread ]</a>
+              <a href="subject.html#184">[ subject ]</a>
+              <a href="author.html#184">[ author ]</a>
+         </LI>
+       </UL>
+
+<hr>
+<a href="https://lists.berlios.de/mailman/listinfo/cloveretl-svn-commits">More information about the Cloveretl-svn-commits
+mailing list</a><br>
+</body></html>
